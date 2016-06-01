@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/icann-dns/puppet-knot.svg?branch=master)](https://travis-ci.org/icann-dns/puppet-knot)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/icann/knot.svg?maxAge=2592000)](https://forge.puppet.com/icann/knot)
 [![Puppet Forge Downloads](https://img.shields.io/puppetforge/dt/icann/knot.svg?maxAge=2592000)](https://forge.puppet.com/icann/knot)
+
 # knot
 
 #### Table of Contents
