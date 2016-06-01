@@ -1,0 +1,21 @@
+# knot - Knot DNS Server
+
+description "Knot DNS Server"
+author "Ondrej Sury <ondrej@debian.org>"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+env CONFFILE=/etc/knot/knot.conf
+
+respawn
+pre-start script
+<%- if @network_status -%>
+  while ! <%= @network_status %>
+  do
+    :
+  done
+<%- end -%>
+  exec /usr/lib/knot/prepare-environment $CONFFILE
+end script
+exec /usr/sbin/knotd -c $CONFFILE

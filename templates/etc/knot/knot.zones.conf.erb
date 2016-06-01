@@ -1,0 +1,74 @@
+remotes {
+  <%- if @masters then -%>
+    <%- @masters.each_with_index do |master, index| -%>
+    master<%= index +1 %>-<%= @name %> {
+      address <%= master %>; 
+      port 53;
+      <%- if @tsig then -%>
+      key <%= @tsig['name'] %>;
+      <%- end -%>
+    }
+    <%- end -%>
+  <%- end -%>
+  <%- if @provide_xfr then -%>
+    <%- @provide_xfr.each_with_index do |xfr, index| -%>
+    slave<%= index +1  %>-<%= @name %> {
+      address <%= xfr %>;
+      port 53;
+    }
+    <%- end -%>
+  <%- end -%>
+  <%- if @notify_addresses then -%>
+    <%- @notify_addresses.each_with_index do |notify_address, index| -%>
+    notify<%= index +1 %>-<%= @name %>-out {
+      address <%= notify_address %>;
+      port 53;
+    }
+    <%- end -%>
+  <%- end -%>
+  <%- if @allow_notify then -%>
+    <%- @allow_notify.each_with_index do |notify, index| -%>
+    notify<%= index +1 %>-<%= @name %>-in {
+      address <%= notify %>;
+      port 53;
+    }
+    <%- end -%>
+  <%- end -%>
+}
+groups {
+  <%- if @masters.any? then -%>
+    master-<%= @name %> {<%- @masters.each_with_index do |master, index| -%> master<%= index +1 %>-<%= @name %><% if !@masters[index +1].nil? then %>, <%- end -%><%- end -%> }
+  <%- end -%>
+  <%- if @provide_xfr.any? then -%>
+    slave-<%= @name %> {<%- @provide_xfr.each_with_index do |xfr, index| -%> slave<%= index +1 %>-<%= @name %><% if !@provide_xfr[index +1].nil? then %>, <%- end -%><%- end -%> }
+  <%- end -%>
+  <%- if @notify_addresses.any? then -%>
+    notify-<%= @name %>-out {<%- @notify_addresses.each_with_index do |notify_address, index| -%> notify<%= index +1 %>-<%= @name %>-out<% if !@notify_addresses[index +1].nil? then %>, <%- end -%><%- end -%> }
+  <%- end -%>
+  <%- if @allow_notify.any? then -%>
+    notify-<%= @name %>-in {<%- @allow_notify.each_with_index do |notify, index| -%> notify<%= index +1 %>-<%= @name %>-in<% if !@allow_notify[index +1].nil? then %>, <%- end -%><%- end -%> }
+  <%- end -%>
+}
+zones {
+  <%- @zones.each do |zone| -%>
+    "<%= zone %>" {
+      <%- if @zonefile then -%>
+        file "<%= @zone_subdir %>/<%= @zonefile %>";
+      <%- else -%>
+        file "<%= @zone_subdir %>/<%= zone %>";
+      <%- end -%>
+      <%- if @notify_addresses.any? then -%>
+        notify-out notify-<%= @name %>-out;
+      <%- end -%>
+      <%- if @allow_notify.any? then -%>
+        notify-in notify-<%= @name %>-in;
+      <%- end -%>
+      <%- if @masters.any? then -%>
+        xfr-in master-<%= @name %>;
+      <%- end -%>
+      <%- if @provide_xfr.any? then -%>
+        xfr-out slave-<%= @name %>;
+      <%- end -%>
+    }
+  <%- end -%>
+}

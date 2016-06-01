@@ -1,0 +1,12 @@
+$TTL 1W
+@ IN SOA <%= @fqdn %>. noc.dns.icann.org. (
+                        2     ; serial
+                        1W    ; refresh
+                        1M    ; retry
+                        1W    ; expiry
+                        1W )  ; minimum
+
+        TXT "ICANN DNS Engineering, <%= @hostname %>"
+        TXT "See http://www.as112.net/ for more information."
+
+        NS blackhole.as112.arpa.

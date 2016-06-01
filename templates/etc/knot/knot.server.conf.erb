@@ -1,0 +1,85 @@
+<%- if @knot_version then
+  @_knot_version = @knot_version
+else
+  @_knot_version = '0'
+end -%>
+system {
+<%- if @identity -%>
+    identity <%= @identity %>; 
+<%- end -%>
+<%- if @hide_version -%>
+    version off;
+<%- else -%>
+    version on;
+<%- end -%>
+<%- if @nsid -%>
+    nsid <%= @nsid -%>;
+<%- end -%>
+<%- if @run_dir -%>
+    rundir "<%= @run_dir %>";
+<%- end -%>
+<%- if @pidfile -%>
+    pidfile "<%= @pidfile %>";
+<%- end -%>
+<%- if @server_count -%>
+    workers <%= @server_count %>;
+<%- end -%>
+  <%- if @max_tcp_clients and scope.function_versioncmp([@_knot_version, '1.6']) >= 0 -%>
+    max-tcp-clients <%= @max_tcp_clients %>;
+<%- end -%>
+<%- if @max_udp_payload -%>
+    max-udp-payload <%= @max_udp_payload %>;
+<%- end -%>
+<%- if @username -%>
+    user <%= @username %>;
+<%- end -%>
+<%- if @rrl_limit -%>
+    rate-limit <%= @rrl_limit %>;
+<%- end -%>
+<%- if @rrl_size -%>
+    rate-limit-size <%= @rrl_size %>;
+<%- end -%>
+<%- if @rrl_slip -%>
+    rate-limit-slip <%= @rrl_slip %>;
+<%- end -%>
+}
+interfaces {
+<%- @ip_addresses.each do |address| -%>
+  <%- if address != :undef -%>
+    interface-<%= address.split('/')[0].gsub!(/[^0-9A-Fa-f]/, '') %> {
+        address <%= address.split('/')[0] %>;
+        port <%= @port %>;
+    }
+  <%- end -%>
+<%- end -%>
+}
+<%- if @control_allow.any? -%>
+remotes {
+  <%- @control_allow.each_pair do |name, address| -%>
+  <%= name %> { address <%= address %>; }
+  <%- end -%>
+}
+<%- end -%>
+<%- if @control_enable -%>
+control {
+  <%- if !@control_interface.nil? -%>
+  listen-on { address <%= @control_interface %>@<%= @control_port %>; }
+  <%- else -%>
+  listen-on "knot.sock";
+  <%- end -%>
+  <%- if @control_allow.any? -%>
+  allow <%= @control_allow.keys().join(', ') -%>;
+  <%- end -%>
+}
+<%- end -%>
+log {
+<%- if %w(syslog stdout stderr).include? @log_target -%>
+  <%= @log_target -%> {
+<%- else -%>
+  file "<%= @log_target %>" {
+<%- end -%>
+    any <%= @log_any_level %>;
+    zone <%= @log_zone_level %>;
+    server <%= @log_server_level %>;
+  }
+}
