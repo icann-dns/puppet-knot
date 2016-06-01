@@ -158,7 +158,7 @@ describe 'knot' do
             .with(
               'ensure'  => 'directory',
               'group'   => 'knot',
-              'mode'    => '0755',
+              'mode'    => '0750',
               'owner'   => 'knot',
               'require' => "Package[#{package_name}]"
             )
@@ -168,7 +168,7 @@ describe 'knot' do
             .with(
               'ensure'  => 'directory',
               'group'   => 'knot',
-              'mode'    => '0755',
+              'mode'    => '0750',
               'owner'   => 'knot',
               'require' => "Package[#{package_name}]"
             )
@@ -178,7 +178,7 @@ describe 'knot' do
             .with(
               'ensure'  => 'directory',
               'group'   => 'knot',
-              'mode'    => '0755',
+              'mode'    => '0750',
               'owner'   => 'knot',
               'require' => "Package[#{package_name}]"
             )
@@ -188,7 +188,7 @@ describe 'knot' do
             .with(
               'ensure'  => 'directory',
               'group'   => 'knot',
-              'mode'    => '0755',
+              'mode'    => '0775',
               'owner'   => 'knot',
               'require' => "Package[#{package_name}]"
             )
@@ -396,7 +396,7 @@ describe 'knot' do
               .with(
                 'ensure'  => 'directory',
                 'group'   => 'knot',
-                'mode'    => '0755',
+                'mode'    => '0750',
                 'owner'   => 'knot',
                 'require' => "Package[#{package_name}]"
               )
@@ -504,7 +504,7 @@ describe 'knot' do
               .with(
                 'ensure'  => 'directory',
                 'group'   => 'knot',
-                'mode'    => '0755',
+                'mode'    => '0750',
                 'owner'   => 'knot',
                 'require' => "Package[#{package_name}]"
               )
@@ -518,7 +518,7 @@ describe 'knot' do
               .with(
                 'ensure'  => 'directory',
                 'group'   => 'knot',
-                'mode'    => '0755',
+                'mode'    => '0750',
                 'owner'   => 'knot',
                 'require' => "Package[#{package_name}]"
               )
@@ -543,7 +543,7 @@ describe 'knot' do
               .with(
                 'ensure'  => 'directory',
                 'group'   => 'knot',
-                'mode'    => '0755',
+                'mode'    => '0775',
                 'owner'   => 'knot',
                 'require' => "Package[#{package_name}]"
               )
