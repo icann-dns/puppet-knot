@@ -19,7 +19,7 @@
 
 ## Overview
 
-Manage the installation and configuration of KNOT (name serve daemon) and zone files.
+Manage the installation and configuration of KNOT 1.* and zone files.
 
 ## Module Description
 
