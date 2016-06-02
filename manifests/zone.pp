@@ -30,4 +30,10 @@ define knot::zone (
     content => template($::knot::zones_template),
     order   => '20';
   }
+  if $::knot::manage_nagios and $::knot::enable {
+    knot::zone::nagios {$zones:
+      masters => $masters,
+      slaves  => $provide_xfr,
+    }
+  }
 }
