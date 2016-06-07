@@ -37,16 +37,16 @@ remotes {
 }
 groups {
   <%- if @masters.any? then -%>
-    master-<%= @name %> {<%- @masters.each_with_index do |master, index| -%>master<%= index +1 %>-<%= @name %><% if !@masters[index +1].nil? then %>, <%- end -%><%- end -%> }
+    master-<%= @name %> { <%- @masters.each_with_index do |master, index| -%>master<%= index +1 %>-<%= @name %><% if !@masters[index +1].nil? then %>, <%- end -%><%- end -%> }
   <%- end -%>
   <%- if @provide_xfr.any? then -%>
-    slave-<%= @name %> {<%- @provide_xfr.each_with_index do |xfr, index| -%>slave<%= index +1 %>-<%= @name %><% if !@provide_xfr[index +1].nil? then %>, <%- end -%><%- end -%> }
+    slave-<%= @name %> { <%- @provide_xfr.each_with_index do |xfr, index| -%>slave<%= index +1 %>-<%= @name %><% if !@provide_xfr[index +1].nil? then %>, <%- end -%><%- end -%> }
   <%- end -%>
   <%- if @notify_addresses.any? then -%>
-    notify-<%= @name %>-out {<%- @notify_addresses.each_with_index do |notify_address, index| -%>notify<%= index +1 %>-<%= @name %>-out<% if !@notify_addresses[index +1].nil? then %>, <%- end -%><%- end -%> }
+    notify-<%= @name %>-out { <%- @notify_addresses.each_with_index do |notify_address, index| -%>notify<%= index +1 %>-<%= @name %>-out<% if !@notify_addresses[index +1].nil? then %>, <%- end -%><%- end -%> }
   <%- end -%>
   <%- if @allow_notify.any? then -%>
-    notify-<%= @name %>-in {<%- @allow_notify.each_with_index do |notify, index| -%>notify<%= index +1 %>-<%= @name %>-in<% if !@allow_notify[index +1].nil? then %>, <%- end -%><%- end -%> }
+    notify-<%= @name %>-in { <%- @allow_notify.each_with_index do |notify, index| -%>notify<%= index +1 %>-<%= @name %>-in<% if !@allow_notify[index +1].nil? then %>, <%- end -%><%- end -%> }
   <%- end -%>
 }
 zones {
