@@ -37,7 +37,8 @@ class knot (
   $zone_subdir       = $::knot::params::zone_subdir,
   $conf_file         = $::knot::params::conf_file,
   $run_dir           = $::knot::params::run_dir,
-  $network_status    = undef
+  $network_status    = undef,
+  $manage_nagios     = false,
 ) inherits knot::params  {
 
   validate_bool($enable)
@@ -82,6 +83,7 @@ class knot (
   if $network_status {
     validate_absolute_path($network_status)
   }
+  validate_bool($manage_nagios)
 
   if $::kernel == 'linux' and $::lsbdistcodename == 'precise' {
     fail('knot is not currently supported on ubuntu precise')
