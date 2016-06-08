@@ -149,7 +149,7 @@ class knot (
       data => $tsig['data'],
     }
   }
-  create_resources(nsd::file, $files)
-  create_resources(nsd::tsig, $tsigs)
+  create_resources(knot::file, $files)
+  create_resources(knot::tsig, $tsigs)
   create_resources(knot::zone, $zones)
 }

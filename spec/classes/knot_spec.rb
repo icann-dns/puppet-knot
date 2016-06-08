@@ -20,11 +20,11 @@ describe 'knot' do
         'name' => 'foo.example.com',
         'data' => 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',
         'algo' => 'hmac-sha256',
-      }
+      },
       #slave_addresses: {},
-      #zones: {},
-      #tsigs: {},
-      #files: {},
+      :zones => { 'example' => { 'masters' => ['192.0.2.2'] }},
+      :tsigs => { 'test.example.com' => { 'data' => 'AAAAA' } },
+      :files => { 'example.com' => { 'content' => 'bla' } }
       #server_template: "knot/etc/knot/knot.server.conf.erb",
       #zones_template: "knot/etc/knot/knot.zones.conf.erb",
       #ip_addresses: [],
@@ -89,6 +89,9 @@ describe 'knot' do
         it { is_expected.to contain_package(package_name) }
         it { is_expected.to contain_class('Knot') }
         it { is_expected.to contain_class('Knot::Params') }
+        it { is_expected.to contain_knot__zone('example') }
+        it { is_expected.to contain_knot__tsig('test.example.com') }
+        it { is_expected.to contain_knot__file('example.com') }
         it do
           is_expected.to contain_concat(conf_file)
             .with(
