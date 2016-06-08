@@ -72,7 +72,7 @@ remotes {
 groups {
   global-slaves {
 <%- @slave_addresses.each_with_index do |(iface, key), index| -%>
-    <%= key %><%- if iface.include? ':' then -%>-v6<%- else -%>-v4<%- end -%><%- if index + 1 < @slave_addresses.length %>,<%- end -%>
+    <%= key %><%- if iface.include? ':' then -%>-v6<%- else -%>-v4<%- end -%><%- if index + 1 < @slave_addresses.length %>,<%- end %>
 <%- end -%>
     }
 }
