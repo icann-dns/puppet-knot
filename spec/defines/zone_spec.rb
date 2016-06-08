@@ -60,7 +60,7 @@ describe 'knot::zone' do
             .with_content(
               /remotes {\n}/
             ).with_content(
-              /groups {\n}/
+              /groups {\s+xfr-in-example\s+{\s+}\s+xfr-out-example\s+{\s+}\s+notify-out-example\s+{\s+}\s+notify-in-example\s+{\s+}\s+}/
             ).with_content(
               /zones {\n}/
             )
@@ -79,31 +79,31 @@ describe 'knot::zone' do
         it do
           is_expected.to contain_concat__fragment('knot_zones_example')
             .with_content(
-              /remotes\s+{[\s\S]+master1-example\s+{\s+address\s+192.0.2.1;\s+port\s+53;\s+}[\s\S]+\n}/
+              /remotes\s+{[\s\S]+xfr-out-example1\s+{\s+address\s+192.0.2.1;\s+port\s+53;\s+}[\s\S]+\n}/
             ).with_content(
-              /remotes\s+{[\s\S]+slave1-example\s+{\s+address\s+192.0.2.1;\s+port\s+53;\s+}[\s\S]+\n}/
+              /remotes\s+{[\s\S]+xfr-in-example1\s+{\s+address\s+192.0.2.1;\s+port\s+53;\s+}[\s\S]+\n}/
             ).with_content(
-              /remotes\s+{[\s\S]+notify1-example-out\s+{\s+address\s+192.0.2.1;\s+port\s+53;\s+}[\s\S]+\n}/
+              /remotes\s+{[\s\S]+notify-out-example1\s+{\s+address\s+192.0.2.1;\s+port\s+53;\s+}[\s\S]+\n}/
             ).with_content(
-              /remotes\s+{[\s\S]+notify1-example-in\s+{\s+address\s+192.0.2.1;\s+port\s+53;\s+}[\s\S]+\n}/
+              /remotes\s+{[\s\S]+notify-in-example1\s+{\s+address\s+192.0.2.1;\s+port\s+53;\s+}[\s\S]+\n}/
             ).with_content(
-              /groups\s+{[\s\S]+master-example\s+{\s+master1-example\s+}[\s\S]+\n}/
+              /groups\s+{[\s\S]+xfr-in-example\s+{\s+xfr-in-example1\s+}[\s\S]+\n}/
             ).with_content(
-              /groups\s+{[\s\S]+slave-example\s+{\s+slave1-example\s+}[\s\S]+\n}/
+              /groups\s+{[\s\S]+xfr-out-example\s+{\s+xfr-out-example1\s+}[\s\S]+\n}/
             ).with_content(
-              /groups\s+{[\s\S]+notify-example-in\s+{\s+notify1-example-in\s+}[\s\S]+\n}/
+              /groups\s+{[\s\S]+notify-in-example\s+{\s+notify-in-example1\s+}[\s\S]+\n}/
             ).with_content(
-              /groups\s+{[\s\S]+notify-example-out\s+{\s+notify1-example-out\s+}[\s\S]+\n}/
+              /groups\s+{[\s\S]+notify-out-example\s+{\s+notify-out-example1\s+}[\s\S]+\n}/
             ).with_content(
               /zones\s+{\s+"example.com"\s+{[\s\S]+file\s+"#{zone_subdir}\/example.com"[\s\S]+\n}/
             ).with_content(
-              /zones\s+{\s+"example.com"\s+{[\s\S]+notify-out\s+notify-example-out[\s\S]+\n}/
+              /zones\s+{\s+"example.com"\s+{[\s\S]+notify-out\s+notify-out-example[\s\S]+\n}/
             ).with_content(
-              /zones\s+{\s+"example.com"\s+{[\s\S]+notify-in\s+notify-example-in[\s\S]+\n}/
+              /zones\s+{\s+"example.com"\s+{[\s\S]+notify-in\s+notify-in-example[\s\S]+\n}/
             ).with_content(
-              /zones\s+{\s+"example.com"\s+{[\s\S]+xfr-in\s+master-example[\s\S]+\n}/
+              /zones\s+{\s+"example.com"\s+{[\s\S]+xfr-in\s+xfr-in-example[\s\S]+\n}/
             ).with_content(
-              /zones\s+{\s+"example.com"\s+{[\s\S]+xfr-out\s+slave-example[\s\S]+\n}/
+              /zones\s+{\s+"example.com"\s+{[\s\S]+xfr-out\s+xfr-out-example[\s\S]+\n}/
             )
         end
       end

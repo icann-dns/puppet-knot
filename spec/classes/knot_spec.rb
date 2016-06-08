@@ -102,7 +102,7 @@ describe 'knot' do
         it do
           is_expected.to contain_concat__fragment('knot_server')
             .with(
-              'order'   => '01',
+              'order'   => '10',
               'target'  => conf_file
             ).with_content(
               /identity foo.example.com;/
@@ -142,7 +142,7 @@ describe 'knot' do
           is_expected.to contain_concat__fragment('key_head')
             .with(
               'content' => /keys {/,
-              'order'   => '09',
+              'order'   => '01',
               'target'  => conf_file
 
             )
@@ -151,7 +151,7 @@ describe 'knot' do
           is_expected.to contain_concat__fragment('key_foot')
             .with(
               'content' => /}/,
-              'order'   => '11',
+              'order'   => '03',
               'target'  => conf_file
 
             )

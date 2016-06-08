@@ -43,7 +43,7 @@ describe 'knot::tsig' do
           is_expected.to contain_concat__fragment('knot_key_foo.example.com')
             .with(
               'content' => /foo.example.com hmac-sha256 "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="/,
-              'order'   => '10',
+              'order'   => '02',
             )
         end
       end
@@ -56,7 +56,7 @@ describe 'knot::tsig' do
             is_expected.to contain_concat__fragment('knot_key_foo.example.com')
               .with(
                 'content' => /foo.example.com hmac-md5 "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="/,
-                'order'   => '10',
+                'order'   => '02',
               )
           end
         end
@@ -67,7 +67,7 @@ describe 'knot::tsig' do
             is_expected.to contain_concat__fragment('knot_key_foo.example.com')
               .with(
                 'content' => /foo.example.com hmac-sha256 "foobar"/,
-                'order'   => '10',
+                'order'   => '02',
               )
           end
         end

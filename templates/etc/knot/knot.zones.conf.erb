@@ -35,12 +35,12 @@ groups {
   }
   xfr-out-<%= @name %> {
 <%- @provide_xfr.each_with_index do |xfr, index| -%>
-    xfr-out-<%= @name %><%= index + 1 %><% if index + 1 < @provide_xfr.length then %>,<%- end -%>
+    xfr-out-<%= @name %><%= index + 1 %><% if index + 1 < @provide_xfr.length then %>,<%- end %>
 <%- end %>
   }
   notify-out-<%= @name %> {
 <%- @notify_addresses.each_with_index do |notify_address, index| -%>
-    notify-out-<%= @name %><%= index + 1 %><% if index + 1 < @notify_addresses.length then %>,<%- end -%>
+    notify-out-<%= @name %><%= index + 1 %><% if index + 1 < @notify_addresses.length then %>,<%- end %>
 <%- end %>
   }
   notify-in-<%= @name %> {

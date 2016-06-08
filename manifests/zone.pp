@@ -25,7 +25,6 @@ define knot::zone (
   } else {
     $zone_subdir = $::knot::zone_subdir
   }
-  $slave_addresses = $::knot::slave_addresses
   concat::fragment{ "knot_zones_${name}":
     target  => $::knot::conf_file,
     content => template($::knot::zones_template),
