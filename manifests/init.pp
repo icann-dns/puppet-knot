@@ -93,20 +93,20 @@ class knot (
     require => Package[$package_name],
     notify  => Service[$service_name];
   }
-  concat::fragment{'knot_server':
-    target  => $conf_file,
-    content => template($server_template),
-    order   => '01',
-  }
   concat::fragment{'key_head':
     target  => $conf_file,
     content => "keys {\n",
-    order   => '09',
+    order   => '01',
   }
   concat::fragment{'key_foot':
     target  => $conf_file,
     content => "}\n",
-    order   => '11',
+    order   => '03',
+  }
+  concat::fragment{'knot_server':
+    target  => $conf_file,
+    content => template($server_template),
+    order   => '10',
   }
   file { [$zonesdir, $zone_subdir, $conf_dir]:
     ensure  => directory,
