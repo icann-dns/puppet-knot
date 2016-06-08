@@ -45,7 +45,7 @@ groups {
   }
   notify-in-<%= @name %> {
 <%- @allow_notify.each_with_index do |notify, index| -%>
-    notify-out-<%= @name %><%= index + 1 %><% if index + 1 < @allow_notify.length then %>,<%- end %>
+    notify-in-<%= @name %><%= index + 1 %><% if index + 1 < @allow_notify.length then %>,<%- end %>
 <%- end -%>
   }
 }
