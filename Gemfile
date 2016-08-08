@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+gem "json_pure", "<=1.8.3"
+
 group :test do
     gem "rake"
     gem "rb-inotify", "<=0.9.5"
