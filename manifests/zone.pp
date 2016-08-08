@@ -8,6 +8,7 @@ define knot::zone (
   $zones            = [],
   $zonefile         = undef,
   $zone_dir         = undef,
+  $tsig_name        = undef,
 ) {
 
   validate_array($masters)
@@ -24,6 +25,16 @@ define knot::zone (
     $zone_subdir = $zone_dir
   } else {
     $zone_subdir = $::knot::zone_subdir
+  }
+  if $tsig_name {
+    validate_string($tsig_name)
+    if defined(Knot::Tsig[$tsig_name]) {
+      $_tsig_name = $tsig_name
+    } else {
+      fail("Nsd::Tsig['${tsig_name}'] does not exist")
+    }
+  } elsif has_key($::knot::tsig, 'name') {
+    $_tsig_name = $::knot::tsig['name']
   }
   concat::fragment{ "knot_zones_${name}":
     target  => $::knot::conf_file,

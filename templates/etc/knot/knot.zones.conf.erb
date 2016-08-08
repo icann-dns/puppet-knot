@@ -3,8 +3,8 @@ remotes {
   xfr-in-<%= @name %><%= index + 1 %> {
     address <%= master %>; 
     port 53;
-    <%- if @tsig then -%>
-    key <%= @tsig['name'] %>;
+    <%- if @_tsig_name then -%>
+    key <%= @_tsig_name %>;
     <%- end -%>
   }
 <%- end -%>
