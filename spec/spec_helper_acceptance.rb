@@ -2,13 +2,15 @@ require 'beaker-rspec'
 
 # Install Puppet on all hosts
 hosts.each do |host|
-  if host['platform'] =~ /freebsd/
-    #default installs incorect version
+  if host['platform'] =~ %r{freebsd}
+    # default installs incorect version
     host.install_package('sysutils/puppet38')
     host.install_package('dns/bind-tools')
-    #install_puppet_on(host)
+    # install_puppet_on(host)
   else
-    install_puppet_on(host)
+    host.install_package('vim')
+    host.install_package('dnsutils')
+    install_puppet_agent_on(host)
   end
 end
 
@@ -20,11 +22,12 @@ RSpec.configure do |c|
   c.before :suite do
     # Install module to all hosts
     hosts.each do |host|
-      install_dev_puppet_module_on(host, :source => module_root )
+      install_dev_puppet_module_on(host, source: module_root)
       # Install dependencies
       on(host, puppet('module', 'install', 'puppetlabs-stdlib'))
       on(host, puppet('module', 'install', 'puppetlabs-concat'))
-      on(host, puppet('module', 'install', 'puppetlabs-inifile'))
+      on(host, puppet('module', 'install', 'b4ldr-logrotate'))
+      on(host, puppet('module', 'install', 'icann-tea'))
     end
   end
 end

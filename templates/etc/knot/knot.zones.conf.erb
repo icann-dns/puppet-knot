@@ -1,74 +1,23 @@
-remotes {
-<%- @masters.each_with_index do |master, index| -%>
-  xfr-in-<%= @name %><%= index + 1 %> {
-    address <%= master %>; 
-    port 53;
-    <%- if @_tsig_name then -%>
-    key <%= @_tsig_name %>;
-    <%- end -%>
-  }
-<%- end -%>
-<%- @provide_xfr.each_with_index do |xfr, index| -%>
-  xfr-out-<%= @name %><%= index + 1 %> {
-    address <%= xfr %>;
-    port 53;
-  }
-<%- end -%>
-<%- @notify_addresses.each_with_index do |notify_address, index| -%>
-  notify-out-<%= @name %><%= index + 1 %> {
-    address <%= notify_address %>;
-    port 53;
-  }
-<%- end -%>
-<%- @allow_notify.each_with_index do |notify, index| -%>
-  notify-in-<%= @name %><%= index + 1 %> {
-    address <%= notify %>;
-    port 53;
-  }
-<%- end -%>
-}
-groups {
-  xfr-in-<%= @name %> {
-<%- @masters.each_with_index do |master, index| -%>
-    xfr-in-<%= @name %><%= index + 1 %><% if index + 1 < @masters.length then %>,<%- end %>
-<%- end -%>
-  }
-  xfr-out-<%= @name %> {
-<%- @provide_xfr.each_with_index do |xfr, index| -%>
-    xfr-out-<%= @name %><%= index + 1 %><% if index + 1 < @provide_xfr.length then %>,<%- end %>
-<%- end %>
-  }
-  notify-out-<%= @name %> {
-<%- @notify_addresses.each_with_index do |notify_address, index| -%>
-    notify-out-<%= @name %><%= index + 1 %><% if index + 1 < @notify_addresses.length then %>,<%- end %>
-<%- end %>
-  }
-  notify-in-<%= @name %> {
-<%- @allow_notify.each_with_index do |notify, index| -%>
-    notify-in-<%= @name %><%= index + 1 %><% if index + 1 < @allow_notify.length then %>,<%- end %>
-<%- end -%>
-  }
-}
-zones {
-  <%- @zones.each do |zone| -%>
-    "<%= zone %>" {
+<%- 
+  @notify_out = @provide_xfrs + @send_notify_additions
+  @notify_in  = @masters + @allow_notify_additions
+-%>
+    "<%= @name %>" {
       <%- if @zonefile then -%>
         file "<%= @zone_subdir %>/<%= @zonefile %>";
       <%- else -%>
-        file "<%= @zone_subdir %>/<%= zone %>";
+        file "<%= @zone_subdir %>/<%= @name %>";
       <%- end -%>
-      <%- if @notify_addresses.any? then -%>
-        notify-out notify-out-<%= @name %>, global-slaves;
+      <%- if @notify_out.any? then -%>
+        notify-out <%= @notify_out.join(', ') %>;
       <%- end -%>
-      <%- if @allow_notify.any? then -%>
-        notify-in notify-in-<%= @name %>;
+      <%- if @notify_in.any? then -%>
+        notify-in <%= @notify_in.join(', ') %>;
       <%- end -%>
       <%- if @masters.any? then -%>
-        xfr-in xfr-in-<%= @name %>;
+        xfr-in <%= @masters.join(', ') %>;
       <%- end -%>
-      <%- if @provide_xfr.any? then -%>
-        xfr-out xfr-out-<%= @name %>, global-slaves;
+      <%- if @provide_xfrs.any? then -%>
+        xfr-out <%= @provide_xfrs.join(', ') %>;
       <%- end -%>
     }
-  <%- end -%>
-}
