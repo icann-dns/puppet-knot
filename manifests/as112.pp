@@ -1,6 +1,7 @@
 # Class knot::as112
 #
 class knot::as112 {
+  include ::knot
   knot::file {
     'db.dd-empty':
       source  => 'puppet:///modules/knot/etc/knot/db.dd-empty';

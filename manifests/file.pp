@@ -9,6 +9,7 @@ define knot::file (
     Optional[String]             $content          = undef,
     Optional[Tea::Puppetcontent] $content_template = undef,
 ) {
+  include ::knot
   if $content and $content_template {
     fail('can\'t set $content and $content_template')
   } elsif $content {

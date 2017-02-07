@@ -8,6 +8,7 @@ define knot::zone (
   Optional[String]              $zonefile               = undef,
   Optional[Tea::Absolutepath]   $zone_dir               = undef,
 ) {
+  include ::knot
   if $zone_dir {
     validate_absolute_path($zone_dir)
     $zone_subdir = $zone_dir
