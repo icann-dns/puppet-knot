@@ -53,11 +53,12 @@ interfaces {
   <%- end -%>
 <%- end -%>
 }
-remotes {
 <%- if @control_allow.any? -%>
+remotes {
   <%- @control_allow.each_pair do |name, address| -%>
   <%= name %> { address <%= address %>; }
   <%- end -%>
+}
 <%- end -%>
 <%- if @control_enable -%>
 control {

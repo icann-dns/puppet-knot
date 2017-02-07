@@ -6,7 +6,7 @@ describe 'knot class' do
     it 'is_expected.to work with no errors' do
       pp = <<-EOS
   class {'::knot':
-    servers => {
+    remotes => {
       'lax.xfr.dns.icann.org' => {
         'address4' => '192.0.32.132'
       },
@@ -15,7 +15,7 @@ describe 'knot class' do
       },
     }
   }
-  nsd::zone {
+  knot::zone {
     '.':
       masters  => ['lax.xfr.dns.icann.org', 'iad.xfr.dns.icann.org'],
       zonefile => 'root';

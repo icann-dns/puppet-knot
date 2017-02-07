@@ -27,7 +27,7 @@ define knot::remote (
   concat::fragment{ "knot_groups_${name}":
     target  => $::knot::conf_file,
     content => template($::knot::groups_template),
-    order   => '16';
+    order   => '15';
   }
   #if $::knot::manage_nagios and $::knot::enable {
   #  knot::zone::nagios {$zones:

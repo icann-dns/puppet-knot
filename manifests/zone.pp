@@ -38,7 +38,7 @@ define knot::zone (
   concat::fragment{ "knot_zones_${name}":
     target  => $::knot::conf_file,
     content => template($::knot::zones_template),
-    order   => '20';
+    order   => '22';
   }
   #if $::knot::manage_nagios and $::knot::enable {
   #  knot::zone::nagios {$zones:
