@@ -1,0 +1,18 @@
+<%- if @address4 -%>
+  <%= @name %>-ipv4 {
+    address <%= @address4 %>; 
+    port <%= @port %>;
+    <%- if @_tsig_name -%>
+    key <%= @_tsig_name %>;
+    <%- end -%>
+  }
+<%- end -%>
+<%- if @address6 -%>
+  <%= @name %>-ipv6 {
+    address <%= @address6 %>; 
+    port <%= @port %>;
+    <%- if @_tsig_name -%>
+    key <%= @_tsig_name %>;
+    <%- end -%>
+  }
+<%- end -%>

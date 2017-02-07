@@ -1,0 +1,7 @@
+<%- if @address4 and @address6 -%> 
+  <%= @name %> { <%= @name %>-ipv4, <%= @name %>-ipv6 }
+<%- elsif @address6 -%>
+  <%= @name %> { <%= @name %>-ipv4 }
+<%- elsif @address6 -%>
+  <%= @name %> { <%= @name %>-ipv6 }
+<%- end -%>
