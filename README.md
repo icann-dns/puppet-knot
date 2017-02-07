@@ -340,7 +340,7 @@ Determins the version of knot by parsing the output of `knot -v`
 
 This module has been tested on:
 
-* Ubuntu 12.04, 14.04
+* Ubuntu 14.04, 16.04
 * FreeBSD 10
 
 ## Development
