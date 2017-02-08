@@ -21,7 +21,7 @@ describe 'knot::remote' do
   # while all required parameters will require you to add a value
   let(:params) do
     {
-      :address4 => '192.0.2.1',
+      address4: '192.0.2.1',
       # :address6 => :undef,
       # :tsig_name => :undef,
       # :port => '53',
@@ -31,9 +31,9 @@ describe 'knot::remote' do
   # add these two lines in a single test block to enable puppet and hiera debug mode
   # Puppet::Util::Log.level = :debug
   # Puppet::Util::Log.newdestination(:console)
-  let (:pre_condition) do
+  let(:pre_condition) do
     'class {\'::knot\':
-      tsigs => { \'example_tsig\' => { \'data\' => \'AAAA\' } } 
+      tsigs => { \'example_tsig\' => { \'data\' => \'AAAA\' } }
     }'
   end
   on_supported_os.each do |os, facts|
@@ -43,11 +43,11 @@ describe 'knot::remote' do
       end
       case facts[:operatingsystem]
       when 'Ubuntu'
-        let(:conf_dir)     { '/etc/knot' }
+        let(:conf_dir) { '/etc/knot' }
       else
-        let(:conf_dir)     { '/usr/local/etc/knot' }
+        let(:conf_dir) { '/usr/local/etc/knot' }
       end
-      let(:conf_file)   { "#{conf_dir}/knot.conf" }
+      let(:conf_file) { "#{conf_dir}/knot.conf" }
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
         it do
@@ -141,7 +141,7 @@ describe 'knot::remote' do
           end
         end
         context 'ipv4 and ipv6 cidr' do
-          before do 
+          before do
             params.merge!(address4: '192.0.2.0/24', address6: '2001:DB8::/48')
           end
           it { is_expected.to compile }
