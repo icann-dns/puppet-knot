@@ -14,7 +14,7 @@ define knot::remote (
     if defined(Knot::Tsig[$tsig_name]) {
       $_tsig_name = $tsig_name
     } else {
-      fail("Nsd::Tsig['${tsig_name}'] does not exist")
+      fail("Knot::Tsig['${tsig_name}'] does not exist")
     }
   } else {
     $_tsig_name = $::knot::default_tsig_name
