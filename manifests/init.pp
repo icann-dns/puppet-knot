@@ -134,7 +134,7 @@ class knot (
   }
   create_resources(knot::file, $files)
   create_resources(knot::tsig, $tsigs)
-  if $default_tsig_name and ! defined(Knot::Tsig($default_tsig_name)) {
+  if $default_tsig_name and ! defined(Knot::Tsig[$default_tsig_name]) {
     fail("Knot::Tsig['${default_tsig_name}'] does not exist")
   }
   create_resources(knot::remote, $remotes)
