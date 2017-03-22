@@ -3,6 +3,7 @@
 define knot::remote (
   Optional[Variant[Tea::Ipv4, Tea::Ipv4_cidr]] $address4  = undef,
   Optional[Variant[Tea::Ipv6, Tea::Ipv6_cidr]] $address6  = undef,
+  Optional[String]                             $tsig      = undef,
   Optional[String]                             $tsig_name = undef,
   Tea::Port                                    $port      = 53,
 ) {
@@ -10,7 +11,16 @@ define knot::remote (
   if ! $address4 and ! $address6 {
     fail("${name} must specify eiather address4 or address6")
   }
-  if $tsig_name {
+  if $tsig {
+    if ! defined(Knot::Tsig[$tsig]) {
+      fail("Knot::Tsig['${tsig}'] does not exist")
+    }
+    if ! $tsig_name {
+      fail(' you must define tsig_name when you deinfe tsig')
+    } else {
+      $_tsig_name = $tsig_name
+    }
+  } elsif $tsig_name {
     if defined(Knot::Tsig[$tsig_name]) {
       $_tsig_name = $tsig_name
     } else {
