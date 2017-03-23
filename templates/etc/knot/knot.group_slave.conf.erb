@@ -10,17 +10,30 @@ begin
     scope.call_function('warning', ['unable to connect to the puppet server, exported resources wont work'])
   end
   response_json = JSON.parse(response.body)
-
-  response_json.each_with_index do |resource, index|
+  slave_resources = response_json.collect do |resource|
     if resource['certname'] == @fqdn && resource['title'] =~ /dns__export_.+/
+      resource
+    end
+  end
+  slave_resources.compact!
+  slave_resources.each_with_index do |slave, index|
+    last = slave_resources.size - 1 == index
+    ipv4_address = slave['parameters'].include?('address4')
+    ipv6_address = slave['parameters'].include?('address6')
+    if ipv4_address
 -%>
-    <%= resource['title'] %><%- if index != response_json.length - 1 -%>,<%- end -%>
+    <%= slave['title'] %>-ipv4<%- if ! last || ipv6_address -%>,<%- end %>
+<%-
+    end
+    if ipv6_address
+-%>
+    <%= slave['title'] %>-ipv6<%- if ! last -%>,<%- end %>
 <%-
     end
   end
 rescue Exception => e
   scope.call_function('warning', ["unable to connect to the puppetdb server, exported resources wont work: #{e}"])
 end
-%>
+-%>
   }
 }
