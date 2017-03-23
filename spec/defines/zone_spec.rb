@@ -64,7 +64,13 @@ describe 'knot::zone' do
           is_expected.to contain_concat__fragment(
             'knot_zones_example.com'
           ).with_content(
-            %r{"example.com" \{\s+file "#{zone_subdir}/example.com";\s+\}}
+            %r{
+              "example.com"\s\{
+              \s+file\s"#{zone_subdir}/example.com";
+              \s+notify-out\sslave_servers;
+              \s+xfr-out\sslave_servers;
+              \s+\}
+            }x
           )
         end
       end

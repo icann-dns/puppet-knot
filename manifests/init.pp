@@ -39,6 +39,8 @@ class knot (
   Tea::Absolutepath            $run_dir           = $::knot::params::run_dir,
   Boolean                      $manage_nagios     = false,
   Optional[Tea::Absolutepath]  $network_status    = undef,
+  Tea::Ip_address              $puppetdb_server   = '127.0.0.1',
+  Tea::Port                    $puppetdb_port     = 8080,
   String                  $server_template  = 'knot/etc/knot/knot.server.conf.erb',
   String                  $zones_template   = 'knot/etc/knot/knot.zones.conf.erb',
   String                  $remotes_template = 'knot/etc/knot/knot.remotes.conf.erb',

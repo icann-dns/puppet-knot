@@ -8,8 +8,8 @@
       <%- else -%>
         file "<%= @zone_subdir %>/<%= @name %>";
       <%- end -%>
-      notify-out slave_servers;
-      xfr-out slave_servers;
+        notify-out slave_servers;
+        xfr-out slave_servers;
       <%- if @notify_out.any? then -%>
         notify-out <%= @notify_out.join(', ') %>;
       <%- end -%>
