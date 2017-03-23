@@ -3,17 +3,18 @@
 require 'net/http'
 require 'json'
 http     = Net::HTTP.new(@puppetdb_server, @puppetdb_port)
-request  = Net::HTTP::Get.new('/pdb/query/v4/resources/Nsd::Remote')
+request  = Net::HTTP::Get.new('/pdb/query/v4/resources/Knot::Remote')
 begin
   response = http.request(request)
   if response.code != 200
     scope.call_function('warning', ['unable to connect to the puppet server, exported resources wont work'])
   end
   response_json = JSON.parse(response.body)
-  response_json.each_index do |resource, index|
-    if resource['certname'] == @certname && resource['title'] =~ /dns::export_.+/
+
+  response_json.each_with_index do |resource, index|
+    if resource['certname'] == @fqdn && resource['title'] =~ /dns__export_.+/
 -%>
-  	<%= resource['title'] %><%- if index != response_json.length - 1 -%>,<%- end -%>
+    <%= resource['title'] %><%- if index != response_json.length - 1 -%>,<%- end -%>
 <%-
     end
   end
