@@ -43,6 +43,7 @@ class knot (
   String                  $zones_template   = 'knot/etc/knot/knot.zones.conf.erb',
   String                  $remotes_template = 'knot/etc/knot/knot.remotes.conf.erb',
   String                  $groups_template  = 'knot/etc/knot/knot.groups.conf.erb',
+  String                  $groups_slave_temp  = 'knot/etc/knot/knot.group_slave.conf.erb',
 ) inherits knot::params  {
 
   if $::kernel == 'linux' and $::lsbdistcodename == 'precise' {
@@ -85,7 +86,7 @@ class knot (
   }
   concat::fragment{'groups_foot':
     target  => $conf_file,
-    content => "}\n",
+    content => template($groups_slave_temp),
     order   => '16',
   }
   concat::fragment{'zones_head':
