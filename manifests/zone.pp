@@ -9,6 +9,8 @@ define knot::zone (
   Optional[Tea::Absolutepath]   $zone_dir               = undef,
 ) {
   include ::knot
+  $default_masters      = $knot::default_masters
+  $default_provide_xfrs = $knot::default_provide_xfrs
   if $zone_dir {
     validate_absolute_path($zone_dir)
     $zone_subdir = $zone_dir

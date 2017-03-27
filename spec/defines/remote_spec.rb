@@ -50,6 +50,8 @@ describe 'knot::remote' do
       let(:conf_file) { "#{conf_dir}/knot.conf" }
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
+        it { is_expected.to contain_knot__tsig('example_tsig') }
+        it { is_expected.to contain_concat__fragment('knot_key_example_tsig') }
         it do
           is_expected.to contain_concat__fragment(
             'knot_remotes_xfr.example.com'

@@ -19,7 +19,9 @@ describe 'knot' do
         'master' => { 'address4' => '192.0.2.1' },
         'provide_xfr' => { 'address4' => '192.0.2.2' },
         'allow_notify_addition' => { 'address4' => '192.0.2.3' },
-        'send_notify_addition' => { 'address4' => '192.0.2.4' }
+        'send_notify_addition' => { 'address4' => '192.0.2.4' },
+        'default_master'      => { 'address4' => '192.0.2.5' },
+        'default_provide_xfr' => { 'address4' => '192.0.2.6' }
       },
       zones: { 'example.com' => { 'masters' => ['master'] } },
       tsigs: { 'test.example.com' => { 'data' => 'AAAAA' } },
@@ -93,9 +95,15 @@ describe 'knot' do
         it { is_expected.to contain_knot__remote('master') }
         it { is_expected.to contain_concat__fragment('knot_remotes_master') }
         it { is_expected.to contain_concat__fragment('knot_groups_master') }
+        it { is_expected.to contain_knot__remote('default_master') }
+        it { is_expected.to contain_concat__fragment('knot_remotes_default_master') }
+        it { is_expected.to contain_concat__fragment('knot_groups_default_master') }
         it { is_expected.to contain_knot__remote('provide_xfr') }
         it { is_expected.to contain_concat__fragment('knot_remotes_provide_xfr') }
+        it { is_expected.to contain_knot__remote('default_provide_xfr') }
         it { is_expected.to contain_concat__fragment('knot_groups_provide_xfr') }
+        it { is_expected.to contain_concat__fragment('knot_remotes_default_provide_xfr') }
+        it { is_expected.to contain_concat__fragment('knot_groups_default_provide_xfr') }
         it { is_expected.to contain_knot__remote('allow_notify_addition') }
         it do
           is_expected.to contain_concat__fragment(

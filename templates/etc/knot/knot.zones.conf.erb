@@ -18,8 +18,12 @@
       <%- end -%>
       <%- if @masters.any? then -%>
         xfr-in <%= @masters.join(', ') %>;
+      <%- elsif @default_masters.any? -%>
+        xfr-in <%= @default_masters.join(', ') %>;
       <%- end -%>
       <%- if @provide_xfrs.any? then -%>
         xfr-out <%= @provide_xfrs.join(', ') %>;
+      <%- elsif @default_provide_xfrs.any? -%>
+        xfr-out <%= @default_provide_xfrs.join(', ') %>;
       <%- end -%>
     }
