@@ -31,7 +31,11 @@ describe 'knot::zone' do
         \'provide_xfr\' => { \'address4\' => \'192.0.2.2\' },
         \'allow_notify_addition\' => { \'address4\' => \'192.0.2.3\' },
         \'send_notify_addition\' => { \'address4\' => \'192.0.2.4\' },
-      }
+        \'default_master\' => { \'address4\' => \'192.0.2.5\' },
+        \'default_provide_xfr\' => { \'address4\' => \'192.0.2.6\' },
+      },
+      default_masters => [\'default_master\'],
+      default_provide_xfrs => [\'default_provide_xfr\']
     }'
   end
   # below is the facts hash that gives you the ability to mock
@@ -69,6 +73,8 @@ describe 'knot::zone' do
               \s+file\s"#{zone_subdir}/example.com";
               \s+notify-out\sslave_servers;
               \s+xfr-out\sslave_servers;
+              \s+xfr-in\sdefault_master;
+              \s+xfr-out\sdefault_provide_xfr;
               \s+\}
             }x
           )

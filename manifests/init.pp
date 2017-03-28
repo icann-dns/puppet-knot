@@ -6,7 +6,6 @@ class knot (
   Array[String]                $default_provide_xfrs = [],
   Boolean                      $enable               = true,
   Hash                         $tsig                 = {},
-  Hash                         $slave_addresses      = {},
   Hash                         $zones                = {},
   Hash                         $tsigs                = {},
   Hash                         $files                = {},
@@ -144,13 +143,13 @@ class knot (
   }
   create_resources(knot::remote, $remotes)
   $default_masters.each |String $master| {
-    if ! defined(Nsd::Remote[$master]) {
-      fail("Nsd::Remote['${master}'] does not exist but defined as default master")
+    if ! defined(Knot::Remote[$master]) {
+      fail("Knot::Remote['${master}'] does not exist but defined as default master")
     }
   }
   $default_provide_xfrs.each |String $provider_xfr| {
-    if ! defined(Nsd::Remote[$provider_xfr]) {
-      fail("Nsd::Remote['${provider_xfr}'] does not exist but defined as default master")
+    if ! defined(Knot::Remote[$provider_xfr]) {
+      fail("Knot::Remote['${provider_xfr}'] does not exist but defined as default master")
     }
   }
   create_resources(knot::zone, $zones)

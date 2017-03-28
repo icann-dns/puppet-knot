@@ -304,13 +304,6 @@ describe 'knot' do
             )
           end
         end
-        context 'slave_addresses' do
-          before do
-            params.merge!(slave_addresses: { '192.0.2.2' => 'foobar.example.com' })
-          end
-          it { is_expected.to compile }
-          # Add Check to validate change was successful
-        end
         context 'ip_addresses' do
           before { params.merge!(ip_addresses: ['192.0.2.2']) }
           it { is_expected.to compile }
