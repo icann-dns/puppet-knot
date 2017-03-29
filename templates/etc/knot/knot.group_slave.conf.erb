@@ -13,7 +13,7 @@ begin
   end
   response_json = JSON.parse(response.body)
   slave_resources = response_json.collect do |resource|
-    if resource['certname'] == @fqdn && resource['title'] =~ /dns__export_.+/
+    if resource['certname'] == @trusted['certname'] && resource['title'] =~ /dns__export_.+/
       resource
     end
   end
