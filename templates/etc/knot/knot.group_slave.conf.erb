@@ -7,7 +7,9 @@ request  = Net::HTTP::Get.new('/pdb/query/v4/resources/Knot::Remote')
 begin
   response = http.request(request)
   if response.code != 200
-    scope.call_function('warning', ['unable to connect to the puppet server, exported resources wont work'])
+    scope.call_function(
+      'warning',
+      ["unable to connect to the puppet server, exported resources wont work: #{response.code}"])
   end
   response_json = JSON.parse(response.body)
   slave_resources = response_json.collect do |resource|
