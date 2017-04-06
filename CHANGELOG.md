@@ -1,3 +1,11 @@
+### 2017-04-06 0.2.0
+* Complete rewrite of the zones hash.
+* depricated the old $tsig hash now all hashs have to be defined in $tsisg and then refrenced by name in the remotes
+* added new nsd::remotes define.  allows you to define data about remote servers and then refrence them by name where ever a zone paramter would require a server e.g. masters, provide_xfrs, notifis etc
+* added default_tsig_name.  this specifies which nsd::tsig should be used by default
+* added default_masters.  this specifies an array of nsd::remote to use by default
+* added default_provide_xfrs.  this specifies an array of nsd::remote to use by default
+
 ### 2016-08-08 0.1.3
 * fix variable scope for future parser
 

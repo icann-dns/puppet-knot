@@ -1,6 +1,6 @@
 {
   "name": "icann-knot",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "author": "john.bond@icann.org",
   "summary": "Installs and configuers knot from nic.cz",
   "license": "Apache-2.0",
@@ -15,7 +15,7 @@
   "operatingsystem_support": [
     {
       "operatingsystem" : "Ubuntu",
-      "operatingsystemrelease" : [ "14.0.4", "16.0.6" ]
+      "operatingsystemrelease" : [ "14.0.4" ]
     },
     {
       "operatingsystem" : "FreeBSD",
