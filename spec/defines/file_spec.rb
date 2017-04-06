@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'knot::file' do
@@ -25,6 +27,7 @@ describe 'knot::file' do
     }
   end
   let(:pre_condition) { "class { '::knot': }" }
+
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
   # manifest you should mock the facts below.
@@ -47,6 +50,7 @@ describe 'knot::file' do
       let(:zonesdir)    { "#{conf_dir}/zone" }
       let(:zone_subdir) { "#{zonesdir}/zone" }
       let(:pidfile)     { "#{run_dir}/knot.pid" }
+
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'knot::tsig' do
@@ -20,6 +22,7 @@ describe 'knot::tsig' do
       # template: "knot/etc/knot/knot.key.conf.erb",
     }
   end
+
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
   # manifest you should mock the facts below.
@@ -28,6 +31,7 @@ describe 'knot::tsig' do
       let(:facts) do
         facts.merge(knot_version: '1.6.0')
       end
+
       describe 'check default config' do
         # add these two lines in a single test block to enable puppet and hiera debug mode
         # Puppet::Util::Log.level = :debug

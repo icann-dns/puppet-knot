@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 knotc_bin = case Facter.value('kernel')
             when 'FreeBSD'
               '/usr/sbin/knotc'

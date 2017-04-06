@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'knot::zone' do
@@ -38,6 +40,7 @@ describe 'knot::zone' do
       default_provide_xfrs => [\'default_provide_xfr\']
     }'
   end
+
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
   # manifest you should mock the facts below.
@@ -60,6 +63,7 @@ describe 'knot::zone' do
       let(:zonesdir)    { "#{conf_dir}/zone" }
       let(:zone_subdir) { "#{zonesdir}/zone" }
       let(:pidfile)     { "#{run_dir}/knot.pid" }
+
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_knot__zone('example.com') }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'knot::remote' do
@@ -36,6 +38,7 @@ describe 'knot::remote' do
       tsigs => { \'example_tsig\' => { \'data\' => \'AAAA\' } }
     }'
   end
+
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
@@ -48,6 +51,7 @@ describe 'knot::remote' do
         let(:conf_dir) { '/usr/local/etc/knot' }
       end
       let(:conf_file) { "#{conf_dir}/knot.conf" }
+
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_knot__tsig('example_tsig') }
