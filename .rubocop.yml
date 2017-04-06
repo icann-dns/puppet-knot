@@ -1,6 +1,6 @@
 require: rubocop-rspec
 AllCops:
-  TargetRubyVersion: 1.9
+  TargetRubyVersion: 2.3
   Include:
     - ./**/*.rb
   Exclude:
@@ -9,6 +9,9 @@ AllCops:
     - .vendor/**/*
     - pkg/**/*
     - spec/fixtures/**/*
+    - Gemfile
+    - Vagrantfile
+    - Rakefile
 Lint/ConditionPosition:
   Enabled: True
 
@@ -35,6 +38,9 @@ Lint/ShadowingOuterLocalVariable:
 
 Lint/LiteralInInterpolation:
   Enabled: True
+
+Style/IndentHeredoc:
+  Enabled: False
 
 Style/HashSyntax:
   Enabled: True
