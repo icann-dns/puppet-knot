@@ -14,7 +14,7 @@ hosts.each do |host|
   end
   install_puppet_on(
     host,
-    version: 4,
+    version: '4',
     puppet_agent_version: '1.6.1',
     default_action: 'gem_install'
   )
