@@ -4,6 +4,8 @@
 
 # knot
 
+# WARNING version 0.2.x is *NOT* backwards compatible with 0.1.x
+
 #### Table of Contents
 
 1. [Overview](#overview)
@@ -37,7 +39,9 @@ file, keys and zonefiles.
 
 ### Setup Requirements **OPTIONAL**
 
-* depends on stdlib 4.11.0 (may work with earlier versions)
+* puppetlabs-stdlib 4.11.0
+* icann-tea 0.2.8
+* puppetlabs-concat 1.2.0
 
 ### Beginning with knot
 
@@ -69,11 +73,13 @@ rrl_size: 1000
 Add config with primary tsig key
 
 ```puppet
-class {'::knot': 
-  tsig => {
-    'name' => 'test',
-    'algo' => 'hmac-sha256',
-    'data' => 'adsasdasdasd='
+class {'::knot':
+  default_tsig_name: 'test',
+  tsigs => {
+    'test',=>  {
+      'algo' => 'hmac-sha256',
+      'data' => 'adsasdasdasd='
+    }
   }
 }
 ```
@@ -81,28 +87,34 @@ class {'::knot':
 or with hiera
 
 ```yaml
-knot::tsig:
-  name: test
-  algo: hmac-sha256
-  data: adsasdasdasd=
+knot::default_tsig_name: test
+knot::tsigs:
+  test:
+    algo: hmac-sha256
+    data: adsasdasdasd=
 ```
 
 add zone files.  zone files are added with sets of common config.
 
 ```puppet
-class {'::knot': 
+class {'::knot':
+  remotes => {
+    master_v4 => { 'address4' => '192.0.2.1' },
+    master_v6 => { 'address6' => '2001:DB8::1' },
+    slave     => { 'address4' => '192.0.2.2' },
+  }
   zones => {
-    'master1_zones' => {
-      'allow_notify' => ['192.0.2.1'],
-      'masters'      => ['192.0.2.1'],
-      'provide_xfr'  => ['127.0.0.1'],
-      'zones'        => ['example.com', 'example.net']
+    'example.com' => {
+      'masters' => ['master_v4', 'master_v6']
+      'provide_xfrs'  => ['slave'],
     },
-    'master2_zones'  => {
-      'allow_notify' => ['192.0.2.2'],
-      'masters'      => ['192.0.2.2'],
-      'provide_xfr'  => ['127.0.0.2'],
-      'zones'        => ['example.org']
+    'example.net' => {
+      'masters' => ['master_v4', 'master_v6']
+      'provide_xfrs'  => ['slave'],
+    }
+    'example.org' => {
+      'masters' => ['master_v4', 'master_v6']
+      'provide_xfrs'  => ['slave'],
     }
   }
 }
@@ -111,123 +123,32 @@ class {'::knot':
 in hiera
 
 ```yaml
+knot::remotes:
+  master_v4:
+	address4: 192.0.2.1
+  master_v6:
+	address4: 2001:DB8::1
+  slave:
+	address4: 192.0.2.2
 knot::zones:
-  master1_zones:
-    allow_notify:
-    - 192.0.2.1
-    masters:
-    - 192.0.2.1
-    provide_xfr:
-    - 192.0.2.1
-    zones:
-    - example.com
-    - example.net
-  master2_zones:
-    allow_notify:
-    - 192.0.2.2
-    masters:
-    - 192.0.2.2
-    provide_xfr:
-    - 192.0.2.2
-    zones:
-    - example.org
+  example.com:
+	masters: &id001
+	- master_v4
+	- master_v6
+	provide_xfrs: &id002
+	- slave
+  example.net:
+	masters: *id001
+	slave: *id002
+  example.org:
+	masters: *id001
+	slave: *id002
 ```
 
-creat and as112 server also uses the knot::file resource
+create and as112, please look at the as112 class to see how this works under the hood
 
 ```puppet
-  class {'::knot': }
-  knot::zone {
-    'rfc1918': 
-      'zonefile' => 'db.dd-empty',
-      'zones' => [
-        '10.in-addr.arpa',
-        '16.172.in-addr.arpa',
-        '17.172.in-addr.arpa',
-        '18.172.in-addr.arpa',
-        '19.172.in-addr.arpa',
-        '20.172.in-addr.arpa',
-        '21.172.in-addr.arpa',
-        '22.172.in-addr.arpa',
-        '23.172.in-addr.arpa',
-        '24.172.in-addr.arpa',
-        '25.172.in-addr.arpa',
-        '26.172.in-addr.arpa',
-        '27.172.in-addr.arpa',
-        '28.172.in-addr.arpa',
-        '29.172.in-addr.arpa',
-        '30.172.in-addr.arpa',
-        '31.172.in-addr.arpa',
-        '168.192.in-addr.arpa',
-        '254.169.in-addr.arpa'
-      ];
-    'empty.as112.arpa':
-      'zonefile' => 'db.dr-empty',
-      'zones'    => ['empty.as112.arpa'];
-    'hostname.as112.net':
-      'zonefile' => 'hostname.as112.net.zone',
-      'zones'    =>  ['hostname.as112.net'];
-    'hostname.as112.arpa':
-      'zonefile' => 'hostname.as112.arpa.zone',
-      'zones'    => ['hostname.as112.arpa'];
-  }
-  knot::file {
-    'db.dd-empty':
-      source  => 'puppet:///modules/knot/etc/knot/db.dd-empty';
-    'db.dr-empty':
-      source  => 'puppet:///modules/knot/etc/knot/db.dr-empty';
-    'hostname.as112.net.zone':
-      content_template => 'knot/etc/knot/hostname.as112.net.zone.erb';
-    'hostname.as112.arpa.zone':
-      content_template => 'knot/etc/knot/hostname.as112.arpa.zone.erb';
-  }
-```
-
-```yaml
-knot::files:
-  db.dd-empty:
-    source: 'puppet:///modules/knot/etc/knot/db.dd-empty'
-  db.dr-empty:
-    source: 'puppet:///modules/knot/etc/knot/db.dr-empty'
-  hostname.as112.net.zone:
-    content_template: 'knot/etc/knot/hostname.as112.net.zone.erb'
-  hostname.as112.arpa.zone:
-    content_template: 'knot/etc/knot/hostname.as112.arpa.zone.erb'
-knot::zones:
-  rfc1918:
-    zonefile: db.dd-empty
-    zones:
-    - 10.in-addr.arpa
-    - 16.172.in-addr.arpa
-    - 17.172.in-addr.arpa
-    - 18.172.in-addr.arpa
-    - 19.172.in-addr.arpa
-    - 20.172.in-addr.arpa
-    - 21.172.in-addr.arpa
-    - 22.172.in-addr.arpa
-    - 23.172.in-addr.arpa
-    - 24.172.in-addr.arpa
-    - 25.172.in-addr.arpa
-    - 26.172.in-addr.arpa
-    - 27.172.in-addr.arpa
-    - 28.172.in-addr.arpa
-    - 29.172.in-addr.arpa
-    - 30.172.in-addr.arpa
-    - 31.172.in-addr.arpa
-    - 168.192.in-addr.arpa
-    - 254.169.in-addr.arpa
-  'empty.as112.arpa':
-    zonefile: db.dr-empty
-    zones:
-    - empty.as112.arpa
-  'hostname.as112.net':
-    zonefile: hostname.as112.net.zone
-    zones:
-    - hostname.as112.net
-  'hostname.as112.arpa':
-    zonefile: hostname.as112.arpa.zone
-    zones:
-    - hostname.as112.arpa
+  class {'::nsd::as112': }
 ```
 
 ## Reference
@@ -241,6 +162,7 @@ knot::zones:
     - [`knot::file`](#defined-knotfile)
     - [`knot::tsig`](#defined-knottsig)
     - [`knot::zone`](#defined-knotzone)
+    - [`knot::zone`](#defined-knotremotes)
 - [**Facts**](#facts)
     - ['knot_version'](#fact-knotversion)
 
@@ -253,37 +175,48 @@ knot::zones:
   
 ##### Parameters (all optional)
 
+* `default_tsig_name` (Optional[String], Default: undef): the default tsig to use when fetching zone data. Knot::Tsig[$default_tsig_name] must exist
+* `default_masters` (Array[String], Default: []): Array of Knot::Remote names to use as the default master servers if none are specified in the zone hash
+* `default_provide_xfrs` (Array[String], Default: []): Array of Knot::Remote names to use as the provide_xfr servers if none are specified in the zone hash
 * `enable` (Bool, Default: true): enable or disable the knot service, config files are still configuered.
-* `tsig` { name => '', algo => '', data => '' }: primary tsig for legecy reasons this doesnt use knot::tsig (i intend to fix that)
-* `slave_addresses` (Hash, Default: {}): a hash key value pairs representing ip address tsig key name values.  e.g. { '192.0.2.1' : 'tsig-key' }.
 * `zones`: a hash which is passed to create_resoure(knot::zone, $zones). Default: Empty.
 * `files` (Hash, Default: {}):  a hash which is passed to create_resoure(knot::file, $files).
 * `tsigs` (Hash, Default: {}): a hash which is passed to create_resoure(knot::tsig, $tsigs)
-* `server_template` (File Path, Default: 'knot/etc/knot/knot.server.conf.'): template file to use for server config.  only change if you know what you are doing.
-* `zones_template` (File Path, Default: 'knot/etc/knot/knot.zones.conf.erb'): template file to use for zone config.  only change if you know what you are doing.
+* `remotes` (Hash, Default: {}): a hash which is passed to create_resoure(knot::remote, $remotes)
 * `ip_addresses` (Array, Default: [$::ipaddress]): Array of IP addresses to listen on.
 * `identity` (String, Default: $::fqdn): A string to specify the identity when asked for CH TXT ID.SERVER
 * `nsid` (String, Default: $::fqdn): A string representing the nsid to add to the EDNS section of the answer when queried with an NSID EDNS enabled packet.
-* `log_target` (File Path or /^(stdout|stderr|syslog)$/, Default: syslog): where to send logs.
+* `log_target` (Knot::Log_target, Default: syslog): where to send logs.
+* `log_zone_level` (Knot::Log_level, Default: notice): Log level for zone messages
+* `log_server_level` (Knot::Log_level, Default: info): Log level for server messages
+* `log_any_level` (Knot::Log_level, Default: error): Log level for any messages
 * `server_count (Integer. Default: $::processorcount)`:  Start this many KNOT workers.
 * `max_tcp_clients` (Integer, Default: 250):  The maximum number of concurrent, active TCP connections by each server. valid options: Integer.
 * `max_udp_payload` (Integer < 4097, Default: 4096): Preferred EDNS buffer size.
-* `pidfile` (File Path, Default: OS Specific): Use the pid file.
-* `port` (Integer < 65536, Default: 53): Port to listen on.
+* `pidfile` (Tea::Absolutepath, Default: OS Specific): Use the pid file.
+* `port` (Tea::Port, Default: 53): Port to listen on.
 * `username` (String, Default: knot): After binding the socket, drop user privileges and assume the username.
-* `zonesdir` (File Path, Default: OS Specific): The data directory
-* `hide_version`: Prevent KNOT from replying with the version string on CHAOS class queries. Valid Optional: bool. Default: false
-* `rrl_size`: This option gives the size of the  hashtable. Valid Optional Integer. Default: 1000000
-* `rrl_limit` (Integer, Default:200):  The max qps allowed.
-* `rrl_slip` (Integer=2): This option controls the number of packets discarded before we send back a SLIP response
+* `zonesdir` (Tea::Absolutepath, Default: OS Specific): The data directory
+* `hide_version`: (Boolean, Default: false): Prevent KNOT from replying with the version string on CHAOS class queries.
+* `rrl_size`: (Integet, Default: 1000000): This option gives the size of the  hashtable.
+* `rrl_limit` (Integer, Default: 200):  The max qps allowed.
+* `rrl_slip` (Integer, Default: 2): This option controls the number of packets discarded before we send back a SLIP response
 * `control_enable` (Bool, Default: false): Enable remote control
 * `control_interface` (Array, Default: undef): the interfaces for remote control service 
-* `control_port` (Integer < 65536, Default: 8952): the port number for remote control service 
+* `control_port` (Tea::Port, Default: 8952): the port number for remote control service 
 * `package_name` (String, Default: OS Specific): The package to install
 * `service_name` (String, Default: OS Specific): The service to manage
-* `zone_subdir` (File Path, Default: OS Specific): The zone directory
+* `zone_subdir` (Tea::Absolutepath, Default: OS Specific): The zone directory
 * `conf_file` (File Path, Default: OS Specific): The config file
+* `puppetdb_server` (Tea::Ip_address, Default: '127.0.0.1'): the ip address of the puppet database server.  This is only used for exported resources and the script that uses it runs from the puppet master server.  So in a monalithic install localhost should be fine.  None monolithic installs will need some way of allowing this connection from the master
+* `puppetdb_port` (Tea::Port, Default: 8080): the port of the puppet database server unencrypted API interface.  This is only used for exported resources and the script that uses it runs from the puppet master server.  So in a monalithic install localhost should be fine.  None monolithic installs will need some way of allowing this connection from the master
 * `network_status` (File Path, Default: undef): if present the upstart script will halt untill this script exits with 0.  used to ensure the network is up before starting knot.  [ upstarts network started trigger fires when the first interface is configuered so knot might not start at boot if you have multible addresses on the same interface] 
+* `server_template` (File Path, Default: 'knot/etc/knot/knot.server.conf.'): template file to use for server config.  only change if you know what you are doing.
+* `zones_template` (File Path, Default: 'knot/etc/knot/knot.zones.conf.erb'): template file to use for zone config.  only change if you know what you are doing.
+* `remotes_template` (File Path, Default: 'knot/etc/knot/knot.remotes.conf.erb'): template file to use for zone config.  only change if you know what you are doing.
+* `groups_template` (File Path, Default: 'knot/etc/knot/knot.groups.conf.erb'): template file to use for zone config.  only change if you know what you are doing.
+* `groups_slave_temp` (File Path, Default: 'knot/etc/knot/knot.groups_slave.conf.erb'): template file to use for zone config.  only change if you know what you are doing.
+
 ### Private Classes
 
 #### Class `knot::params`
@@ -329,6 +262,17 @@ Manage a zone set conifg for knot
 * `zones` (Array, Default: []): List of zones with this configueration
 * `zonefile` (String, Default: undef): zonefile name, (will be used for all zones)
 * `zone_dir` (File Path, Default: undef): override default zone path
+
+#### Defined `knot::remote`
+
+used to define remote serveres these are used later to configure the system
+
+##### Parameters
+
+* `address4` (Optional[Variant[Tea::Ipv4, Tea::Ipv4_cidr]]): ipv4 address or prefix for this remote
+* `address6` (Optional[Variant[Tea::Ipv6, Tea::Ipv6_cidr]]): ipv6 address or prefix for this remote
+* `tsig_name`: (Optional[String]): nsd::tsig to use
+* `port`: (Tea::Port, Default: 53): port use to talk to remote.
 
 ### Facts
 
