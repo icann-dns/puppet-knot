@@ -53,29 +53,13 @@ interfaces {
   <%- end -%>
 <%- end -%>
 }
-remotes {
 <%- if @control_allow.any? -%>
+remotes {
   <%- @control_allow.each_pair do |name, address| -%>
   <%= name %> { address <%= address %>; }
   <%- end -%>
-<%- end -%>
-<%- if @slave_addresses -%>
-  <%- @slave_addresses.each_pair do |iface, key| -%>
-  <%= key %><%- if iface.include? ':' then -%>v6<%- else -%>v4<%- end -%> {
-    address <%= iface %>;
-    port 53;
-    key <%= key %>;
-  }
-  <%- end -%>
-<%- end -%>
 }
-groups {
-  global-slaves {
-<%- @slave_addresses.each_with_index do |(iface, key), index| -%>
-    <%= key %><%- if iface.include? ':' then -%>v6<%- else -%>v4<%- end -%><%- if index + 1 < @slave_addresses.length %>,<%- end %>
 <%- end -%>
-    }
-}
 <%- if @control_enable -%>
 control {
   <%- if !@control_interface.nil? -%>

@@ -1,89 +1,53 @@
 #== Class: knot
 #
 class knot (
-  $enable            = true,
-  $tsig              = {},
-  $slave_addresses   = {},
-  $zones             = {},
-  $tsigs             = {},
-  $files             = {},
-  $server_template   = 'knot/etc/knot/knot.server.conf.erb',
-  $zones_template    = 'knot/etc/knot/knot.zones.conf.erb',
-  $ip_addresses      = $::knot::params::ip_addresses,
-  $identity          = $::knot::params::identity,
-  $nsid              = $::knot::params::nsid,
-  $log_target        = 'syslog',
-  $log_zone_level    = 'notice',
-  $log_server_level  = 'info',
-  $log_any_level     = 'error',
-  $server_count      = $::knot::params::server_count,
-  $max_tcp_clients   = 250,
-  $max_udp_payload   = 4096,
-  $pidfile           = $::knot::params::pidfile,
-  $port              = 53,
-  $username          = 'knot',
-  $zonesdir          = $::knot::params::zonesdir,
-  $hide_version      = false,
-  $rrl_size          = 1000000,
-  $rrl_limit         = 200,
-  $rrl_slip          = 2,
-  $control_enable    = true,
-  $control_interface = '127.0.0.1',
-  $control_port      = 5533,
-  $control_allow     = { 'localhost' => '127.0.0.1' },
-  $package_name      = $::knot::params::package_name,
-  $service_name      = 'knot',
-  $conf_dir          = $::knot::params::conf_dir,
-  $zone_subdir       = $::knot::params::zone_subdir,
-  $conf_file         = $::knot::params::conf_file,
-  $run_dir           = $::knot::params::run_dir,
-  $network_status    = undef,
-  $manage_nagios     = false,
+  Optional[String]             $default_tsig_name    = undef,
+  Array[String]                $default_masters      = [],
+  Array[String]                $default_provide_xfrs = [],
+  Boolean                      $enable               = true,
+  Hash                         $tsig                 = {},
+  Hash                         $zones                = {},
+  Hash                         $tsigs                = {},
+  Hash                         $files                = {},
+  Hash                         $remotes              = {},
+  Array[Tea::Ip_address]       $ip_addresses         = $::knot::params::ip_addresses,
+  String                       $identity             = $::knot::params::identity,
+  String                       $nsid                 = $::knot::params::nsid,
+  Knot::Log_target             $log_target           = 'syslog',
+  Knot::Log_level              $log_zone_level       = 'notice',
+  Knot::Log_level              $log_server_level     = 'info',
+  Knot::Log_level              $log_any_level        = 'error',
+  Integer[1,255]               $server_count         = $::knot::params::server_count,
+  Integer                      $max_tcp_clients      = 250,
+  Integer[512,4096]            $max_udp_payload      = 4096,
+  Tea::Absolutepath            $pidfile              = $::knot::params::pidfile,
+  Tea::Port                    $port                 = 53,
+  String                       $username             = 'knot',
+  Tea::Absolutepath            $zonesdir             = $::knot::params::zonesdir,
+  Boolean                      $hide_version         = false,
+  Integer                      $rrl_size             = 1000000,
+  Integer                      $rrl_limit            = 200,
+  Integer                      $rrl_slip             = 2,
+  Boolean                      $control_enable       = true,
+  Tea::Ip_address              $control_interface    = '127.0.0.1',
+  Tea::Port                    $control_port         = 5533,
+  Hash[String,Tea::Ip_address] $control_allow        = {'localhost' => '127.0.0.1'},
+  String                       $package_name         = $::knot::params::package_name,
+  String                       $service_name         = 'knot',
+  Tea::Absolutepath            $conf_dir             = $::knot::params::conf_dir,
+  Tea::Absolutepath            $zone_subdir          = $::knot::params::zone_subdir,
+  Tea::Absolutepath            $conf_file            = $::knot::params::conf_file,
+  Tea::Absolutepath            $run_dir              = $::knot::params::run_dir,
+  Boolean                      $manage_nagios        = false,
+  Optional[Tea::Absolutepath]  $network_status       = undef,
+  Tea::Ip_address              $puppetdb_server      = '127.0.0.1',
+  Tea::Port                    $puppetdb_port        = 8080,
+  String                  $server_template   = 'knot/etc/knot/knot.server.conf.erb',
+  String                  $zones_template    = 'knot/etc/knot/knot.zones.conf.erb',
+  String                  $remotes_template  = 'knot/etc/knot/knot.remotes.conf.erb',
+  String                  $groups_template   = 'knot/etc/knot/knot.groups.conf.erb',
+  String                  $groups_slave_temp = 'knot/etc/knot/knot.group_slave.conf.erb',
 ) inherits knot::params  {
-
-  validate_bool($enable)
-  validate_hash($tsig)
-  validate_hash($slave_addresses)
-  validate_hash($zones)
-  validate_hash($tsigs)
-  validate_hash($files)
-  validate_absolute_path("/${server_template}")
-  validate_absolute_path("/${zones_template}")
-  validate_array($ip_addresses)
-  validate_string($identity)
-  validate_string($nsid)
-  if ! is_absolute_path($log_target) {
-    validate_re($log_target, '^(stdout|stderr|syslog)$',
-        'log target must be a file path, stdout, stderr or syslog' )
-  }
-  validate_re($log_zone_level, '^(debug|info|notice|warning|error|critical)$')
-  validate_re($log_server_level, '^(debug|info|notice|warning|error|critical)$')
-  validate_re($log_any_level, '^(debug|info|notice|warning|error|critical)$')
-  validate_integer($server_count)
-  validate_integer($max_tcp_clients)
-  validate_integer($max_udp_payload, 65535)
-  validate_integer($port, 65535)
-  validate_string($username)
-  validate_absolute_path($zonesdir)
-  validate_bool($hide_version)
-  validate_integer($rrl_limit)
-  validate_integer($rrl_size)
-  validate_integer($rrl_slip)
-  validate_bool($control_enable)
-  validate_ip_address($control_interface)
-  validate_integer($control_port, 65535)
-  validate_hash($control_allow)
-  validate_string($package_name)
-  validate_string($service_name)
-  validate_absolute_path($conf_dir)
-  validate_absolute_path($zone_subdir)
-  validate_absolute_path($conf_file)
-  validate_absolute_path($run_dir)
-  validate_absolute_path($pidfile)
-  if $network_status {
-    validate_absolute_path($network_status)
-  }
-  validate_bool($manage_nagios)
 
   if $::kernel == 'linux' and $::lsbdistcodename == 'precise' {
     fail('knot is not currently supported on ubuntu precise')
@@ -107,6 +71,36 @@ class knot (
     target  => $conf_file,
     content => template($server_template),
     order   => '10',
+  }
+  concat::fragment{'remote_head':
+    target  => $conf_file,
+    content => "remotes {\n",
+    order   => '11',
+  }
+  concat::fragment{'remote_foot':
+    target  => $conf_file,
+    content => "}\n",
+    order   => '13',
+  }
+  concat::fragment{'groups_head':
+    target  => $conf_file,
+    content => "groups {\n",
+    order   => '14',
+  }
+  concat::fragment{'groups_foot':
+    target  => $conf_file,
+    content => template($groups_slave_temp),
+    order   => '16',
+  }
+  concat::fragment{'zones_head':
+    target  => $conf_file,
+    content => "zones {\n",
+    order   => '21',
+  }
+  concat::fragment{'zones_foot':
+    target  => $conf_file,
+    content => "}\n",
+    order   => '23',
   }
   file { [$zonesdir, $zone_subdir, $conf_dir]:
     ensure  => directory,
@@ -142,14 +136,21 @@ class knot (
     enable  => $enable,
     require => Package[$package_name],
   }
-  #add backwords compatible
-  if ! empty($tsig) {
-    knot::tsig {$tsig['name']:
-      algo => $tsig['algo'],
-      data => $tsig['data'],
-    }
-  }
   create_resources(knot::file, $files)
   create_resources(knot::tsig, $tsigs)
+  if $default_tsig_name and ! defined(Knot::Tsig[$default_tsig_name]) {
+    fail("Knot::Tsig['${default_tsig_name}'] does not exist")
+  }
+  create_resources(knot::remote, $remotes)
+  $default_masters.each |String $master| {
+    if ! defined(Knot::Remote[$master]) {
+      fail("Knot::Remote['${master}'] does not exist but defined as default master")
+    }
+  }
+  $default_provide_xfrs.each |String $provider_xfr| {
+    if ! defined(Knot::Remote[$provider_xfr]) {
+      fail("Knot::Remote['${provider_xfr}'] does not exist but defined as default master")
+    }
+  }
   create_resources(knot::zone, $zones)
 }

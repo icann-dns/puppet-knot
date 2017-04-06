@@ -1,33 +1,24 @@
 # Define: knot::file
 #
 define knot::file (
-    $ensure           = 'present',
-    $owner            = 'knot',
-    $group            = 'knot',
-    $mode             = '0640',
-    $source           = undef,
-    $content          = undef,
-    $content_template = undef,
+    String                       $ensure           = 'present',
+    String                       $owner            = 'knot',
+    String                       $group            = 'knot',
+    Pattern[/^\d+$/]             $mode             = '0640',
+    Optional[Tea::Puppetsource]  $source           = undef,
+    Optional[String]             $content          = undef,
+    Optional[Tea::Puppetcontent] $content_template = undef,
 ) {
-  validate_string($owner)
-  validate_string($group)
-  validate_re($mode, '^\d+$')
-  if $source {
-    validate_string($source)
-  }
+  include ::knot
   if $content and $content_template {
     fail('can\'t set $content and $content_template')
   } elsif $content {
-    validate_string($content)
     $_content = $content
   } elsif $content_template {
-    validate_absolute_path("/${content_template}")
     $_content = template($content_template)
   } else {
     $_content = undef
   }
-  validate_string($ensure)
-
   file { "${::knot::zone_subdir}/${title}":
     ensure  => $ensure,
     owner   => $owner,

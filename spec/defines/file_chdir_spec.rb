@@ -8,7 +8,6 @@ describe 'knot::file' do
   # to the specific context in the spec/shared_contexts.rb file
   # Note: you can only use a single hiera context per describe/context block
   # rspec-puppet does not allow you to swap out hiera data on a per test block
-  # include_context :hiera
 
   let(:node) { 'foo.example.com' }
   let(:title) { 'example.com' }
@@ -26,7 +25,7 @@ describe 'knot::file' do
       # content_template: undef,
     }
   end
-  let(:pre_condition) { "class { '::knot': }" }
+  let(:pre_condition) { 'class { \'::knot\': zone_subdir => \'/zone\' }' }
 
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
@@ -48,12 +47,11 @@ describe 'knot::file' do
       end
       let(:conf_file)   { "#{conf_dir}/knot.conf" }
       let(:zonesdir)    { "#{conf_dir}/zone" }
-      let(:zone_subdir) { "#{zonesdir}/zone" }
+      let(:zone_subdir) { '/zone' }
       let(:pidfile)     { "#{run_dir}/knot.pid" }
 
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
-
         it { is_expected.to contain_knot__file('example.com') }
         it do
           is_expected.to contain_file("#{zone_subdir}/example.com").with(
