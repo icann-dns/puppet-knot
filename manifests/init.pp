@@ -1,7 +1,7 @@
 #== Class: knot
 #
 class knot (
-  Optional[String]             $default_tsig_name    = undef,
+  String                       $default_tsig_name    = 'NOKEY',
   Array[String]                $default_masters      = [],
   Array[String]                $default_provide_xfrs = [],
   Boolean                      $enable               = true,
@@ -138,7 +138,7 @@ class knot (
   }
   create_resources(knot::file, $files)
   create_resources(knot::tsig, $tsigs)
-  if $default_tsig_name and ! defined(Knot::Tsig[$default_tsig_name]) {
+  if ! defined(Knot::Tsig[$default_tsig_name]) and $default_tsig_name != 'NOKEY' {
     fail("Knot::Tsig['${default_tsig_name}'] does not exist")
   }
   create_resources(knot::remote, $remotes)

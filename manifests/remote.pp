@@ -21,7 +21,7 @@ define knot::remote (
       $_tsig_name = $tsig_name
     }
   } elsif $tsig_name and $tsig_name != '' {
-    if defined(Knot::Tsig[$tsig_name]) {
+    if defined(Knot::Tsig[$tsig_name]) or $tsig_name == 'NOKEY' {
       $_tsig_name = $tsig_name
     } else {
       fail("Knot::Tsig['${tsig_name}'] does not exist")
