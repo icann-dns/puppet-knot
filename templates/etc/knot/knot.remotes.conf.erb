@@ -2,7 +2,7 @@
   <%= @name %>-ipv4 {
     address <%= @address4 %>; 
     port <%= @port %>;
-    <%- if @_tsig_name and $tsig_name != 'NOKEY' -%>
+    <%- if @_tsig_name and $_tsig_name != 'NOKEY' -%>
     key <%= @_tsig_name %>;
     <%- end -%>
   }
@@ -11,7 +11,7 @@
   <%= @name %>-ipv6 {
     address <%= @address6 %>; 
     port <%= @port %>;
-    <%- if @_tsig_name and $tsig_name != 'NOKEY' -%>
+    <%- if @_tsig_name and $_tsig_name != 'NOKEY' -%>
     key <%= @_tsig_name %>;
     <%- end -%>
   }
