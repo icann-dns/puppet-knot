@@ -20,7 +20,7 @@ define knot::remote (
     } else {
       $_tsig_name = $tsig_name
     }
-  } elsif $tsig_name {
+  } elsif $tsig_name and $tsig_name != '' {
     if defined(Knot::Tsig[$tsig_name]) {
       $_tsig_name = $tsig_name
     } else {
