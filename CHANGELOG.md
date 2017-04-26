@@ -1,3 +1,7 @@
+### 2017-04-10 0.2.1
+* Fix a few typos
+* Add NOKEY support
+
 ### 2017-04-06 0.2.0
 * Complete rewrite of the zones hash.
 * depricated the old $tsig hash now all hashs have to be defined in $tsisg and then refrenced by name in the remotes
