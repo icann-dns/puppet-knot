@@ -1,6 +1,16 @@
 <%- 
-  @notify_out = @provide_xfrs + @send_notify_additions
-  @notify_in  = @masters + @allow_notify_additions
+  if @provide_xfrs.any?
+    @notify_out    = @provide_xfrs + @send_notify_additions
+    @_provide_xfrs = @provide_xfrs
+  else
+    @notify_out    = @default_provide_xfrs + @send_notify_additions
+    @_provide_xfrs = @default_provide_xfrs
+  end
+  if @masters.any?
+    @notify_in  = @masters + @allow_notify_additions
+  else
+    @notify_in  = @default_masters + @allow_notify_additions
+  end
 -%>
     "<%= @name %>" {
       <%- if @zonefile then -%>
@@ -8,11 +18,8 @@
       <%- else -%>
         file "<%= @zone_subdir %>/<%= @name %>";
       <%- end -%>
-        notify-out slave_servers;
-        xfr-out slave_servers;
-      <%- if @notify_out.any? then -%>
-        notify-out <%= @notify_out.join(', ') %>;
-      <%- end -%>
+        notify-out <%= @notify_out.join(', ') %> slave_servers;
+        xfr-out <%= @_provide_xfrs.join(', ') %> slave_servers;
       <%- if @notify_in.any? then -%>
         notify-in <%= @notify_in.join(', ') %>;
       <%- end -%>
@@ -20,10 +27,5 @@
         xfr-in <%= @masters.join(', ') %>;
       <%- elsif @default_masters.any? -%>
         xfr-in <%= @default_masters.join(', ') %>;
-      <%- end -%>
-      <%- if @provide_xfrs.any? then -%>
-        xfr-out <%= @provide_xfrs.join(', ') %>;
-      <%- elsif @default_provide_xfrs.any? -%>
-        xfr-out <%= @default_provide_xfrs.join(', ') %>;
       <%- end -%>
     }

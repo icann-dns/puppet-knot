@@ -75,10 +75,10 @@ describe 'knot::zone' do
             %r{
               "example.com"\s\{
               \s+file\s"#{zone_subdir}/example.com";
-              \s+notify-out\sslave_servers;
-              \s+xfr-out\sslave_servers;
+              \s+notify-out\sdefault_provide_xfr\sslave_servers;
+              \s+xfr-out\sdefault_provide_xfr\sslave_servers;
+              \s+notify-in\sdefault_master;
               \s+xfr-in\sdefault_master;
-              \s+xfr-out\sdefault_provide_xfr;
               \s+\}
             }x
           )
