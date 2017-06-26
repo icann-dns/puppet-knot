@@ -1,0 +1,10 @@
+<%- port_str = @port == 53 ? '' : "@#{@port}" -%>
+  - id: <%= @name %>-notify
+    address: [<%= [@address4, @address6].compact.join("#{port_str}, ") -%><%= port_str %>]
+    action: notify
+  - id: <%= @name %>-transfer
+    address: [<%= [@address4, @address6].compact.join("#{port_str}, ") -%><%= port_str %>]
+<% if @_tsig_name and @_tsig_name != 'NOKEY' -%>
+    key: <%= @_tsig_name %>
+<% end -%>
+    action: transfer

@@ -34,15 +34,9 @@ define knot::remote (
     content => template($::knot::remotes_template),
     order   => '12';
   }
-  concat::fragment{ "knot_groups_${name}":
+  concat::fragment{ "knot_acl_${name}":
     target  => $::knot::conf_file,
-    content => template($::knot::groups_template),
+    content => template($::knot::acl_template),
     order   => '15';
   }
-  #if $::knot::manage_nagios and $::knot::enable {
-  #  knot::zone::nagios {$zones:
-  #    masters => $masters,
-  #    slaves  => $provide_xfr,
-  #  }
-  #}
 }

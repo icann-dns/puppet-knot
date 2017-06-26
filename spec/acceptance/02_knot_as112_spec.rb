@@ -7,8 +7,8 @@ describe 'knot class' do
   context 'as112' do
     it 'is_expected.to work with no errors' do
       pp = 'class {\'::knot::as112\': }'
-      apply_manifest(pp, catch_failures: true)
-      expect(apply_manifest(pp, catch_failures: true).exit_code).to eq 0
+      execute_manifest(pp, catch_failures: true)
+      expect(execute_manifest(pp, catch_failures: true).exit_code).to eq 0
     end
     describe service('knot') do
       it { is_expected.to be_running }

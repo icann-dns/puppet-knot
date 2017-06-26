@@ -4,7 +4,7 @@ require 'uri'
 require 'json'
 # move to https://github.com/dalen/puppet-puppetdbquery in future
 if @imports.empty? 
-  return "slave_servers {}\nslave_servers_notify {}\n}\n"
+  return "  slave_servers {}\n  slave_servers_notify {}\n}\n"
 end
 headers = { 'Accept' => 'application/json' }
 query    = ['and', ['=', 'exported', true], ['~', 'tag', "dns__(#{@imports.join('|')})"]]

@@ -38,12 +38,12 @@ class knot (
   Tea::Absolutepath            $zone_subdir          = $::knot::params::zone_subdir,
   Tea::Absolutepath            $conf_file            = $::knot::params::conf_file,
   Tea::Absolutepath            $run_dir              = $::knot::params::run_dir,
-  Boolean                      $manage_nagios        = false,
   Optional[Tea::Absolutepath]  $network_status       = undef,
   Tea::Ip_address              $puppetdb_server      = '127.0.0.1',
   Tea::Port                    $puppetdb_port        = 8080,
   Array[String]                $exports              = [],
   Array[String]                $imports              = [],
+  String                       $puppetdb_search      = 'dns__export_'
   String                  $server_template   = 'knot/etc/knot/knot.server.conf.erb',
   String                  $zones_template    = 'knot/etc/knot/knot.zones.conf.erb',
   String                  $remotes_template  = 'knot/etc/knot/knot.remotes.conf.erb',
@@ -51,22 +51,35 @@ class knot (
   String                  $groups_slave_temp = 'knot/etc/knot/knot.group_slave.conf.erb',
 ) inherits knot::params  {
 
-  if $::kernel == 'linux' and $::lsbdistcodename == 'precise' {
-    fail('knot is not currently supported on ubuntu precise')
-  }
+  $server_template   = $::knot::params::server_template
+  $key_template      = $::knot::params::key_template
+  $zones_template    = $::knot::params::zones_template
+  $remotes_template  = $::knot::params::remotes_template
+  $acl_template      = $::knot::params::acl_template
+  $acl_head          = $::knot::params::acl_head
+  $acl_foot          = $::knot::params::acl_foot
+  $concat_head       = $::knot::params::concat_head
+  $concat_foot       = $::knot::params::concat_foot
+
+  $exported_remotes   = knot::get_exported_titles(
+    $puppetdb_server,
+    $puppetdb_port,
+    $puppetdb_search,
+  )
   ensure_packages($package_name)
+
   concat{$conf_file:
     require => Package[$package_name],
     notify  => Service[$service_name];
   }
   concat::fragment{'key_head':
     target  => $conf_file,
-    content => "keys {\n",
+    content => "key${concat_head}",
     order   => '01',
   }
   concat::fragment{'key_foot':
     target  => $conf_file,
-    content => "}\n",
+    content => $concat_foot,
     order   => '03',
   }
   concat::fragment{'knot_server':
@@ -76,32 +89,36 @@ class knot (
   }
   concat::fragment{'remote_head':
     target  => $conf_file,
-    content => "remotes {\n",
+    content => "remote${concat_head}",
     order   => '11',
   }
   concat::fragment{'remote_foot':
     target  => $conf_file,
-    content => "}\n",
+    content => $concat_foot,
     order   => '13',
   }
-  concat::fragment{'groups_head':
+  concat::fragment{'acl_head':
     target  => $conf_file,
-    content => "groups {\n",
+    content => $acl_head,
     order   => '14',
   }
-  concat::fragment{'groups_foot':
+  $_acl_foot = $acl_foot ? {
+    $concat_foot => $acl_foot,
+    default => template($acl_foot)
+  }
+  concat::fragment{'acl_foot':
     target  => $conf_file,
-    content => template($groups_slave_temp),
+    content => $_acl_foot,
     order   => '16',
   }
   concat::fragment{'zones_head':
     target  => $conf_file,
-    content => "zones {\n",
+    content => "zone${concat_head}",
     order   => '21',
   }
   concat::fragment{'zones_foot':
     target  => $conf_file,
-    content => "}\n",
+    content => $concat_foot,
     order   => '23',
   }
   file { [$zonesdir, $zone_subdir, $conf_dir]:
