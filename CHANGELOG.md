@@ -1,3 +1,6 @@
+### 2017-04-26 0.2.2
+* FIX: missing notify in statments
+
 ### 2017-04-10 0.2.1
 * Fix a few typos
 * Add NOKEY support
