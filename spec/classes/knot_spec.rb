@@ -210,7 +210,7 @@ describe 'knot' do
         end
         it do
           is_expected.to contain_concat__fragment('groups_foot').with(
-            content: %r{\}},
+            content: %r{^\}$},
             order: '16',
             target: conf_file
           )
