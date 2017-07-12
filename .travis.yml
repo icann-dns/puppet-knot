@@ -28,12 +28,6 @@ matrix:
     env: BEAKER_TESTMODE=apply BEAKER_debug=true BEAKER_set=docker/ubuntu-14.04 CHECK=beaker
     services: docker
     sudo: required
-  - rvm: 2.3
-    bundler_args: --without development
-    dist: trusty
-    env: BEAKER_TESTMODE=apply BEAKER_debug=true BEAKER_set=docker/ubuntu-16.04 CHECK=beaker
-    services: docker
-    sudo: required
 notifications:
   email: false
 deploy:
