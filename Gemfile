@@ -30,6 +30,7 @@ group :test do
   gem 'puppet-strings', '~> 1.0',                                   :require => false
   gem 'redcarpet',                                                  :require => false
   gem 'gettext-setup',                                              :require => false
+  gem 'xmlrpc',                                                     :require => false if RUBY_VERSION >= '2.4.0'
   gem 'rubocop', '~> 0.48.0',                                       :require => false if RUBY_VERSION >= '2.3.0'
   gem 'rubocop-rspec', '~> 1.15.0',                                 :require => false if RUBY_VERSION >= '2.3.0'
   gem 'mocha', '>= 1.2.1',                                          :require => false
