@@ -18,7 +18,7 @@
       <%- else -%>
         file "<%= @zone_subdir %>/<%= @name %>";
       <%- end -%>
-        notify-out <%= @notify_out.join('-notify, ') %>-notify, slave_servers_notify;
+        notify-out <%= @notify_out.join('-notify, ') %><%- if @notify_out.any? -%>-notify,<%- end -%> slave_servers_notify;
         xfr-out <%= @_provide_xfrs.join(', ') %>, slave_servers;
       <%- if @notify_in.any? then -%>
         notify-in <%= @notify_in.join('-notify, ') %>-notify;
