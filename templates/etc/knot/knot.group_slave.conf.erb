@@ -13,7 +13,7 @@ begin
   response_json = JSON.parse(response.body)
 rescue Exception => e
   scope.call_function('warning', ["unable to connect to the puppetdb server, exported resources wont work: #{e}"])
-  return '}'
+  return "slave_servers {}\nslave_servers_notify {}\n}"
 end
 slave_resources = response_json.collect do |resource|
   if resource['certname'] == @trusted['certname'] && resource['title'] =~ /dns__export_.+/
