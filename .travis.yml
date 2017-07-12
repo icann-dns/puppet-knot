@@ -13,7 +13,7 @@ before_install:
   - bundle -v
 script:
   - 'bundle exec rake $CHECK'
-env: ["PUPPET_VERSION=\"~> 4.6.0\" STRICT_VARIABLES=yes", "PUPPET_VERSION=\"~> 4.7.0\" STRICT_VARIABLES=yes", "PUPPET_VERSION=\"~> 4.8.0\" STRICT_VARIABLES=yes", "PUPPET_VERSION=\"~> 4.9.0\" STRICT_VARIABLES=yes", "PUPPET_VERSION=\"~> 4.10.0\" STRICT_VARIABLES=yes", "PUPPET_VERSION=\"~> 5.0.0\" STRICT_VARIABLES=yes"]
+env: ["CHECK=rubocop", "PUPPET_VERSION=\"~> 4.6.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 4.7.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 4.8.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 4.9.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 4.10.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 5.0.0\" STRICT_VARIABLES=yes CHECK=test"]
 rvm: [2.2, 2.3, 2.4]
 matrix:
   fast_finish: true
