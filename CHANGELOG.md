@@ -1,3 +1,6 @@
+### 2017-04-26 0.2.3
+* FIX: never use TSIG for notifies.  this was the default in previosu versions.  in future versions we will make tsig configueration more flexible
+
 ### 2017-04-26 0.2.2
 * FIX: missing notify in statments
 
