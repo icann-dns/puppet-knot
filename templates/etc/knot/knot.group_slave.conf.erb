@@ -1,10 +1,15 @@
 <%-
 require 'net/http'
+require 'uri'
 require 'json'
+# move to https://github.com/dalen/puppet-puppetdbquery in future
 begin
+  headers = { 'Accept' => 'application/json' }
+  query    = ['and' ['=', 'exported', true], ['~', 'title', 'dns__export_']]
+  uri      = '/pdb/query/v4/resources/Knot::Remote'
+  uri      += URI.escape("?query=#{query.to_json}")
   http     = Net::HTTP.new(@puppetdb_server, @puppetdb_port)
-  request  = Net::HTTP::Get.new('/pdb/query/v4/resources/Knot::Remote')
-  response = http.request(request)
+  response = http.get(uri, headers)
   if response.code != "200"
     scope.call_function(
       'warning',
@@ -15,17 +20,11 @@ rescue Exception => e
   scope.call_function('warning', ["unable to connect to the puppetdb server, exported resources wont work: #{e}"])
   return "slave_servers {}\nslave_servers_notify {}\n}\n"
 end
-slave_resources = response_json.collect do |resource|
-  if resource['certname'] == @trusted['certname'] && resource['title'] =~ /dns__export_.+/
-    resource
-  end
-end
-slave_resources.compact!
 -%>
   slave_servers {
 <%-    
-slave_resources.each_with_index do |slave, index|
-  last = slave_resources.size - 1 == index
+response_json.each_with_index do |slave, index|
+  last = response_json.size - 1 == index
   ipv4_address = slave['parameters'].include?('address4')
   ipv6_address = slave['parameters'].include?('address6')
   if ipv4_address
@@ -43,8 +42,8 @@ end
   }
   slave_servers_notify {
 <%-
-slave_resources.each_with_index do |slave, index|
-  last = slave_resources.size - 1 == index
+response_json.each_with_index do |slave, index|
+  last = response_json.size - 1 == index
   ipv4_address = slave['parameters'].include?('address4')
   ipv6_address = slave['parameters'].include?('address6')
   if ipv4_address
