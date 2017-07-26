@@ -1,4 +1,4 @@
-### 2017-04-26 0.2.4
+### 2017-07-26 0.2.4
 * Change how we handle exported resources so they are all added/removed in one run
 
 ### 2017-04-26 0.2.3
