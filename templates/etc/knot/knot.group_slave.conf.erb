@@ -3,12 +3,12 @@ require 'net/http'
 require 'uri'
 require 'json'
 # move to https://github.com/dalen/puppet-puppetdbquery in future
+headers = { 'Accept' => 'application/json' }
+query    = ['and', ['=', 'exported', true], ['~', 'title', 'dns__export_']]
+uri      = '/pdb/query/v4/resources/Knot::Remote'
+uri      += URI.escape("?query=#{query.to_json}")
+http     = Net::HTTP.new(@puppetdb_server, @puppetdb_port)
 begin
-  headers = { 'Accept' => 'application/json' }
-  query    = ['and' ['=', 'exported', true], ['~', 'title', 'dns__export_']]
-  uri      = '/pdb/query/v4/resources/Knot::Remote'
-  uri      += URI.escape("?query=#{query.to_json}")
-  http     = Net::HTTP.new(@puppetdb_server, @puppetdb_port)
   response = http.get(uri, headers)
   if response.code != "200"
     scope.call_function(
