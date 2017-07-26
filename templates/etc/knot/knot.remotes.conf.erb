@@ -6,6 +6,10 @@
     key <%= @_tsig_name %>;
     <%- end -%>
   }
+  <%= @name %>-ipv4-notify {
+    address <%= @address4 %>; 
+    port <%= @port %>;
+  }
 <%- end -%>
 <%- if @address6 -%>
   <%= @name %>-ipv6 {
@@ -14,5 +18,9 @@
     <%- if @_tsig_name and @_tsig_name != 'NOKEY' -%>
     key <%= @_tsig_name %>;
     <%- end -%>
+  }
+  <%= @name %>-ipv6-notify {
+    address <%= @address6 %>; 
+    port <%= @port %>;
   }
 <%- end -%>

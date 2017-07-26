@@ -75,9 +75,9 @@ describe 'knot::zone' do
             %r{
               "example.com"\s\{
               \s+file\s"#{zone_subdir}/example.com";
-              \s+notify-out\sdefault_provide_xfr\sslave_servers;
-              \s+xfr-out\sdefault_provide_xfr\sslave_servers;
-              \s+notify-in\sdefault_master;
+              \s+notify-out\sdefault_provide_xfr-notify,\sslave_servers_notify;
+              \s+xfr-out\sdefault_provide_xfr,\sslave_servers;
+              \s+notify-in\sdefault_master-notify;
               \s+xfr-in\sdefault_master;
               \s+\}
             }x
@@ -99,9 +99,9 @@ describe 'knot::zone' do
           is_expected.to contain_concat__fragment(
             'knot_zones_example.com'
           ).with_content(
-            %r{"example.com"\s+\{[\s\S]+notify-out\s+provide_xfr, send_notify_addition[\s\S]+\}}
+            %r{"example.com"\s+\{[\s\S]+notify-out\s+provide_xfr-notify, send_notify_addition-notify[\s\S]+\}}
           ).with_content(
-            %r{"example.com"\s+\{[\s\S]+notify-in\s+master, allow_notify_addition[\s\S]+\}}
+            %r{"example.com"\s+\{[\s\S]+notify-in\s+master-notify, allow_notify_addition-notify[\s\S]+\}}
           ).with_content(
             %r{"example.com"\s+\{[\s\S]+xfr-in\s+master[\s\S]+\}}
           ).with_content(
