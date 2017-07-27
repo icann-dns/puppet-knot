@@ -150,7 +150,7 @@ describe 'knot' do
           ).with_content(
             %r{pidfile "#{pidfile}"}
           ).with_content(
-            %r{workers 1;}
+            %r{workers #{facts[:processors]['count']};}
           ).with_content(
             %r{max-tcp-clients 250;}
           ).with_content(
