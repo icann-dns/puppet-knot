@@ -21,5 +21,5 @@ class knot::params {
   $key_template = 'knot/etc/knot/knot.key.conf.erb'
   $nsid         = $::fqdn
   $identity     = $::fqdn
-  $server_count = $::processorcount
+  $server_count = $facts['processors']['count']
 }
