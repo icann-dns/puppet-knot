@@ -38,7 +38,7 @@ EOS
           },
         },
         remotes => {
-          'master_server' => { 
+          'master_server' => {
             'address4'  => '#{dnsmaster_ip}',
             'tsig_name' => '#{dnsslave}-test',
           }
@@ -97,7 +97,7 @@ EOS
       end
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
-        its(:stdout) do 
+        its(:stdout) do
           is_expected.to match(
             %r{sns.dns.icann.org. noc.dns.icann.org. 1 7200 3600 1209600 3600}
           )
@@ -121,7 +121,7 @@ EOS
       end
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
-        its(:stdout) do 
+        its(:stdout) do
           is_expected.to match(
             %r{sns.dns.icann.org. noc.dns.icann.org. 2 7200 3600 1209600 3600}
           )

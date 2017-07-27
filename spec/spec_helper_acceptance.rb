@@ -8,7 +8,7 @@ require 'progressbar'
 modules = [
   'puppetlabs-stdlib',
   'puppetlabs-concat',
-  'icann-tea',
+  'icann-tea'
 ]
 git_repos = []
 def install_modules(host, modules, git_repos)
