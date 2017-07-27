@@ -42,6 +42,8 @@ class knot (
   Optional[Tea::Absolutepath]  $network_status       = undef,
   Tea::Ip_address              $puppetdb_server      = '127.0.0.1',
   Tea::Port                    $puppetdb_port        = 8080,
+  Array[String]                $exports              = [],
+  Array[String]                $imports              = [],
   String                  $server_template   = 'knot/etc/knot/knot.server.conf.erb',
   String                  $zones_template    = 'knot/etc/knot/knot.zones.conf.erb',
   String                  $remotes_template  = 'knot/etc/knot/knot.remotes.conf.erb',

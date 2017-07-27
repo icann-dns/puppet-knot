@@ -150,7 +150,7 @@ describe 'knot' do
           ).with_content(
             %r{pidfile "#{pidfile}"}
           ).with_content(
-            %r{workers 1;}
+            %r{workers #{facts[:processors]['count']};}
           ).with_content(
             %r{max-tcp-clients 250;}
           ).with_content(
@@ -210,7 +210,7 @@ describe 'knot' do
         end
         it do
           is_expected.to contain_concat__fragment('groups_foot').with(
-            content: %r{\}},
+            content: "slave_servers {}\nslave_servers_notify {}\n}\n",
             order: '16',
             target: conf_file
           )
