@@ -1,12 +1,12 @@
 before_script:
   - ruby -v
   - which ruby
-  - sudo bundle install
+  - bundle install
 
 rspec:
   script:
-    - bundle exec rspec
+    - bundle exec rake test
 
 rubocop:
   script:
-    - bundle exec rubocop
+    - bundle exec rake rubocop
