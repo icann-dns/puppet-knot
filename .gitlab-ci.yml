@@ -3,6 +3,7 @@ before_script:
   - which ruby
   - bundle install
 
+
 rspec:
   script:
     - bundle exec rake test
@@ -10,3 +11,31 @@ rspec:
 rubocop:
   script:
     - bundle exec rake rubocop
+
+beaker_trusty_apply:
+  variables:
+    BEAKER_set: docker/ubuntu-14.04
+    BEAKER_TESTMODE: apply
+  script:
+    -  bundle exec rake beaker
+
+beaker_xenial_agent:
+  variables:
+    BEAKER_set: docker/ubuntu-16.04
+    BEAKER_TESTMODE: apply
+  script:
+    -  bundle exec rake beaker
+
+beaker_trusty_agent:
+  variables:
+    BEAKER_set: docker/ubuntu-master-14.04
+    BEAKER_TESTMODE: agent
+  script:
+    -  bundle exec rake beaker
+
+beaker_xenial_agent:
+  variables:
+    BEAKER_set: docker/ubuntu-master-16.04
+    BEAKER_TESTMODE: agent
+  script:
+    -  bundle exec rake beaker
