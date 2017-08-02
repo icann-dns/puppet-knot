@@ -1,5 +1,6 @@
 before_script:
   - who
+  - pwd
   - ruby -v
   - which ruby
   - gem install bundler --no-ri --no-rdoc
