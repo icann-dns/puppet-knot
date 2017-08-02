@@ -1,12 +1,7 @@
 before_script:
-  - whoami
-  - touch test
-  - ls -la test
-  - rm test
-  - pwd
   - ruby -v
   - which ruby
-  - bundle install
+  - sudo bundle install
 
 rspec:
   script:
