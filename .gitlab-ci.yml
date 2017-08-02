@@ -19,7 +19,7 @@ beaker_trusty_apply:
   script:
     -  bundle exec rake beaker
 
-beaker_xenial_agent:
+beaker_xenial_apply:
   variables:
     BEAKER_set: docker/ubuntu-16.04
     BEAKER_TESTMODE: apply
