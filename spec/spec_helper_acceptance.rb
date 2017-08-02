@@ -11,8 +11,6 @@ modules = [
   'icann-tea'
 ]
 git_repos = []
-<<<<<<< HEAD
-=======
 # git_repos = [
 #  {
 #    mod: 'nsd',
@@ -25,7 +23,6 @@ git_repos = []
 #    repo: 'https://github.com/icann-dns/puppet-knot'
 #  }
 # ]
->>>>>>> 1f29098... correct spec helper
 def install_modules(host, modules, git_repos)
   module_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
   install_dev_puppet_module_on(host, source: module_root)
