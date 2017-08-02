@@ -1,5 +1,8 @@
 before_script:
-  - who
+  - whoami
+  - touch test
+  - ls -la test
+  - rm test
   - pwd
   - ruby -v
   - which ruby
