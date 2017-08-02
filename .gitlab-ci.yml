@@ -3,7 +3,6 @@ before_script:
   - pwd
   - ruby -v
   - which ruby
-  - gem install bundler --no-ri --no-rdoc
   - bundle install
 
 rspec:
