@@ -169,7 +169,7 @@ describe 'knot' do
             ).with_content(
               %r{pidfile "#{pidfile}"}
             ).with_content(
-              %r{workers 1;}
+              %r{workers #{facts[:processors]['count']};}
             ).with_content(
               %r{max-tcp-clients 250;}
             ).with_content(
@@ -302,7 +302,7 @@ describe 'knot' do
           if facts[:operatingsystem] == 'Ubuntu' &&
              facts[:lsbdistcodename] == 'trusty'
             is_expected.to contain_concat__fragment('acl_foot').with(
-              content: %r{slave_servers\s\{\s+\}},
+              content: %r{slave_servers \{\}\s+slave_servers_notify \{\}},
               order: '16',
               target: conf_file
             )

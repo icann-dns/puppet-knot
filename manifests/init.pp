@@ -43,12 +43,7 @@ class knot (
   Tea::Port                    $puppetdb_port        = 8080,
   Array[String]                $exports              = [],
   Array[String]                $imports              = [],
-  String                       $puppetdb_search      = 'dns__export_'
-  String                  $server_template   = 'knot/etc/knot/knot.server.conf.erb',
-  String                  $zones_template    = 'knot/etc/knot/knot.zones.conf.erb',
-  String                  $remotes_template  = 'knot/etc/knot/knot.remotes.conf.erb',
-  String                  $groups_template   = 'knot/etc/knot/knot.groups.conf.erb',
-  String                  $groups_slave_temp = 'knot/etc/knot/knot.group_slave.conf.erb',
+  String                       $puppetdb_search      = 'dns__export_',
 ) inherits knot::params  {
 
   $server_template   = $::knot::params::server_template
