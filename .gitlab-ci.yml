@@ -1,8 +1,8 @@
 stages:
   - rspec
+  - rubocop
   - beaker_apply
   - beaker_agent
-  - rubocop
 
 before_script:
   - rvm -v

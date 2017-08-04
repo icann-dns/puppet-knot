@@ -117,7 +117,7 @@ EOS
       describe command('service knot restart'), node: dnsmaster do
         its(:exit_status) do
           sleep(10)
-          is_expected.to eq 0 
+          is_expected.to eq 0
         end
       end
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
