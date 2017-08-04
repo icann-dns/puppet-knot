@@ -1,6 +1,10 @@
 before_script:
+  - rvm -v
   - ruby -v
-  - which ruby
+  - bundle --version
+  - gem --version
+  - rvm use 2.3
+  - rm Gemfile.lock || true
   - bundle install
 
 
