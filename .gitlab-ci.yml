@@ -1,3 +1,9 @@
+stages:
+  - rspec
+  - beaker_apply
+  - beaker_agent
+  - rubocop
+
 before_script:
   - rvm -v
   - ruby -v
@@ -7,16 +13,18 @@ before_script:
   - rm Gemfile.lock || true
   - bundle install
 
-
 rspec:
+  stage: rspec
   script:
     - bundle exec rake test
 
 rubocop:
+  stage: rubocop
   script:
     - bundle exec rake rubocop
 
 beaker_trusty_apply:
+  stage: beaker_apply
   variables:
     BEAKER_set: docker/ubuntu-14.04
     BEAKER_TESTMODE: apply
@@ -24,6 +32,7 @@ beaker_trusty_apply:
     -  bundle exec rake beaker
 
 beaker_xenial_apply:
+  stage: beaker_apply
   variables:
     BEAKER_set: docker/ubuntu-16.04
     BEAKER_TESTMODE: apply
@@ -31,6 +40,7 @@ beaker_xenial_apply:
     -  bundle exec rake beaker
 
 beaker_trusty_agent:
+  stage: beaker_agent
   variables:
     BEAKER_set: docker/ubuntu-master-14.04
     BEAKER_TESTMODE: agent
@@ -38,6 +48,7 @@ beaker_trusty_agent:
     -  bundle exec rake beaker
 
 beaker_xenial_agent:
+  stage: beaker_agent
   variables:
     BEAKER_set: docker/ubuntu-master-16.04
     BEAKER_TESTMODE: agent

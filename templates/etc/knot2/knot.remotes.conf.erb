@@ -7,3 +7,5 @@ addresses = [@address4, @address6].compact.map{ |addr| addr.split('/')[0] }
 <%- if @_tsig_name and @_tsig_name != 'NOKEY' -%>
     key: <%= @_tsig_name %>
 <%- end -%>
+  - id: <%= @name %>-notify
+    address: [<%= addresses.join("#{port_str}, ") -%><%= port_str %>]

@@ -95,7 +95,6 @@ EOS
       describe command('knot-checkconf /usr/local/etc/knot/knot.conf || cat /usr/local/etc/knot/knot.conf'), if: os[:family] == 'freebsd', node: dnsslave do
         its(:stdout) { is_expected.to match %r{} }
       end
-      sleep(10)
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) do
@@ -116,10 +115,11 @@ EOS
         its(:exit_status) { is_expected.to eq 0 }
       end
       describe command('service knot restart'), node: dnsmaster do
-        its(:exit_status) { is_expected.to eq 0 }
-        # sleep a bit to let the transfer happen
+        its(:exit_status) do
+          sleep(10)
+          is_expected.to eq 0 
+        end
       end
-      sleep(10)
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) do
