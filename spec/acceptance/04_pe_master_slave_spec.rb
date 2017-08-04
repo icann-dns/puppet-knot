@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
+if ENV['BEAKER_TESTMODE'] == 'agent'
 require 'spec_helper_acceptance'
 
-if ENV['BEAKER_TESTMODE'] == 'agent'
   describe 'master slave config using exported resources' do
     context 'defaults' do
       dnsmaster    = find_host_with_role('dnsmaster')
@@ -12,6 +12,7 @@ if ENV['BEAKER_TESTMODE'] == 'agent'
 
       master_pp = <<EOS
   class { '::knot':
+    imports => ['spectest'],
     remotes  => {
       'lax.xfr.dns.icann.org' => {
         'address4' => '192.0.32.132',
@@ -35,8 +36,8 @@ if ENV['BEAKER_TESTMODE'] == 'agent'
       },
     },
   }
-  Knot::Tsig <<| tag == 'dns__slave_tsig' |>>
-  Knot::Remote <<| tag == 'dns__slave_remote' |>>
+  Knot::Tsig <<| tag == 'spectest' |>>
+  Knot::Remote <<| tag == 'spectest' |>>
 EOS
       # the key below is only to be used in here to not use it in production
       dnsslave_pp = <<EOS
@@ -65,17 +66,17 @@ EOS
       },
     },
   }
-  @@knot::tsig {'dns__export_#{dnsslave}-test':
+  @@knot::tsig {'export_#{dnsslave}-test':
     algo => 'hmac-sha256',
     data => 'qneKJvaiXqVrfrS4v+Oi/9GpLqrkhSGLTCZkf0dyKZ0=',
     key_name => '#{dnsslave}-test',
-    tag => dns__slave_tsig,
+    tag => spectest,
   }
-  @@knot::remote {'dns__export_#{dnsslave}':
+  @@knot::remote {'export_#{dnsslave}':
     address4 => '#{dnsslave_ip}',
-    tsig => 'dns__export_#{dnsslave}-test',
+    tsig => 'export_#{dnsslave}-test',
     tsig_name => '#{dnsslave}-test',
-    tag => 'dns__slave_remote',
+    tag => 'spectest',
   }
 EOS
 

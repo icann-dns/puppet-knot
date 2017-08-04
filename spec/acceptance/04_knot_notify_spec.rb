@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
+if ENV['BEAKER_TESTMODE'] == 'agent'
 require 'spec_helper_acceptance'
 
-if ENV['BEAKER_TESTMODE'] == 'agent'
   describe 'knot class' do
     context 'test notifies' do
       dnsmaster    = find_host_with_role('dnsmaster')
@@ -26,8 +26,8 @@ EOS
           }
         },
       }
-      Knot::Tsig <<| tag == 'dns__nofiy_test_slave_tsig' |>>
-      Knot::Remote <<| tag == 'dns__nofiy_test_slave_remote' |>>
+      Knot::Tsig <<| tag == 'nofiy_test' |>>
+      Knot::Remote <<| tag == 'nofiy_test' |>>
       EOS
       dnsslave_pp = <<-EOS
       class {'::knot':
@@ -47,17 +47,17 @@ EOS
           'example.com' => { 'masters' => ['master_server'] },
         },
       }
-      @@knot::tsig {'dns__export_nofiy_test_#{dnsslave}-test':
+      @@knot::tsig {'export_#{dnsslave}-test':
         algo => 'hmac-sha256',
         data => 'qneKJvaiXqVrfrS4v+Oi/9GpLqrkhSGLTCZkf0dyKZ0=',
         key_name => '#{dnsslave}-test',
-        tag => 'dns__nofiy_test_slave_tsig',
+        tag => 'nofiy_test',
       }
-      @@knot::remote {'dns__export_nofiy_test_#{dnsslave}':
+      @@knot::remote {'export_#{dnsslave}':
         address4 => '#{dnsslave_ip}',
-        tsig => 'dns__export_nofiy_test_#{dnsslave}-test',
+        tsig => 'export_#{dnsslave}-test',
         tsig_name => '#{dnsslave}-test',
-        tag => 'dns__nofiy_test_slave_remote',
+        tag => 'nofiy_test',
       }
       EOS
       it 'run puppet a bunch of times' do
@@ -95,6 +95,7 @@ EOS
       describe command('knot-checkconf /usr/local/etc/knot/knot.conf || cat /usr/local/etc/knot/knot.conf'), if: os[:family] == 'freebsd', node: dnsslave do
         its(:stdout) { is_expected.to match %r{} }
       end
+      sleep(10)
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) do
@@ -117,8 +118,8 @@ EOS
       describe command('service knot restart'), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
         # sleep a bit to let the transfer happen
-        sleep(2)
       end
+      sleep(10)
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) do

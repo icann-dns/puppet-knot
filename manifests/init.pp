@@ -56,11 +56,10 @@ class knot (
   $concat_head       = $::knot::params::concat_head
   $concat_foot       = $::knot::params::concat_foot
 
-  $exported_remotes   = knot::get_exported_titles(
-    $puppetdb_server,
-    $puppetdb_port,
-    $puppetdb_search,
-  )
+  $exported_remotes = empty($imports) ? {
+    true    => [],
+    default => knot::get_exported_titles($imports),
+  }
   ensure_packages($package_name)
 
   concat{$conf_file:

@@ -7,7 +7,7 @@ if @imports.empty?
   return "  slave_servers {}\n  slave_servers_notify {}\n}\n"
 end
 headers = { 'Accept' => 'application/json' }
-query    = ['and', ['=', 'exported', true], ['~', 'tag', "dns__(#{@imports.join('|')})"]]
+query    = ['and', ['=', 'exported', true], ['~', 'tag', "(#{@imports.join('|')})"]]
 uri      = '/pdb/query/v4/resources/Knot::Remote'
 uri      += URI.escape("?query=#{query.to_json}")
 http     = Net::HTTP.new(@puppetdb_server, @puppetdb_port)

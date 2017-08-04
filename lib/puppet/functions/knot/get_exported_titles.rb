@@ -1,39 +1,36 @@
 # frozen_string_literal: true
 
-require 'net/http'
 require 'json'
-
+require 'puppet/util/puppetdb'
+require 'puppet/network/http_pool'
+# credit to dalen
+# https://github.com/dalen/puppet-puppetdbquery/blob/master/lib/puppetdb/connection.rb
 Puppet::Functions.create_function('knot::get_exported_titles') do
   dispatch :get_exported_titles do
-    param 'String', :puppetdb_server
-    param 'Integer', :puppetdb_port
-    param 'String', :search_prefix
+    param 'Array', :imports
   end
 
-  def get_exported_titles(puppetdb_server, puppetdb_port, search_prefix)
-    resources = []
-    http      = Net::HTTP.new(puppetdb_server, puppetdb_port)
-    request   = Net::HTTP::Get.new('/pdb/query/v4/resources/Knot::Remote')
+  def get_exported_titles(imports)
+    db_uri = URI(Puppet::Util::Puppetdb.config.server_urls.first)
+    http = Puppet::Network::HttpPool.http_instance(
+      db_uri.host, db_uri.port, db_uri.scheme == 'https'
+    )
+    headers = { 'Accept' => 'application/json' }
+    query    = ['and', ['=', 'exported', true], ['~', 'tag', "(#{imports.join('|')})"]]
+    uri      = '/pdb/query/v4/resources/Knot::Remote'
+    uri      += URI.escape("?query=#{query.to_json}")
     begin
-      response = http.request(request)
-      if response.code != '200'
+      response = http.get(uri, headers)
+      if !response.is_a?(Net::HTTPSuccess)
         Puppet.warning(
-          "unable to connect to the #{puppetdb_server}:#{puppetdb_port}, exported resources wont work: #{response.code}"
+          "unable to connect to the puppetdb, exported resources wont work: #{response.code}"
         )
-        return resources
+        return []
       end
-      scope = closure_scope
-      response_json = JSON.parse(response.body)
-      exported_resources = response_json.map do |resource|
-        next unless resource['certname'] == scope['trusted']['certname'] &&
-                    resource['title'] =~ %r{#{search_prefix}.+} &&
-                    !resource['exported']
-        resource['title']
-      end
-      resources = exported_resources.compact
+      return JSON.parse(response.body).map { |res| res['title'] }
     rescue => e
       Puppet.warning("Exception, exported resources wont work: #{e}")
     end
-    resources
+    []
   end
 end
