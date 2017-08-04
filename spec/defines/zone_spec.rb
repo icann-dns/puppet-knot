@@ -92,7 +92,7 @@ describe 'knot::zone' do
               %r{
               \s+-\sdomain:\sexample.com\n
               \s+file:\s#{zone_subdir}/example.com\n
-              \s+notify:\s\[default_provide_xfr\]\n
+              \s+notify:\s\[default_provide_xfr-notify\]\n
               \s+acl:\s\[default_provide_xfr-transfer,\sdefault_master-notify\]\n
               \s+master:\s\[default_master\]
               }x
@@ -134,7 +134,7 @@ describe 'knot::zone' do
               %r{
               \s+-\sdomain:\sexample.com\n
               \s+file:\s#{zone_subdir}/example.com\n
-              \s+notify:\s\[provide_xfr,\ssend_notify_addition\]\n
+              \s+notify:\s\[provide_xfr-notify,\ssend_notify_addition-notify\]\n
               \s+acl:\s\[provide_xfr-transfer,\smaster-notify,\sallow_notify_addition-notify\]\n
               \s+master:\s\[master\]
               }x
@@ -164,7 +164,7 @@ describe 'knot::zone' do
                 %r{
                 \s+-\sdomain:\sexample.com\n
                 \s+file:\s#{zone_subdir}/foobar\n
-                \s+notify:\s\[default_provide_xfr\]\n
+                \s+notify:\s\[default_provide_xfr-notify\]\n
                 \s+acl:\s\[default_provide_xfr-transfer,\sdefault_master-notify\]\n
                 \s+master:\s\[default_master\]
                 }x
@@ -192,7 +192,7 @@ describe 'knot::zone' do
                 %r{
                 \s+-\sdomain:\sexample.com\n
                 \s+file:\s/zones/example.com\n
-                \s+notify:\s\[default_provide_xfr\]\n
+                \s+notify:\s\[default_provide_xfr-notify\]\n
                 \s+acl:\s\[default_provide_xfr-transfer,\sdefault_master-notify\]\n
                 \s+master:\s\[default_master\]
                 }x
