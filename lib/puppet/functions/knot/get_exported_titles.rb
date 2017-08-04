@@ -16,12 +16,12 @@ Puppet::Functions.create_function('knot::get_exported_titles') do
       db_uri.host, db_uri.port, db_uri.scheme == 'https'
     )
     headers = { 'Accept' => 'application/json' }
-    query    = ['and', ['=', 'exported', true], ['~', 'tag', "(#{imports.join('|')})"]]
-    uri      = '/pdb/query/v4/resources/Knot::Remote'
-    uri      += URI.escape("?query=#{query.to_json}")
+    query = ['and', ['=', 'exported', true], ['~', 'tag', "(#{imports.join('|')})"]]
+    uri = '/pdb/query/v4/resources/Knot::Remote'
+    uri += URI.escape("?query=#{query.to_json}")
     begin
       response = http.get(uri, headers)
-      if !response.is_a?(Net::HTTPSuccess)
+      unless response.is_a?(Net::HTTPSuccess)
         Puppet.warning(
           "unable to connect to the puppetdb, exported resources wont work: #{response.code}"
         )
