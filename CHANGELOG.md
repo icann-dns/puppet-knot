@@ -1,3 +1,6 @@
+### 2017-07-27 0.2.6
+* Remove a sparse comma
+
 ### 2017-07-27 0.2.5
 * Add acceptance tests to check notifies are working
 
