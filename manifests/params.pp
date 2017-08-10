@@ -3,16 +3,16 @@
 class knot::params {
   case $::kernel {
     'FreeBSD': {
-      $package_name    = 'knot1'
-      $conf_dir        = '/usr/local/etc/knot'
-      $run_dir         = '/var/run/knot'
-      $restart_command = '/usr/local/sbin/knotc reload'
+      $package_name = 'knot1'
+      $conf_dir     = '/usr/local/etc/knot'
+      $run_dir      = '/var/run/knot'
+      $restart_cmd  = '/usr/local/sbin/knotc reload'
     }
     default: {
-      $package_name    = 'knot'
-      $conf_dir        = '/etc/knot'
-      $run_dir         = '/run/knot'
-      $restart_command = '/usr/sbin/knotc reload'
+      $package_name = 'knot'
+      $conf_dir     = '/etc/knot'
+      $run_dir      = '/run/knot'
+      $restart_cmd  = '/usr/sbin/knotc reload'
     }
   }
   $ip_addresses = [$::ipaddress]
