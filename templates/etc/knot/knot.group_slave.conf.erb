@@ -28,7 +28,7 @@ if @imports.empty?
 end
 knot_resources = exported_resources('Knot::Remote', @imports)
 dns_resources = exported_resources('Dns::Remote', @imports)
-resources = dns_resources.merge(knot_resources)
+resources = (knot_resources + dns_resources).uniq { |h| h['title'] }
 if resources.empty?
   return " slave_servers {}\n slave_servers_notify {}\n}\n"
 end
