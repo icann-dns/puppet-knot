@@ -36,7 +36,7 @@ end
   slave_servers {
 <%-    
 resources.each_with_index do |slave, index|
-  last = response_json.size - 1 == index
+  last = resources.size - 1 == index
   ipv4_address = slave['parameters'].include?('address4')
   ipv6_address = slave['parameters'].include?('address6')
   if ipv4_address
@@ -55,7 +55,7 @@ end
   slave_servers_notify {
 <%-
 resources.each_with_index do |slave, index|
-  last = response_json.size - 1 == index
+  last = resources.size - 1 == index
   ipv4_address = slave['parameters'].include?('address4')
   ipv6_address = slave['parameters'].include?('address6')
   if ipv4_address
