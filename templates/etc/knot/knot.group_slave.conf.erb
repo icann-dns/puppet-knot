@@ -15,12 +15,12 @@ def exported_resources(resource, tags, exported=true)
       scope.call_function(
         'warning',
         ["unable to connect to the puppet server, exported resources wont work: #{response.code}"])
-      return {}
+      return []
     end
     JSON.parse(response.body)
   rescue Exception => e
     scope.call_function('warning', ["unable to connect to the puppetdb server, exported resources wont work: #{e}"])
-    return {}
+    return []
   end
 end
 if @imports.empty? 
