@@ -137,7 +137,7 @@ class knot (
   service {$service_name:
     ensure  => $enable,
     enable  => $enable,
-    restart => $restart_cmd
+    restart => $restart_cmd,
     require => Package[$package_name],
   }
   create_resources(knot::file, $files)
