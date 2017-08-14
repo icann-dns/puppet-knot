@@ -115,9 +115,9 @@ EOS
         its(:exit_status) { is_expected.to eq 0 }
       end
       describe command('service knot restart'), node: dnsmaster do
+        sleep(10)
         its(:exit_status) { is_expected.to eq 0 }
         # sleep a bit to let the transfer happen
-        sleep(10)
       end
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
