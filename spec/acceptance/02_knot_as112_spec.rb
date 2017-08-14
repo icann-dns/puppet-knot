@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
+if ENV['BEAKER_TESTMODE'] == 'apply'
 require 'spec_helper_acceptance'
 
-if ENV['BEAKER_TESTMODE'] == 'apply'
   describe 'knot class' do
     ipaddress = fact('ipaddress')
     context 'as112' do

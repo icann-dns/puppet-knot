@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
+if ENV['BEAKER_TESTMODE'] == 'agent'
 require 'spec_helper_acceptance'
 
-if ENV['BEAKER_TESTMODE'] == 'agent'
   describe 'knot class' do
     context 'test notifies' do
       dnsmaster    = find_host_with_role('dnsmaster')
