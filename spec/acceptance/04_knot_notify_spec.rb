@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 if ENV['BEAKER_TESTMODE'] == 'agent'
-require 'spec_helper_acceptance'
+  require 'spec_helper_acceptance'
 
   describe 'knot class' do
     context 'test notifies' do
