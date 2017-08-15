@@ -36,6 +36,6 @@ beaker_trusty_agent:
   variables:
     BEAKER_set: docker/ubuntu-master-14.04
     BEAKER_TESTMODE: agent
-    BEAKER_debug: on
+    BEAKER_debug: 'on'
   script:
     -  bundle exec rake beaker
