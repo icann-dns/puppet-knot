@@ -1,3 +1,9 @@
+### 2017-07-27 0.2.7
+* Add restart command to check config before restarting
+* Remove rouge comma
+* updated spec tests
+* added gitlab-ci tests 
+
 ### 2017-07-27 0.2.6
 * Remove a sparse comma
 
