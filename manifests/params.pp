@@ -6,11 +6,13 @@ class knot::params {
       $package_name = 'knot1'
       $conf_dir     = '/usr/local/etc/knot'
       $run_dir      = '/var/run/knot'
+      $restart_cmd  = 'PATH=/usr/local/sbin/ knotc reload || knotc checkconf && service knot restart '
     }
     default: {
       $package_name = 'knot'
       $conf_dir     = '/etc/knot'
       $run_dir      = '/run/knot'
+      $restart_cmd  = 'PATH=/usr/sbin/ knotc reload || knotc checkconf && service knot restart '
     }
   }
   $ip_addresses = [$::ipaddress]

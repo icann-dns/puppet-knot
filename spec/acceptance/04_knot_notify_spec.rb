@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper_acceptance'
-
 if ENV['BEAKER_TESTMODE'] == 'agent'
+  require 'spec_helper_acceptance'
+
   describe 'knot class' do
     context 'test notifies' do
       dnsmaster    = find_host_with_role('dnsmaster')
@@ -116,10 +116,10 @@ EOS
       end
       describe command('service knot restart'), node: dnsmaster do
         its(:exit_status) { is_expected.to eq 0 }
-        # sleep a bit to let the transfer happen
-        sleep(2)
       end
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
+        let(:pre_command) { 'sleep 5'  }
+
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) do
           is_expected.to match(

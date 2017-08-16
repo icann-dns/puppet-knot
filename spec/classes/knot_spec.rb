@@ -210,7 +210,7 @@ describe 'knot' do
         end
         it do
           is_expected.to contain_concat__fragment('groups_foot').with(
-            content: "slave_servers {}\nslave_servers_notify {}\n}\n",
+            content: "  slave_servers {}\n  slave_servers_notify {}\n}\n",
             order: '16',
             target: conf_file
           )

@@ -34,6 +34,7 @@ class knot (
   Hash[String,Tea::Ip_address] $control_allow        = {'localhost' => '127.0.0.1'},
   String                       $package_name         = $::knot::params::package_name,
   String                       $service_name         = 'knot',
+  String                       $restart_cmd          = $::knot::params::restart_cmd,
   Tea::Absolutepath            $conf_dir             = $::knot::params::conf_dir,
   Tea::Absolutepath            $zone_subdir          = $::knot::params::zone_subdir,
   Tea::Absolutepath            $conf_file            = $::knot::params::conf_file,
@@ -59,6 +60,7 @@ class knot (
     require => Package[$package_name],
     notify  => Service[$service_name];
   }
+
   concat::fragment{'key_head':
     target  => $conf_file,
     content => "keys {\n",
@@ -136,6 +138,7 @@ class knot (
   service {$service_name:
     ensure  => $enable,
     enable  => $enable,
+    restart => $restart_cmd,
     require => Package[$package_name],
   }
   create_resources(knot::file, $files)
