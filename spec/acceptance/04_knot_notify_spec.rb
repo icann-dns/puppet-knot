@@ -119,6 +119,7 @@ EOS
       end
       describe command("dig +short soa example.com. @#{dnsmaster_ip}"), node: dnsmaster do
         let(:pre_command) { 'sleep 5'  }
+
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) do
           is_expected.to match(
