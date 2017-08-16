@@ -31,7 +31,7 @@ class knot (
   Boolean                      $control_enable       = true,
   Tea::Ip_address              $control_interface    = '127.0.0.1',
   Tea::Port                    $control_port         = 5533,
-  Hash[String,Tea::Ip_address] $control_allow        = {'localhost' => '127.0.0.1'},
+  Hash[String,Tea::Ip_address] $control_allow        = {'localhost_remote' => '127.0.0.1'},
   String                       $package_name         = $::knot::params::package_name,
   String                       $service_name         = 'knot',
   String                       $restart_cmd          = $::knot::params::restart_cmd,

@@ -166,9 +166,9 @@ describe 'knot' do
           ).with_content(
             %r{interfaces\s+\{\s+interface-\d+\s+\{\s+address\s+\d+\.\d+\.\d+\.\d+;\s+port\s+53;}
           ).with_content(
-            %r{control\s+\{\s+listen-on\s+\{\s+address\s+127.0.0.1@5533;\s+\}\s+allow\s+localhost;}
+            %r{control\s+\{\s+listen-on\s+\{\s+address\s+127.0.0.1@5533;\s+\}\s+allow\s+localhost_remote;}
           ).with_content(
-            %r{remotes\s+\{\s+localhost\s+\{\s+address\s+127.0.0.1;}
+            %r{remotes\s+\{\s+localhost_remote\s+\{\s+address\s+127.0.0.1;}
           ).with_content(
             %r{log\s+\{\s+syslog\s+\{\s+any\s+error;\s+zone\s+notice;\s+server\s+info;}
           )
@@ -493,7 +493,7 @@ describe 'knot' do
           # Add Check to validate change was successful
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{control\s+\{\s+listen-on\s+\{\s+address\s+192.0.2.2@5533;\s+\}\s+allow\s+localhost;}
+              %r{control\s+\{\s+listen-on\s+\{\s+address\s+192.0.2.2@5533;\s+\}\s+allow\s+localhost_remote;}
             )
           end
         end
@@ -502,7 +502,7 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{control\s+\{\s+listen-on\s+\{\s+address\s+127.0.0.1@42;\s+\}\s+allow\s+localhost;}
+              %r{control\s+\{\s+listen-on\s+\{\s+address\s+127.0.0.1@42;\s+\}\s+allow\s+localhost_remote;}
             )
           end
         end
