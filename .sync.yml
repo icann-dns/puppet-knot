@@ -1,8 +1,11 @@
 ---
 .travis.yml:
+  install_system_tests: true
   docker_sets:
   - set: 'docker/ubuntu-14.04'
     testmode: apply
-    # - set: 'docker/ubuntu-16.04'
-    # testmode: apply
+  - set: 'docker/ubuntu-14.04'
+    testmode: agent
+  - set: 'docker/ubuntu-16.04'
+    testmode: apply
   secure: "CuBiWSJ8fiU4+v5oYRIbpFRHhoZXasNdx/8qcoew2iPNkkQp+9us7pT61KhRVEHZNQoPbtctpdoFz1p64TTRfwASlecHkLxgiTNL+AIug8GxGEF4tV1OPjGdac6+nseGUGstLg/ftPcwBa+guukVxe84qZbqCMHcqmjOmbOAosPbw4lE3YUEMvZd5yutpJhzI6NQsdMKN7pXhEz6G8UhL7F9Gakj73ohUBumXY+ix7HDKlSa546jFc2bOLotZpJLbFOMS8dVfAGH2KUE2JJV/TqYhjFm3s6W0DHn1shPUnrnIuEi2Wm2/wdYRRUCzpDrvwee4yCreJtiTA2V2Nff9D2IdYnEheMDK/6oQIeQ89IAGqGiuOa5/o7W+M37+y/YtNpYbpmVgC/S3k5We+yy+uk55XG2tG0XYQhPEMRRDj5C1qZhUEM0HZvYvO0AM8YiBKMkVwvfd4+C3d/gthRKNQSMd41W0B6lzJUvRbzLSn0jLCa8qSqg+Fkbi0n0UuV8ohc9F66OOxN1UgKijX1xx8gYNfX2idmgXsX7x9nCok2xtB8OXcq7DNTDDQYj35Wzi2dCuulDxbwll2u/W1r4gRNQoqJpBjf/XcrGG8OtGzKotYG/rpWhEQ75udxKpH+ElTnAdI8RPaEqtH+a8WUmjLtASko+Aj/eVrXhH4KwlGU="
