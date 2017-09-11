@@ -3,7 +3,7 @@ sudo: false
 dist: trusty
 language: ruby
 cache: bundler
-bundler_args: --without system_tests development
+bundler_args: --without development
 before_install:
   - bundle -v
   - rm Gemfile.lock || true
@@ -17,6 +17,7 @@ env: ["CHECK=rubocop", "PUPPET_VERSION=\"~> 4.6.0\" STRICT_VARIABLES=yes CHECK=t
 rvm: [2.2, 2.3, 2.4]
 matrix:
   fast_finish: true
+ 
   exclude:
   - rvm: 2.2
     env: CHECK=rubocop
@@ -24,20 +25,23 @@ matrix:
   - rvm: 2.3
     bundler_args: --without development
     dist: trusty
-    env: BEAKER_TESTMODE=apply BEAKER_debug=false BEAKER_set=docker/ubuntu-14.04 CHECK=beaker
+    env: BEAKER_TESTMODE=apply BEAKER_set=docker/ubuntu-14.04 CHECK=beaker
+    services: docker
+    sudo: required
+  - rvm: 2.3
+    bundler_args: --without development
+    dist: trusty
+    env: BEAKER_TESTMODE=agent BEAKER_set=docker/ubuntu-14.04 CHECK=beaker
+    services: docker
+    sudo: required
+  - rvm: 2.3
+    bundler_args: --without development
+    dist: trusty
+    env: BEAKER_TESTMODE=apply BEAKER_set=docker/ubuntu-16.04 CHECK=beaker
     services: docker
     sudo: required
   - rvm: 2.4.0
     env: PUPPET_VERSION="~> 4.0" CHECK=build DEPLOY_TO_FORGE=yes
-  - rvm: 2.3.1
-    env: ["BEAKER_set=\"docker/ubuntu-master-14.04\"", "CHECK=beaker", "BEAKER_TESTMODE=agent"]
-    services: ["docker"]
-    sudo: required
-  - rvm: 2.3.1
-    env: ["BEAKER_set=\"docker/ubuntu-master-16.04\"", "CHECK=beaker", "BEAKER_TESTMODE=agent", "BEAKER_debug=yes" ]
-    services: ["docker"]
-    sudo: required
-    dist: xenial
 notifications:
   email: false
 deploy:

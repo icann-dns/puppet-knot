@@ -40,13 +40,13 @@ Lint/ShadowingOuterLocalVariable:
 Lint/LiteralInInterpolation:
   Enabled: True
 
-Style/IndentHeredoc:
+Layout/IndentHeredoc:
   Enabled: False
 
-Style/HashSyntax:
+Layout/HashSyntax:
   Enabled: True
 
-Style/RedundantReturn:
+Layout/RedundantReturn:
   Enabled: True
 
 Lint/AmbiguousOperator:
@@ -55,13 +55,13 @@ Lint/AmbiguousOperator:
 Lint/AssignmentInCondition:
   Enabled: True
 
-Style/SpaceBeforeComment:
+Layout/SpaceBeforeComment:
   Enabled: True
 
-Style/AndOr:
+Layout/AndOr:
   Enabled: True
 
-Style/RedundantSelf:
+Layout/RedundantSelf:
   Enabled: True
 
 Metrics/BlockLength:
@@ -75,7 +75,7 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: False
 
-Style/WhileUntilModifier:
+Layout/WhileUntilModifier:
   Enabled: True
 
 Lint/AmbiguousRegexpLiteral:
@@ -123,342 +123,339 @@ Lint/UselessAssignment:
 Lint/Void:
   Enabled: True
 
-Style/AccessModifierIndentation:
+Layout/AccessModifierIndentation:
   Enabled: True
 
-Style/AccessorMethodName:
+Layout/AccessorMethodName:
   Enabled: True
 
-Style/Alias:
+Layout/Alias:
   Enabled: True
 
-Style/AlignArray:
+Layout/AlignArray:
   Enabled: True
 
-Style/AlignHash:
+Layout/AlignHash:
   Enabled: True
 
-Style/AlignParameters:
+Layout/AlignParameters:
   Enabled: True
 
 Metrics/BlockNesting:
   Enabled: True
 
-Style/AsciiComments:
+Layout/AsciiComments:
   Enabled: True
 
-Style/Attr:
+Layout/Attr:
   Enabled: True
 
-Style/BracesAroundHashParameters:
+Layout/BracesAroundHashParameters:
   Enabled: True
 
-Style/CaseEquality:
+Layout/CaseEquality:
   Enabled: True
 
-Style/CaseIndentation:
+Layout/CaseIndentation:
   Enabled: True
 
-Style/CharacterLiteral:
+Layout/CharacterLiteral:
   Enabled: True
 
-Style/ClassAndModuleCamelCase:
+Layout/ClassAndModuleCamelCase:
   Enabled: True
 
-Style/ClassAndModuleChildren:
+Layout/ClassAndModuleChildren:
   Enabled: False
 
-Style/ClassCheck:
+Layout/ClassCheck:
   Enabled: True
 
 # Class length is not necessarily an indicator of code quality
 Metrics/ClassLength:
   Enabled: False
 
-Style/ClassMethods:
+Layout/ClassMethods:
   Enabled: True
 
-Style/ClassVars:
+Layout/ClassVars:
   Enabled: True
 
-Style/WhenThen:
+Layout/WhenThen:
   Enabled: True
 
-Style/WordArray:
+Layout/WordArray:
   Enabled: True
 
-Style/UnneededPercentQ:
+Layout/UnneededPercentQ:
   Enabled: True
 
-Style/Tab:
+Layout/Tab:
   Enabled: True
 
-Style/SpaceBeforeSemicolon:
+Layout/SpaceBeforeSemicolon:
   Enabled: True
 
-Style/TrailingBlankLines:
+Layout/TrailingBlankLines:
   Enabled: True
 
-Style/SpaceInsideBlockBraces:
+Layout/SpaceInsideBlockBraces:
   Enabled: True
 
-Style/SpaceInsideBrackets:
+Layout/SpaceInsideBrackets:
   Enabled: True
 
-Style/SpaceInsideHashLiteralBraces:
+Layout/SpaceInsideHashLiteralBraces:
   Enabled: True
 
-Style/SpaceInsideParens:
+Layout/SpaceInsideParens:
   Enabled: True
 
-Style/LeadingCommentSpace:
+Layout/LeadingCommentSpace:
   Enabled: True
 
-Style/SpaceBeforeFirstArg:
+Layout/SpaceAfterColon:
   Enabled: True
 
-Style/SpaceAfterColon:
+Layout/SpaceAfterComma:
   Enabled: True
 
-Style/SpaceAfterComma:
+Layout/SpaceAfterMethodName:
   Enabled: True
 
-Style/SpaceAfterMethodName:
+Layout/SpaceAfterNot:
   Enabled: True
 
-Style/SpaceAfterNot:
+Layout/SpaceAfterSemicolon:
   Enabled: True
 
-Style/SpaceAfterSemicolon:
+Layout/SpaceAroundEqualsInParameterDefault:
   Enabled: True
 
-Style/SpaceAroundEqualsInParameterDefault:
+Layout/SpaceAroundOperators:
   Enabled: True
 
-Style/SpaceAroundOperators:
+Layout/SpaceBeforeBlockBraces:
   Enabled: True
 
-Style/SpaceBeforeBlockBraces:
+Layout/SpaceBeforeComma:
   Enabled: True
 
-Style/SpaceBeforeComma:
+Layout/CollectionMethods:
   Enabled: True
 
-Style/CollectionMethods:
+Layout/CommentIndentation:
   Enabled: True
 
-Style/CommentIndentation:
+Layout/ColonMethodCall:
   Enabled: True
 
-Style/ColonMethodCall:
-  Enabled: True
-
-Style/CommentAnnotation:
+Layout/CommentAnnotation:
   Enabled: True
 
 # 'Complexity' is very relative
 Metrics/CyclomaticComplexity:
   Enabled: False
 
-Style/ConstantName:
+Layout/ConstantName:
   Enabled: True
 
-Style/Documentation:
+Layout/Documentation:
   Enabled: False
 
-Style/DefWithParentheses:
+Layout/DefWithParentheses:
   Enabled: True
 
-Style/PreferredHashMethods:
+Layout/PreferredHashMethods:
   Enabled: True
 
-Style/DotPosition:
-  EnforcedStyle: trailing
+Layout/DotPosition:
+  EnforcedLayout: trailing
 
-Style/DoubleNegation:
+Layout/DoubleNegation:
   Enabled: True
 
-Style/EachWithObject:
+Layout/EachWithObject:
   Enabled: True
 
-Style/EmptyLineBetweenDefs:
+Layout/EmptyLineBetweenDefs:
   Enabled: True
 
-Style/IndentArray:
+Layout/IndentArray:
   Enabled: True
 
-Style/IndentHash:
+Layout/IndentHash:
   Enabled: True
 
-Style/IndentationConsistency:
+Layout/IndentationConsistency:
   Enabled: True
 
-Style/IndentationWidth:
+Layout/IndentationWidth:
   Enabled: True
 
-Style/EmptyLines:
+Layout/EmptyLines:
   Enabled: True
 
-Style/EmptyLinesAroundAccessModifier:
+Layout/EmptyLinesAroundAccessModifier:
   Enabled: True
 
-Style/EmptyLiteral:
+Layout/EmptyLiteral:
   Enabled: True
 
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
   Enabled: False
 
-Style/MethodCallWithoutArgsParentheses:
+Layout/MethodCallWithoutArgsParentheses:
   Enabled: True
 
-Style/MethodDefParentheses:
+Layout/MethodDefParentheses:
   Enabled: True
 
-Style/LineEndConcatenation:
+Layout/LineEndConcatenation:
   Enabled: True
 
-Style/TrailingWhitespace:
+Layout/TrailingWhitespace:
   Enabled: True
 
-Style/StringLiterals:
+Layout/StringLiterals:
   Enabled: True
 
-Style/TrailingCommaInArguments:
+Layout/TrailingCommaInArguments:
   Enabled: True
 
-Style/TrailingCommaInLiteral:
+Layout/TrailingCommaInLiteral:
   Enabled: True
 
-Style/GlobalVars:
+Layout/GlobalVars:
   Enabled: True
 
-Style/GuardClause:
+Layout/GuardClause:
   Enabled: True
 
-Style/IfUnlessModifier:
+Layout/IfUnlessModifier:
   Enabled: True
 
-Style/MultilineIfThen:
+Layout/MultilineIfThen:
   Enabled: True
 
-Style/NegatedIf:
+Layout/NegatedIf:
   Enabled: True
 
-Style/NegatedWhile:
+Layout/NegatedWhile:
   Enabled: True
 
-Style/Next:
+Layout/Next:
   Enabled: True
 
-Style/SingleLineBlockParams:
+Layout/SingleLineBlockParams:
   Enabled: True
 
-Style/SingleLineMethods:
+Layout/SingleLineMethods:
   Enabled: True
 
-Style/SpecialGlobalVars:
+Layout/SpecialGlobalVars:
   Enabled: True
 
-Style/TrivialAccessors:
+Layout/TrivialAccessors:
   Enabled: True
 
-Style/UnlessElse:
+Layout/UnlessElse:
   Enabled: True
 
-Style/VariableInterpolation:
+Layout/VariableInterpolation:
   Enabled: True
 
-Style/VariableName:
+Layout/VariableName:
   Enabled: True
 
-Style/WhileUntilDo:
+Layout/WhileUntilDo:
   Enabled: True
 
-Style/EvenOdd:
+Layout/EvenOdd:
   Enabled: True
 
-Style/FileName:
+Layout/FileName:
   Enabled: True
 
-Style/For:
+Layout/For:
   Enabled: True
 
-Style/Lambda:
+Layout/Lambda:
   Enabled: True
 
-Style/MethodName:
+Layout/MethodName:
   Enabled: True
 
-Style/MultilineTernaryOperator:
+Layout/MultilineTernaryOperator:
   Enabled: True
 
-Style/NestedTernaryOperator:
+Layout/NestedTernaryOperator:
   Enabled: True
 
-Style/NilComparison:
+Layout/NilComparison:
   Enabled: True
 
-Style/FormatString:
+Layout/FormatString:
   Enabled: True
 
-Style/MultilineBlockChain:
+Layout/MultilineBlockChain:
   Enabled: True
 
-Style/Semicolon:
+Layout/Semicolon:
   Enabled: True
 
-Style/SignalException:
+Layout/SignalException:
   Enabled: True
 
-Style/NonNilCheck:
+Layout/NonNilCheck:
   Enabled: True
 
-Style/Not:
+Layout/Not:
   Enabled: True
 
-Style/NumericLiterals:
+Layout/NumericLiterals:
   Enabled: True
 
-Style/OneLineConditional:
+Layout/OneLineConditional:
   Enabled: True
 
-Style/OpMethod:
+Layout/OpMethod:
   Enabled: True
 
-Style/ParenthesesAroundCondition:
+Layout/ParenthesesAroundCondition:
   Enabled: True
 
-Style/PercentLiteralDelimiters:
+Layout/PercentLiteralDelimiters:
   Enabled: True
 
-Style/PerlBackrefs:
+Layout/PerlBackrefs:
   Enabled: True
 
-Style/PredicateName:
+Layout/PredicateName:
   Enabled: True
 
-Style/RedundantException:
+Layout/RedundantException:
   Enabled: True
 
-Style/SelfAssignment:
+Layout/SelfAssignment:
   Enabled: True
 
-Style/Proc:
+Layout/Proc:
   Enabled: True
 
-Style/RaiseArgs:
+Layout/RaiseArgs:
   Enabled: True
 
-Style/RedundantBegin:
+Layout/RedundantBegin:
   Enabled: True
 
-Style/RescueModifier:
+Layout/RescueModifier:
   Enabled: True
 
 # based on https://github.com/voxpupuli/modulesync_config/issues/168
-Style/RegexpLiteral:
-  EnforcedStyle: percent_r
+Layout/RegexpLiteral:
+  EnforcedLayout: percent_r
   Enabled: True
 
 Lint/UnderscorePrefixedVariableName:
@@ -470,25 +467,25 @@ Metrics/ParameterLists:
 Lint/RequireParentheses:
   Enabled: True
 
-Style/SpaceBeforeFirstArg:
+Layout/SpaceBeforeFirstArg:
   Enabled: True
 
-Style/ModuleFunction:
+Layout/ModuleFunction:
   Enabled: True
 
 Lint/Debugger:
   Enabled: True
 
-Style/IfWithSemicolon:
+Layout/IfWithSemicolon:
   Enabled: True
 
-Style/Encoding:
+Layout/Encoding:
   Enabled: True
 
-Style/BlockDelimiters:
+Layout/BlockDelimiters:
   Enabled: True
 
-Style/MultilineBlockLayout:
+Layout/MultilineBlockLayout:
   Enabled: True
 
 # 'Complexity' is very relative
@@ -502,7 +499,7 @@ Metrics/PerceivedComplexity:
 Lint/UselessAssignment:
   Enabled: True
 
-Style/ClosingParenthesisIndentation:
+Layout/ClosingParenthesisIndentation:
   Enabled: True
 
 # RSpec
@@ -531,7 +528,7 @@ RSpec/NestedGroups:
   Enabled: False
 
 # this is broken on ruby1.9
-Style/IndentHeredoc:
+Layout/IndentHeredoc:
   Enabled: False
 
 # disable Yaml safe_load. This is needed to support ruby2.0.0 development envs
