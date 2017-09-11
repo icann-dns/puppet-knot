@@ -3,31 +3,40 @@ require 'net/http'
 require 'uri'
 require 'json'
 # move to https://github.com/dalen/puppet-puppetdbquery in future
+def exported_resources(resource, tags, exported=true)
+  headers = { 'Accept' => 'application/json' }
+  query    = ['and', ['=', 'exported', true], ['~', 'tag', "dns__(#{tags.join('|')})"]]
+  uri      = "/pdb/query/v4/resources/#{resource}"
+  uri      += URI.escape("?query=#{query.to_json}")
+  http     = Net::HTTP.new(@puppetdb_server, @puppetdb_port)
+  begin
+    response = http.get(uri, headers)
+    if response.code != "200"
+      scope.call_function(
+        'warning',
+        ["unable to connect to the puppet server, exported resources wont work: #{response.code}"])
+      return []
+    end
+    JSON.parse(response.body)
+  rescue Exception => e
+    scope.call_function('warning', ["unable to connect to the puppetdb server, exported resources wont work: #{e}"])
+    return []
+  end
+end
 if @imports.empty? 
   return "  slave_servers {}\n  slave_servers_notify {}\n}\n"
 end
-headers = { 'Accept' => 'application/json' }
-query    = ['and', ['=', 'exported', true], ['~', 'tag', "(#{@imports.join('|')})"]]
-uri      = '/pdb/query/v4/resources/Knot::Remote'
-uri      += URI.escape("?query=#{query.to_json}")
-http     = Net::HTTP.new(@puppetdb_server, @puppetdb_port)
-begin
-  response = http.get(uri, headers)
-  if response.code != "200"
-    scope.call_function(
-      'warning',
-      ["unable to connect to the puppet server, exported resources wont work: #{response.code}"])
-  end
-  response_json = JSON.parse(response.body)
-rescue Exception => e
-  scope.call_function('warning', ["unable to connect to the puppetdb server, exported resources wont work: #{e}"])
-  return "slave_servers {}\nslave_servers_notify {}\n}\n"
+knot_resources = exported_resources('Knot::Remote', @imports)
+dns_resources = exported_resources('Dns::Remote', @imports)
+resources = (knot_resources + dns_resources).uniq{|h| h['title']}.sort_by{|h| h['title']}
+if resources.empty?
+  return "  slave_servers {}\n  slave_servers_notify {}\n}\n"
 end
 -%>
   slave_servers {
 <%-    
-response_json.each_with_index do |slave, index|
-  last = response_json.size - 1 == index
+resources.each_with_index do |slave, index|
+  last = resources.size - 1 == index
   ipv4_address = slave['parameters'].include?('address4')
   ipv6_address = slave['parameters'].include?('address6')
   if ipv4_address
@@ -45,8 +54,8 @@ end
   }
   slave_servers_notify {
 <%-
-response_json.each_with_index do |slave, index|
-  last = response_json.size - 1 == index
+resources.each_with_index do |slave, index|
+  last = resources.size - 1 == index
   ipv4_address = slave['parameters'].include?('address4')
   ipv6_address = slave['parameters'].include?('address6')
   if ipv4_address

@@ -31,7 +31,6 @@ if ENV['BEAKER_TESTMODE'] == 'apply'
         execute_manifest(pp, catch_failures: true)
         execute_manifest(pp, catch_failures: true)
         expect(execute_manifest(pp, catch_failures: true).exit_code).to eq 0
-        # sleep to allow zone transfer (value probably to high)
         sleep(10)
       end
       describe service('knot') do

@@ -1,3 +1,15 @@
+### 2017-08-16 0.2.8
+* change the name of the remote acl to allow localhost acls in other parts of knot
+
+### 2017-08-16 0.2.7
+* Add restart command to check config before restarting
+* Remove rouge comma
+* updated spec tests
+* added gitlab-ci tests 
+
+### 2017-07-27 0.2.6
+* Remove a sparse comma
+
 ### 2017-07-27 0.2.5
 * Add acceptance tests to check notifies are working
 

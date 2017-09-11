@@ -725,7 +725,6 @@ describe 'knot' do
         context 'control_interface' do
           before { params.merge!(control_interface: '192.0.2.2') }
           it { is_expected.to compile }
-          # Add Check to validate change was successful
           if facts[:operatingsystem] == 'Ubuntu' &&
              facts[:lsbdistcodename] == 'trusty'
             it do
