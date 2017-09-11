@@ -500,6 +500,10 @@ Layout/ClosingParenthesisIndentation:
 
 # RSpec
 
+# This seems to trigger when lets are in case statments
+RSpec/ScatteredLet:
+  Enabled: False
+
 RSpec/BeforeAfterAll:
   Exclude:
     - spec/acceptance/**/*
