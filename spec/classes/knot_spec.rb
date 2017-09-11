@@ -197,12 +197,12 @@ describe 'knot' do
               \s+\{
               \s+address\s+127.0.0.1@5533;
               \s+\}
-              \s+allow\s+localhost;
+              \s+allow\s+localhost_remote;
               }x
             ).with_content(
               %r{
               remotes\s+\{
-              \s+localhost\s+\{
+              \s+localhost_remote\s+\{
               \s+address\s+127.0.0.1;
               }x
             ).with_content(
@@ -734,7 +734,7 @@ describe 'knot' do
                 \s+listen-on\s+\{
                 \s+address\s+192.0.2.2@5533;
                 \s+\}
-                \s+allow\s+localhost;
+                \s+allow\s+localhost_remote;
                 }x
               )
             end
@@ -752,7 +752,7 @@ describe 'knot' do
                 \s+listen-on\s+\{
                 \s+address\s+127.0.0.1@42;
                 \s+\}
-                \s+allow\s+localhost;
+                \s+allow\s+localhost_remote;
                 }x
               )
             end

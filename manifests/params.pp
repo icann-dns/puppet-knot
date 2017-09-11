@@ -72,4 +72,5 @@ class knot::params (
   $nsid         = $::fqdn
   $identity     = $::fqdn
   $server_count = $facts['processors']['count']
+  $restart_cmd      = 'PATH=/usr/sbin:/usr/local/sbin/ knotc reload || knotc checkconf && service knot restart'
 }
