@@ -93,9 +93,6 @@ EOS
       it 'clean puppet run on dns dnsslave' do
         expect(execute_manifest_on(dnsslave, dnsslave_pp, catch_failures: true).exit_code).to eq 0
       end
-      it 'sleep for 1 minute to allow tranfers to occur' do
-        sleep(60)
-      end
       describe service('knot'), node: dnsmaster do
         it { is_expected.to be_running }
       end
@@ -121,6 +118,7 @@ EOS
         its(:stdout) { is_expected.to match %r{} }
       end
       describe command("dig +short soa . @#{dnsslave_ip}"), node: dnsslave do
+        let(:pre_command) { 'sleep 10' }
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
       end

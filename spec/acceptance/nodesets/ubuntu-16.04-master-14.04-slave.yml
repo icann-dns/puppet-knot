@@ -1,0 +1,38 @@
+---
+# This file is managed via modulesync
+# https://github.com/voxpupuli/modulesync
+# https://github.com/voxpupuli/modulesync_config
+HOSTS:
+  puppetmaster:
+    roles: 
+    - master
+    - dashboard
+    - database
+    - agent
+    platform: ubuntu-14.04-amd64
+    hypervisor: vagrant
+    box: puppetlabs/ubuntu-14.04-64-nocm
+  dnsmaster:
+    roles: 
+    - agent
+    - default
+    - frictionless
+    - dnsmaster
+    platform: ubuntu-14.04-amd64
+    hypervisor: vagrant
+    box: puppetlabs/ubuntu-14.04-64-nocm
+  dnsslave:
+    roles: 
+    - agent
+    - dnsslave
+    - frictionless
+    platform: ubuntu-16.04-amd64
+    hypervisor: vagrant
+    box: puppetlabs/ubuntu-16.04-64-nocm
+CONFIG:
+  trace_limit: 200
+  pe_debug: false
+  pe_ver: 2016.4.3
+  pe_dir: https://s3.amazonaws.com/pe-builds/released/2016.4.3
+...
+# vim: syntax=yaml

@@ -5,7 +5,7 @@ require 'json'
 # move to https://github.com/dalen/puppet-puppetdbquery in future
 def exported_resources(resource, tags, exported=true)
   headers = { 'Accept' => 'application/json' }
-  query    = ['and', ['=', 'exported', true], ['~', 'tag', "dns__(#{tags.join('|')})"]]
+  query    = ['and', ['=', 'exported', true], ['~', 'tag', "(#{tags.join('|')})"]]
   uri      = "/pdb/query/v4/resources/#{resource}"
   uri      += URI.escape("?query=#{query.to_json}")
   http     = Net::HTTP.new(@puppetdb_server, @puppetdb_port)
