@@ -13,6 +13,7 @@ end
 group :test do
   gem 'puppetlabs_spec_helper', '~> 2.2.0',                         :require => false
   gem 'rspec-puppet', '~> 2.5',                                     :require => false
+  gem 'semantic_puppet',                                            :require => false
   gem 'rspec-puppet-facts',                                         :require => false
   gem 'rspec-puppet-utils',                                         :require => false
   gem 'puppet-lint-absolute_classname-check',                       :require => false
@@ -51,6 +52,8 @@ group :development do
 end
 
 group :system_tests do
+  gem 'vagrant-wrapper',               :require => false
+  gem 'scooter',                       :require => false
   gem 'beaker', '<= 2.51.0',           :require => false if RUBY_VERSION < '2.2.5'
   gem 'progressbar',                   :require => false
   if beaker_version = ENV['BEAKER_VERSION']
