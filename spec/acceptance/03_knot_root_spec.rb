@@ -46,6 +46,7 @@ if ENV['BEAKER_TESTMODE'] == 'apply'
       end
       describe command("dig +short soa . @#{ipaddress}") do
         let(:pre_command) { 'sleep 10' }
+
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
       end
