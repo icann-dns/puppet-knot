@@ -6,9 +6,9 @@ if ENV['BEAKER_TESTMODE'] == 'agent' and ENV['VIRTUALBOX'] == 'yes'
   describe 'notifies with Virtualbox' do
     context 'test notifies' do
       dnsmaster    = find_host_with_role('dnsmaster')
-      dnsmaster_ip = fact_on(dnsmaster, 'ipaddress_eth1')
+      dnsmaster_ip = '10.255.1.3'
       dnsslave     = find_host_with_role('dnsslave')
-      dnsslave_ip  = fact_on(dnsslave, 'ipaddress_eth1')
+      dnsslave_ip  = '10.255.1.4'
       example_zone = <<EOS
 example.com. 3600 IN SOA sns.dns.icann.org. noc.dns.icann.org. 1 7200 3600 1209600 3600
 example.com. 86400 IN NS a.iana-servers.net.

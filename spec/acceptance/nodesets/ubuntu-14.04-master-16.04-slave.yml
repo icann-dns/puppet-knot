@@ -13,6 +13,7 @@ HOSTS:
     hypervisor: vagrant
     box: puppetlabs/ubuntu-14.04-64-nocm
     vagrant_memsize: 4096
+    ip: 10.255.1.2
   dnsmaster:
     roles: 
     - agent
@@ -22,6 +23,7 @@ HOSTS:
     platform: ubuntu-14.04-amd64
     hypervisor: vagrant
     box: puppetlabs/ubuntu-14.04-64-nocm
+    ip: 10.255.1.3
   dnsslave:
     roles: 
     - agent
@@ -30,6 +32,7 @@ HOSTS:
     platform: ubuntu-16.04-amd64
     hypervisor: vagrant
     box: puppetlabs/ubuntu-16.04-64-nocm
+    ip: 10.255.1.4
 CONFIG:
   trace_limit: 200
   pe_debug: false
