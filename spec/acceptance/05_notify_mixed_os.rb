@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if ENV['BEAKER_TESTMODE'] == 'agent' and ENV['VIRTUALBOX'] == 'yes' 
+if ENV['BEAKER_TESTMODE'] == 'agent' && ENV['VIRTUALBOX'] == 'yes'
   require 'spec_helper_acceptance'
 
   describe 'notifies with Virtualbox' do
