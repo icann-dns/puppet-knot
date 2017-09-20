@@ -4,9 +4,17 @@ class knot::params (
   Boolean $force_knot1 = false
 ) {
   if $force_knot1 {
-    $package_name = $::kernel ? {
-      'FreeBSD' => 'knot1',
-      default   => 'knot',
+    case $::kernel {
+      'FreeBSD': {
+        $package_name = 'knot1'
+        $conf_dir         = '/usr/local/etc/knot'
+        $run_dir          = '/var/run/knot'
+      }
+      default: {
+        $package_name = 'knot'
+        $conf_dir     = '/etc/knot'
+        $run_dir      = '/run/knot'
+      }
     }
     $concat_head      = "s {\n"
     $concat_foot      = "}\n"
