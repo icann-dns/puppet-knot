@@ -33,6 +33,7 @@ class knot (
   Tea::Port                    $control_port         = 5533,
   Hash[String,Tea::Ip_address] $control_allow        = {'localhost_remote' => '127.0.0.1'},
   String                       $package_name         = $::knot::params::package_name,
+  String                       $package_ensure       = $::knot::params::package_ensure,
   String                       $service_name         = 'knot',
   String                       $restart_cmd          = $::knot::params::restart_cmd,
   Tea::Absolutepath            $conf_dir             = $::knot::params::conf_dir,
@@ -61,7 +62,7 @@ class knot (
     true    => [],
     default => knot::get_exported_titles($imports),
   }
-  ensure_packages($package_name)
+  ensure_packages($package_name, {'ensure' => $package_ensure})
 
   concat{$conf_file:
     require => Package[$package_name],
