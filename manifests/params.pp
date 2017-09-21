@@ -28,8 +28,8 @@ class knot::params (
     $remotes_template = 'knot/etc/knot1/knot.remotes.conf.erb'
     $acl_template     = 'knot/etc/knot1/knot.acl.conf.erb'
   } else {
+    $package_ensure = 'latest'
     case $::kernel {
-      $package_ensure = 'latest'
       'FreeBSD': {
         $package_name     = 'knot2'
         $conf_dir         = '/usr/local/etc/knot'
