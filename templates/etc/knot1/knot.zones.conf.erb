@@ -14,18 +14,18 @@
 -%>
     "<%= @name %>" {
       <%- if @zonefile then -%>
-      file "<%= @zone_subdir %>/<%= @zonefile %>";
+        file "<%= @zone_subdir %>/<%= @zonefile %>";
       <%- else -%>
-      file "<%= @zone_subdir %>/<%= @name %>";
+        file "<%= @zone_subdir %>/<%= @name %>";
       <%- end -%>
-      notify-out <%= @notify_out.join('-notify, ') %><%- if @notify_out.any? -%>-notify,<%- end -%> slave_servers_notify;
-      xfr-out <%= @_provide_xfrs.join(', ') %><%- if @_provide_xfrs.any? -%>, <%- end -%>slave_servers;
+        notify-out <%= @notify_out.join('-notify, ') %><%- if @notify_out.any? -%>-notify,<%- end -%> slave_servers_notify;
+        xfr-out <%= @_provide_xfrs.join(', ') %><%- if @_provide_xfrs.any? -%>, <%- end -%>slave_servers;
       <%- if @notify_in.any? then -%>
-      notify-in <%= @notify_in.join('-notify, ') %>-notify;
+        notify-in <%= @notify_in.join('-notify, ') %>-notify;
       <%- end -%>
       <%- if @masters.any? then -%>
-      xfr-in <%= @masters.join(', ') %>;
+        xfr-in <%= @masters.join(', ') %>;
       <%- elsif @default_masters.any? -%>
-      xfr-in <%= @default_masters.join(', ') %>;
+        xfr-in <%= @default_masters.join(', ') %>;
       <%- end -%>
     }
