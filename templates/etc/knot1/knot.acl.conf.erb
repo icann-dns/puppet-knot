@@ -3,7 +3,7 @@
   <%= @name %>-notify { <%= @name %>-ipv4-notify, <%= @name %>-ipv6-notify }
 <%- elsif @address4 -%>
   <%= @name %> { <%= @name %>-ipv4 }
-  <%= @name %>-notify { <%= @name %>-ipv4-notify}
+  <%= @name %>-notify { <%= @name %>-ipv4-notify }
 <%- elsif @address6 -%>
   <%= @name %> { <%= @name %>-ipv6 }
   <%= @name %>-notify { <%= @name %>-ipv6-notify }
