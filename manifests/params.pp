@@ -3,6 +3,8 @@
 class knot::params (
   Boolean $force_knot1 = false
 ) {
+  # This is specific to ICANN migration and will
+  # likley get removed in future versions
   if $force_knot1 {
     case $::kernel {
       'FreeBSD': {
@@ -15,7 +17,9 @@ class knot::params (
         $package_name   = 'knot'
         $conf_dir       = '/etc/knot'
         $run_dir        = '/run/knot'
-        $package_ensure = '/^1/'
+        $package_ensure = $::lsbdistcodename ? {
+          'trusty' => '1.6.7-1+trusty+1',
+          default  => '1.6.7-1+xenial+1',
       }
     }
     $concat_head      = "s {\n"
