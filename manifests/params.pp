@@ -18,6 +18,7 @@ class knot::params (
         $conf_dir       = '/etc/knot'
         $run_dir        = '/run/knot'
         $package_ensure = "1.6.7+${facts['os']['distro']}+1"
+      }
     }
     $concat_head      = "s {\n"
     $concat_foot      = "}\n"
