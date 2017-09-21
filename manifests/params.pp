@@ -6,14 +6,16 @@ class knot::params (
   if $force_knot1 {
     case $::kernel {
       'FreeBSD': {
-        $package_name = 'knot1'
-        $conf_dir         = '/usr/local/etc/knot'
-        $run_dir          = '/var/run/knot'
+        $package_name   = 'knot1'
+        $conf_dir       = '/usr/local/etc/knot'
+        $run_dir        = '/var/run/knot'
+        $package_ensure = 'latest'
       }
       default: {
-        $package_name = 'knot'
-        $conf_dir     = '/etc/knot'
-        $run_dir      = '/run/knot'
+        $package_name   = 'knot'
+        $conf_dir       = '/etc/knot'
+        $run_dir        = '/run/knot'
+        $package_ensure = '1.6'
       }
     }
     $concat_head      = "s {\n"
@@ -27,6 +29,7 @@ class knot::params (
     $acl_template     = 'knot/etc/knot1/knot.acl.conf.erb'
   } else {
     case $::kernel {
+      $package_ensure = 'latest'
       'FreeBSD': {
         $package_name     = 'knot2'
         $conf_dir         = '/usr/local/etc/knot'
