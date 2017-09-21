@@ -15,7 +15,7 @@ class knot::params (
         $package_name   = 'knot'
         $conf_dir       = '/etc/knot'
         $run_dir        = '/run/knot'
-        $package_ensure = '1.6'
+        $package_ensure = '1.6.7'
       }
     }
     $concat_head      = "s {\n"
