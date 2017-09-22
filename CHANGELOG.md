@@ -1,3 +1,6 @@
+### 2017-08-16 0.3.0
+* add support for knot 2.x. 
+
 ### 2017-08-16 0.2.8
 * change the name of the remote acl to allow localhost acls in other parts of knot
 
