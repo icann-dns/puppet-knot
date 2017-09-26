@@ -59,16 +59,18 @@ class knot (
   $force_knot1       = $::knot::params::force_knot1
 
   if $force_knot1 and $::kernel == 'Linux' {
-    $package_ensure = 'held'
-  } else {
-    $package_ensure = 'latest'
+    apt::pin{'knot1':
+      packages => 'knot',
+      version  => '1.*',
+      priority => 1001,
+    }
   }
 
   $exported_remotes = empty($imports) ? {
     true    => [],
     default => knot::get_exported_titles($imports),
   }
-  ensure_packages($package_name, {'ensure' => $package_ensure})
+  ensure_packages($package_name)
 
   concat{$conf_file:
     require => Package[$package_name],
