@@ -1,4 +1,7 @@
-### 2017-08-16 0.3.0
+### 2017-09-26 0.3.1
+* use apt::pin to pin knot1 if force\_knot is used
+
+### 2017-09-22 0.3.0
 * add support for knot 2.x. 
 
 ### 2017-08-16 0.2.8
