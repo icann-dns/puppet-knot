@@ -18,6 +18,7 @@ class knot::params (
         $run_dir        = '/run/knot'
       }
     }
+    $knotc_arg        = 'checkconf'
     $concat_head      = "s {\n"
     $concat_foot      = "}\n"
     $acl_head         = "groups {\n"
@@ -42,6 +43,7 @@ class knot::params (
         $zones_template   = 'knot/etc/knot2/knot.zones.conf.erb'
         $remotes_template = 'knot/etc/knot2/knot.remotes.conf.erb'
         $acl_template     = 'knot/etc/knot2/knot.acl.conf.erb'
+        $knotc_arg        = 'conf-check'
       }
       default: {
         $package_name = 'knot'
@@ -58,6 +60,7 @@ class knot::params (
             $zones_template   = 'knot/etc/knot1/knot.zones.conf.erb'
             $remotes_template = 'knot/etc/knot1/knot.remotes.conf.erb'
             $acl_template     = 'knot/etc/knot1/knot.acl.conf.erb'
+            $knotc_arg        = 'checkconf'
           }
           default: {
             $concat_head      = ":\n"
@@ -69,6 +72,7 @@ class knot::params (
             $zones_template   = 'knot/etc/knot2/knot.zones.conf.erb'
             $remotes_template = 'knot/etc/knot2/knot.remotes.conf.erb'
             $acl_template     = 'knot/etc/knot2/knot.acl.conf.erb'
+            $knotc_arg        = 'conf-check'
           }
         }
       }
@@ -82,5 +86,5 @@ class knot::params (
   $nsid         = $::fqdn
   $identity     = $::fqdn
   $server_count = $facts['processors']['count']
-  $restart_cmd      = 'PATH=/usr/sbin:/usr/local/sbin/ knotc reload || knotc checkconf && service knot restart'
+  $restart_cmd  = "PATH=/usr/sbin:/usr/local/sbin/ knotc reload || knotc ${knotc_arg} && service knot restart"
 }
