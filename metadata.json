@@ -1,6 +1,6 @@
 {
   "name": "icann-knot",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "john.bond@icann.org",
   "summary": "Installs and configuers knot from nic.cz",
   "license": "Apache-2.0",

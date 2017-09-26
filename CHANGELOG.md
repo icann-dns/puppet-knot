@@ -1,3 +1,6 @@
+### 2017-09-26 0.3.2
+* use correct knotc arguments
+
 ### 2017-09-26 0.3.1
 * use apt::pin to pin knot1 if force\_knot is used
 
