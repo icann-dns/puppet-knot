@@ -59,7 +59,7 @@ class knot (
   $force_knot1       = $::knot::params::force_knot1
 
   if $force_knot1 and $::kernel == 'Linux' {
-    apt::pin{'knot1':
+    apt::pin{'00knot1':
       packages => 'knot',
       version  => '1.*',
       priority => 1001,
