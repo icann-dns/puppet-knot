@@ -11,13 +11,11 @@ class knot::params (
         $package_name   = 'knot1'
         $conf_dir       = '/usr/local/etc/knot'
         $run_dir        = '/var/run/knot'
-        $package_ensure = 'latest'
       }
       default: {
         $package_name   = 'knot'
         $conf_dir       = '/etc/knot'
         $run_dir        = '/run/knot'
-        $package_ensure = "1.6.7-1+${facts['os']['distro']['codename']}+1"
       }
     }
     $concat_head      = "s {\n"
@@ -30,7 +28,6 @@ class knot::params (
     $remotes_template = 'knot/etc/knot1/knot.remotes.conf.erb'
     $acl_template     = 'knot/etc/knot1/knot.acl.conf.erb'
   } else {
-    $package_ensure = 'latest'
     case $::kernel {
       'FreeBSD': {
         $package_name     = 'knot2'

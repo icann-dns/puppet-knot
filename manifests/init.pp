@@ -33,7 +33,6 @@ class knot (
   Tea::Port                    $control_port         = 5533,
   Hash[String,Tea::Ip_address] $control_allow        = {'localhost_remote' => '127.0.0.1'},
   String                       $package_name         = $::knot::params::package_name,
-  String                       $package_ensure       = $::knot::params::package_ensure,
   String                       $service_name         = 'knot',
   String                       $restart_cmd          = $::knot::params::restart_cmd,
   Tea::Absolutepath            $conf_dir             = $::knot::params::conf_dir,
@@ -57,6 +56,13 @@ class knot (
   $acl_foot          = $::knot::params::acl_foot
   $concat_head       = $::knot::params::concat_head
   $concat_foot       = $::knot::params::concat_foot
+  $force_knot1       = $::knot::params::force_knot1
+
+  if $force_knot1 and $::kernel == 'Linux' {
+    $package_ensure = 'held'
+  } else {
+    $package_ensure = 'latest'
+  }
 
   $exported_remotes = empty($imports) ? {
     true    => [],
