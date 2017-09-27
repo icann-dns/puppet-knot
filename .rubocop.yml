@@ -122,6 +122,7 @@ Lint/Void:
 Layout/AccessModifierIndentation:
   Enabled: True
 
+#Naming/AccessorMethodName:
 Style/AccessorMethodName:
   Enabled: True
 
@@ -158,6 +159,7 @@ Layout/CaseIndentation:
 Style/CharacterLiteral:
   Enabled: True
 
+#Naming/ClassAndModuleCamelCase:
 Style/ClassAndModuleCamelCase:
   Enabled: True
 
@@ -256,6 +258,7 @@ Style/CommentAnnotation:
 Metrics/CyclomaticComplexity:
   Enabled: False
 
+#Naming/ConstantName:
 Style/ConstantName:
   Enabled: True
 
@@ -365,6 +368,7 @@ Style/UnlessElse:
 Style/VariableInterpolation:
   Enabled: True
 
+#Naming/VariableName:
 Style/VariableName:
   Enabled: True
 
@@ -374,6 +378,7 @@ Style/WhileUntilDo:
 Style/EvenOdd:
   Enabled: True
 
+#Naming/FileName:
 Style/FileName:
   Enabled: True
 
@@ -383,6 +388,7 @@ Style/For:
 Style/Lambda:
   Enabled: True
 
+#Naming/MethodName:
 Style/MethodName:
   Enabled: True
 
@@ -421,6 +427,8 @@ Style/OneLineConditional:
 
 Style/OpMethod:
   Enabled: True
+#Style/BinaryOperatorParameterName:
+#  Enabled: True
 
 Style/ParenthesesAroundCondition:
   Enabled: True
@@ -431,6 +439,7 @@ Style/PercentLiteralDelimiters:
 Style/PerlBackrefs:
   Enabled: True
 
+#Naming/PredicateName:
 Style/PredicateName:
   Enabled: True
 
