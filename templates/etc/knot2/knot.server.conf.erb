@@ -11,9 +11,7 @@ server:
   identity: <%= @identity %>
 <%- end -%>
 <%- if @hide_version -%>
-  version: off
-<%- else -%>
-  version: on
+  version: hidden
 <%- end -%>
 <%- if @nsid -%>
   nsid: <%= @nsid %>

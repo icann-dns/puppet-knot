@@ -222,8 +222,8 @@ describe 'knot' do
               target: conf_file
             ).with_content(
               %r{identity: foo.example.com}
-            ).with_content(
-              %r{version: on}
+            ).without_content(
+              %r{version:}
             ).with_content(
               %r{nsid: foo.example.com}
             ).with_content(
@@ -662,10 +662,19 @@ describe 'knot' do
         context 'hide_version' do
           before { params.merge!(hide_version: true) }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{version:? off;?}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{version off;}
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{version: hidden}
+              )
+            end
           end
         end
         context 'rrl_size' do
