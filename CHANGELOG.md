@@ -1,3 +1,6 @@
+### 2017-09-26 0.3.3
+* Fix version string in knot 2.x.  if hide\_version is set to false then version.server queries will recive the string hidden.  in future version we should extend this with the abbility to pass a string
+
 ### 2017-09-26 0.3.2
 * use correct knotc arguments
 
