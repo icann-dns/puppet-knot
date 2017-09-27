@@ -33,18 +33,30 @@ describe 'knot::tsig' do
       end
 
       describe 'check default config' do
-        # add these two lines in a single test block to enable puppet and hiera debug mode
-        # Puppet::Util::Log.level = :debug
-        # Puppet::Util::Log.newdestination(:console)
         it { is_expected.to compile.with_all_deps }
-
         it { is_expected.to contain_knot__tsig('foo.example.com') }
-        it do
-          is_expected.to contain_concat__fragment(
-            'knot_key_foo.example.com'
-          ).with_content(
-            %r{foo.example.com hmac-sha256 "A+="}
-          ).with_order('02')
+
+        if facts[:operatingsystem] == 'Ubuntu' &&
+           facts[:lsbdistcodename] == 'trusty'
+          it do
+            is_expected.to contain_concat__fragment(
+              'knot_key_foo.example.com'
+            ).with_content(
+              %r{foo.example.com hmac-sha256 "A+="}
+            ).with_order('02')
+          end
+        else
+          it do
+            is_expected.to contain_concat__fragment(
+              'knot_key_foo.example.com'
+            ).with_content(
+              %r{
+              \s+-\sid:\sfoo.example.com\n
+              \s+algorithm:\shmac-sha256\n
+              \s+secret:\sA+=
+              }x
+            ).with_order('02')
+          end
         end
       end
 
@@ -52,23 +64,53 @@ describe 'knot::tsig' do
         context 'algo' do
           before { params.merge!(algo: 'hmac-md5') }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment(
-              'knot_key_foo.example.com'
-            ).with_content(
-              %r{foo.example.com hmac-md5 "A+="}
-            ).with_order('02')
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_key_foo.example.com'
+              ).with_content(
+                %r{foo.example.com hmac-md5 "A+="}
+              ).with_order('02')
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_key_foo.example.com'
+              ).with_content(
+                %r{
+                \s+-\sid:\sfoo.example.com\n
+                \s+algorithm:\shmac-md5\n
+                \s+secret:\sA+=
+                }x
+              ).with_order('02')
+            end
           end
         end
         context 'data' do
           before { params.merge!(data: 'foobar') }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment(
-              'knot_key_foo.example.com'
-            ).with_content(
-              %r{foo.example.com hmac-sha256 "foobar"}
-            ).with_order('02')
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_key_foo.example.com'
+              ).with_content(
+                %r{foo.example.com hmac-sha256 "foobar"}
+              ).with_order('02')
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_key_foo.example.com'
+              ).with_content(
+                %r{
+                \s+-\sid:\sfoo.example.com\n
+                \s+algorithm:\shmac-sha256\n
+                \s+secret:\sfoobar
+                }x
+              ).with_order('02')
+            end
           end
         end
       end

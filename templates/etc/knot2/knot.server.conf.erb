@@ -1,0 +1,58 @@
+<%-
+    @background_workers = 1
+    @tcp_workers        = (@server_count * 0.2).floor
+    @tcp_workers        = @tcp_workers > 0 ? @tcp_workers : 1 
+
+    @udp_workers        = @server_count - @tcp_workers - @background_workers
+    @udp_workers        = @udp_workers > 0 ? @udp_workers : 1 
+-%>
+server:
+<%- if @identity -%>
+  identity: <%= @identity %>
+<%- end -%>
+<%- if @hide_version -%>
+  version: hidden
+<%- end -%>
+<%- if @nsid -%>
+  nsid: <%= @nsid %>
+<%- end -%>
+<%- if @run_dir -%>
+  rundir: <%= @run_dir %>
+<%- end -%>
+<%- if @pidfile -%>
+  pidfile: <%= @pidfile %>
+<%- end -%>
+<%- if @server_count -%>
+  udp-workers: <%= @udp_workers %>
+  tcp-workers: <%= @tcp_workers %>
+  background-workers: <%= @background_workers %>
+<%- end -%>
+  <%- if @max_tcp_clients -%>
+  max-tcp-clients: <%= @max_tcp_clients %>
+<%- end -%>
+<%- if @max_udp_payload -%>
+  max-udp-payload: <%= @max_udp_payload %>
+<%- end -%>
+<%- if @username -%>
+  user: <%= @username %>
+<%- end -%>
+<%- if @rrl_limit -%>
+  rate-limit: <%= @rrl_limit %>
+<%- end -%>
+<%- if @rrl_size -%>
+  rate-limit-table-size: <%= @rrl_size %>
+<%- end -%>
+<%- if @rrl_slip -%>
+  rate-limit-slip: <%= @rrl_slip %>
+<%- end -%>
+<%- if @port == 53 then port_str = '' else port_str = "@#{@port}" end -%>
+  listen: [<%= @ip_addresses.join("#{port_str}, ") %><%= port_str %>]
+<%- if @control_enable -%>
+control:
+  listen: <%= @run_dir %>/knot.sock
+<%- end -%>
+log:
+  - target: <%= @log_target %>
+    any: <%= @log_any_level %>
+    zone: <%= @log_zone_level %>
+    server: <%= @log_server_level %>

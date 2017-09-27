@@ -1,6 +1,6 @@
 {
   "name": "icann-knot",
-  "version": "0.2.7",
+  "version": "0.3.3",
   "author": "john.bond@icann.org",
   "summary": "Installs and configuers knot from nic.cz",
   "license": "Apache-2.0",
@@ -9,13 +9,14 @@
   "issues_url": "https://github.com/icann-dns/puppet-knot/issues",
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 4.11.0 <5.0.0"},
-    {"name":"puppetlabs-concat","version_requirement":">= 1.2.0 <5.0.0"},
-    {"name":"icann-tea","version_requirement":">= 0.2.8 <1.0.0"}
+    {"name":"puppetlabs-concat","version_requirement":">= 1.2.0 <2.0.0"},
+    {"name":"puppetlabs-apt","version_requirement":">= 2.2.2 <3.0.0"},
+    {"name":"icann-tea","version_requirement":">= 0.2.13 <1.0.0"}
   ],
   "operatingsystem_support": [
     {
       "operatingsystem" : "Ubuntu",
-      "operatingsystemrelease" : [ "14.04" ]
+      "operatingsystemrelease" : [ "14.04", "16.04" ]
     },
     {
       "operatingsystem" : "FreeBSD",

@@ -1,4 +1,19 @@
-### 2017-07-27 0.2.7
+### 2017-09-26 0.3.3
+* Fix version string in knot 2.x.  if hide\_version is set to false then version.server queries will recive the string hidden.  in future version we should extend this with the abbility to pass a string
+
+### 2017-09-26 0.3.2
+* use correct knotc arguments
+
+### 2017-09-26 0.3.1
+* use apt::pin to pin knot1 if force\_knot is used
+
+### 2017-09-22 0.3.0
+* add support for knot 2.x. 
+
+### 2017-08-16 0.2.8
+* change the name of the remote acl to allow localhost acls in other parts of knot
+
+### 2017-08-16 0.2.7
 * Add restart command to check config before restarting
 * Remove rouge comma
 * updated spec tests

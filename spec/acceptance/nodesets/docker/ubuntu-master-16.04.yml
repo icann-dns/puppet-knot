@@ -31,7 +31,7 @@ HOSTS:
     docker_image_commands:
       - 'apt-get install -y net-tools wget locales cron'
       - 'locale-gen en_US.UTF-8'
-  ubuntu-1604-x64-slave:
+  ubuntu-1604-x64-dnsslave:
     roles: 
     - agent
     - dnsslave

@@ -28,11 +28,9 @@ if ENV['BEAKER_TESTMODE'] == 'apply'
         masters  => ['lax.xfr.dns.icann.org', 'iad.xfr.dns.icann.org'];
     }
         EOS
-        apply_manifest(pp, catch_failures: true)
-        apply_manifest(pp, catch_failures: true)
-        expect(apply_manifest(pp, catch_failures: true).exit_code).to eq 0
-        # sleep to allow zone transfer (value probably to high)
-        sleep(10)
+        execute_manifest(pp, catch_failures: true)
+        execute_manifest(pp, catch_failures: true)
+        expect(execute_manifest(pp, catch_failures: true).exit_code).to eq 0
       end
       describe service('knot') do
         it { is_expected.to be_running }
@@ -47,6 +45,8 @@ if ENV['BEAKER_TESTMODE'] == 'apply'
         its(:stdout) { is_expected.to match %r{} }
       end
       describe command("dig +short soa . @#{ipaddress}") do
+        let(:pre_command) { 'sleep 10' }
+
         its(:exit_status) { is_expected.to eq 0 }
         its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
       end

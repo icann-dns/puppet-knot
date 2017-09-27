@@ -1,0 +1,45 @@
+<%- 
+  @acl = []
+  # use function in group slave to get titles
+  if @provide_xfrs.any?
+    @notify_out = (@provide_xfrs + @send_notify_additions + @exported_remotes).map {
+      |notify| "#{notify}-notify" 
+    }
+    @acl        += (@provide_xfrs + @exported_remotes).map{ 
+      |xfr| "#{xfr}-transfer" 
+    }
+  else
+    @notify_out = (@default_provide_xfrs + @send_notify_additions + @exported_remotes).map {
+      |notify| "#{notify}-notify" 
+    }
+    @acl        += (@default_provide_xfrs + @exported_remotes).map{ 
+      |xfr| "#{xfr}-transfer" 
+    }
+  end
+  if @masters.any?
+    @acl  += (@masters + @allow_notify_additions).map{ 
+      |notify| "#{notify}-notify" 
+    }
+  else
+    @acl  += (@default_masters + @allow_notify_additions).map{ 
+      |notify| "#{notify}-notify" 
+    }
+  end
+-%>
+  - domain: <%= @name %>
+<%- if @zonefile -%>
+    file: <%= @zone_subdir %>/<%= @zonefile %>
+<%- else -%>
+    file: <%= @zone_subdir %>/<%= @name %>
+<%- end -%>
+<%- if @notify_out.any? -%>
+    notify: [<%= @notify_out.join(', ') %>]
+<%- end -%>
+<%- if @acl.any? -%>
+    acl: [<%= @acl.join(', ') %>]
+<%- end -%>
+<%- if @masters.any? -%>
+    master: [<%= @masters.join(', ') %>]
+<%- elsif @default_masters.any? -%>
+    master: [<%= @default_masters.join(', ') %>]
+<%- end -%>

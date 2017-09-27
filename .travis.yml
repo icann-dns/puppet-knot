@@ -3,7 +3,7 @@ sudo: false
 dist: trusty
 language: ruby
 cache: bundler
-bundler_args: --without system_tests development
+bundler_args: --without development
 before_install:
   - bundle -v
   - rm Gemfile.lock || true
@@ -25,7 +25,19 @@ matrix:
   - rvm: 2.3
     bundler_args: --without development
     dist: trusty
-    env: BEAKER_TESTMODE=apply BEAKER_debug=false BEAKER_set=docker/ubuntu-14.04 CHECK=beaker
+    env: BEAKER_TESTMODE=apply BEAKER_set=docker/ubuntu-master-14.04 CHECK=beaker
+    services: docker
+    sudo: required
+  - rvm: 2.3
+    bundler_args: --without development
+    dist: trusty
+    env: BEAKER_TESTMODE=agent BEAKER_set=docker/ubuntu-master-14.04 CHECK=beaker
+    services: docker
+    sudo: required
+  - rvm: 2.3
+    bundler_args: --without development
+    dist: trusty
+    env: BEAKER_TESTMODE=apply BEAKER_set=docker/ubuntu-master-16.04 CHECK=beaker
     services: docker
     sudo: required
   - rvm: 2.4.0

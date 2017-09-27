@@ -9,8 +9,9 @@ define knot::zone (
   Optional[Tea::Absolutepath]   $zone_dir               = undef,
 ) {
   include ::knot
-  $default_masters      = $knot::default_masters
-  $default_provide_xfrs = $knot::default_provide_xfrs
+  $default_masters      = $::knot::default_masters
+  $default_provide_xfrs = $::knot::default_provide_xfrs
+  $exported_remotes     = $::knot::exported_remotes
   if $zone_dir {
     validate_absolute_path($zone_dir)
     $zone_subdir = $zone_dir
@@ -42,10 +43,4 @@ define knot::zone (
     content => template($::knot::zones_template),
     order   => '22';
   }
-  #if $::knot::manage_nagios and $::knot::enable {
-  #  knot::zone::nagios {$zones:
-  #    masters => $masters,
-  #    slaves  => $provide_xfr,
-  #  }
-  #}
 }

@@ -17,7 +17,7 @@ describe 'knot::zone' do
   # while all required parameters will require you to add a value
   let(:params) do
     {
-      # masters: [],
+      # master: [],
       # notify_addresses: [],
       # allow_notify: [],
       # provide_xfr: [],
@@ -55,7 +55,7 @@ describe 'knot::zone' do
         let(:conf_dir)     { '/etc/knot' }
         let(:run_dir)      { '/run/knot' }
       else
-        let(:package_name) { 'knot1' }
+        let(:package_name) { 'knot2' }
         let(:conf_dir)     { '/usr/local/etc/knot' }
         let(:run_dir)      { '/var/run/knot' }
       end
@@ -67,21 +67,37 @@ describe 'knot::zone' do
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_knot__zone('example.com') }
-
-        it do
-          is_expected.to contain_concat__fragment(
-            'knot_zones_example.com'
-          ).with_content(
-            %r{
-              "example.com"\s\{
-              \s+file\s"#{zone_subdir}/example.com";
-              \s+notify-out\sdefault_provide_xfr-notify,\sslave_servers_notify;
-              \s+xfr-out\sdefault_provide_xfr,\sslave_servers;
-              \s+notify-in\sdefault_master-notify;
-              \s+xfr-in\sdefault_master;
-              \s+\}
-            }x
-          )
+        if facts[:operatingsystem] == 'Ubuntu' &&
+           facts[:lsbdistcodename] == 'trusty'
+          it do
+            is_expected.to contain_concat__fragment(
+              'knot_zones_example.com'
+            ).with_content(
+              %r{
+                "example.com"\s\{
+                \s+file\s"#{zone_subdir}/example.com";
+                \s+notify-out\sdefault_provide_xfr-notify,\sslave_servers_notify;
+                \s+xfr-out\sdefault_provide_xfr,\sslave_servers;
+                \s+notify-in\sdefault_master-notify;
+                \s+xfr-in\sdefault_master;
+                \s+\}
+              }x
+            )
+          end
+        else
+          it do
+            is_expected.to contain_concat__fragment(
+              'knot_zones_example.com'
+            ).with_content(
+              %r{
+              \s+-\sdomain:\sexample.com\n
+              \s+file:\s#{zone_subdir}/example.com\n
+              \s+notify:\s\[default_provide_xfr-notify\]\n
+              \s+acl:\s\[default_provide_xfr-transfer,\sdefault_master-notify\]\n
+              \s+master:\s\[default_master\]
+              }x
+            )
+          end
         end
       end
 
@@ -95,18 +111,35 @@ describe 'knot::zone' do
           )
         end
         it { is_expected.to compile }
-        it do
-          is_expected.to contain_concat__fragment(
-            'knot_zones_example.com'
-          ).with_content(
-            %r{"example.com"\s+\{[\s\S]+notify-out\s+provide_xfr-notify, send_notify_addition-notify[\s\S]+\}}
-          ).with_content(
-            %r{"example.com"\s+\{[\s\S]+notify-in\s+master-notify, allow_notify_addition-notify[\s\S]+\}}
-          ).with_content(
-            %r{"example.com"\s+\{[\s\S]+xfr-in\s+master[\s\S]+\}}
-          ).with_content(
-            %r{"example.com"\s+\{[\s\S]+xfr-out\s+provide_xfr[\s\S]+\}}
-          )
+        if facts[:operatingsystem] == 'Ubuntu' &&
+           facts[:lsbdistcodename] == 'trusty'
+          it do
+            is_expected.to contain_concat__fragment(
+              'knot_zones_example.com'
+            ).with_content(
+              %r{"example.com"\s+\{[\s\S]+notify-out\s+provide_xfr-notify, send_notify_addition-notify, slave_servers_notify[\s\S]+\}}
+            ).with_content(
+              %r{"example.com"\s+\{[\s\S]+notify-in\s+master-notify, allow_notify_addition[\s\S]+\}}
+            ).with_content(
+              %r{"example.com"\s+\{[\s\S]+xfr-in\s+master[\s\S]+\}}
+            ).with_content(
+              %r{"example.com"\s+\{[\s\S]+xfr-out\s+provide_xfr[\s\S]+\}}
+            )
+          end
+        else
+          it do
+            is_expected.to contain_concat__fragment(
+              'knot_zones_example.com'
+            ).with_content(
+              %r{
+              \s+-\sdomain:\sexample.com\n
+              \s+file:\s#{zone_subdir}/example.com\n
+              \s+notify:\s\[provide_xfr-notify,\ssend_notify_addition-notify\]\n
+              \s+acl:\s\[provide_xfr-transfer,\smaster-notify,\sallow_notify_addition-notify\]\n
+              \s+master:\s\[master\]
+              }x
+            )
+          end
         end
       end
 
@@ -114,23 +147,57 @@ describe 'knot::zone' do
         context 'zonefile' do
           before { params.merge!(zonefile: 'foobar') }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment(
-              'knot_zones_example.com'
-            ).with_content(
-              %r{"example.com"\s+\{[\s\S]+file\s+"#{zone_subdir}/foobar"[\s\S]+\}}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_zones_example.com'
+              ).with_content(
+                %r{"example.com"\s+\{[\s\S]+file\s+"#{zone_subdir}/foobar"[\s\S]+\}}
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_zones_example.com'
+              ).with_content(
+                %r{
+                \s+-\sdomain:\sexample.com\n
+                \s+file:\s#{zone_subdir}/foobar\n
+                \s+notify:\s\[default_provide_xfr-notify\]\n
+                \s+acl:\s\[default_provide_xfr-transfer,\sdefault_master-notify\]\n
+                \s+master:\s\[default_master\]
+                }x
+              )
+            end
           end
         end
         context 'zone_dir' do
           before { params.merge!(zone_dir: '/zones') }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment(
-              'knot_zones_example.com'
-            ).with_content(
-              %r{"example.com"\s+\{[\s\S]+file\s+"/zones/example.com"[\s\S]+\}}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_zones_example.com'
+              ).with_content(
+                %r{"example.com"\s+\{[\s\S]+file\s+"/zones/example.com"[\s\S]+\}}
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_zones_example.com'
+              ).with_content(
+                %r{
+                \s+-\sdomain:\sexample.com\n
+                \s+file:\s/zones/example.com\n
+                \s+notify:\s\[default_provide_xfr-notify\]\n
+                \s+acl:\s\[default_provide_xfr-transfer,\sdefault_master-notify\]\n
+                \s+master:\s\[default_master\]
+                }x
+              )
+            end
           end
         end
       end
@@ -138,7 +205,7 @@ describe 'knot::zone' do
       # You will have to correct any values that should be bool
       describe 'check bad type' do
         context 'masters' do
-          before { params.merge!(masters: true) }
+          before { params.merge!(master: true) }
           it { expect { subject.call }.to raise_error(Puppet::Error) }
         end
         context 'notify_addresses' do

@@ -65,20 +65,37 @@ describe 'knot' do
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
   # manifest you should mock the facts below.
+  Puppet::Util::Log.level = :debug
+  Puppet::Util::Log.newdestination(:console)
+  # it { pp catalogue.resources }
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
         facts.merge(knot_version: '1.6.0')
       end
       case facts[:operatingsystem]
-      when 'Ubuntu'
+      when 'FreeBSD'
+        let(:package_name) { 'knot2' }
+        let(:conf_dir)     { '/usr/local/etc/knot' }
+        let(:run_dir)      { '/var/run/knot' }
+        let(:concat_head)  { ":\n" }
+        let(:concat_foot)  { "\n" }
+        let(:acl_head)     { "acl:\n" }
+      else
         let(:package_name) { 'knot' }
         let(:conf_dir)     { '/etc/knot' }
         let(:run_dir)      { '/run/knot' }
-      else
-        let(:package_name) { 'knot1' }
-        let(:conf_dir)     { '/usr/local/etc/knot' }
-        let(:run_dir)      { '/var/run/knot' }
+
+        case facts[:lsbdistcodename]
+        when 'trusty'
+          let(:concat_head) { "s {\n" }
+          let(:concat_foot) { "}\n" }
+          let(:acl_head)    { "groups {\n" }
+        else
+          let(:concat_head) { ":\n" }
+          let(:concat_foot) { "\n" }
+          let(:acl_head)    { "acl:\n" }
+        end
       end
       let(:conf_file)   { "#{conf_dir}/knot.conf" }
       let(:zonesdir)    { "#{conf_dir}/zone" }
@@ -97,16 +114,16 @@ describe 'knot' do
         it { is_expected.to contain_concat__fragment('knot_zones_example.com') }
         it { is_expected.to contain_knot__remote('master') }
         it { is_expected.to contain_concat__fragment('knot_remotes_master') }
-        it { is_expected.to contain_concat__fragment('knot_groups_master') }
+        it { is_expected.to contain_concat__fragment('knot_acl_master') }
         it { is_expected.to contain_knot__remote('default_master') }
         it { is_expected.to contain_concat__fragment('knot_remotes_default_master') }
-        it { is_expected.to contain_concat__fragment('knot_groups_default_master') }
+        it { is_expected.to contain_concat__fragment('knot_acl_default_master') }
         it { is_expected.to contain_knot__remote('provide_xfr') }
         it { is_expected.to contain_concat__fragment('knot_remotes_provide_xfr') }
         it { is_expected.to contain_knot__remote('default_provide_xfr') }
-        it { is_expected.to contain_concat__fragment('knot_groups_provide_xfr') }
+        it { is_expected.to contain_concat__fragment('knot_acl_provide_xfr') }
         it { is_expected.to contain_concat__fragment('knot_remotes_default_provide_xfr') }
-        it { is_expected.to contain_concat__fragment('knot_groups_default_provide_xfr') }
+        it { is_expected.to contain_concat__fragment('knot_acl_default_provide_xfr') }
         it { is_expected.to contain_knot__remote('allow_notify_addition') }
         it do
           is_expected.to contain_concat__fragment(
@@ -115,7 +132,7 @@ describe 'knot' do
         end
         it do
           is_expected.to contain_concat__fragment(
-            'knot_groups_allow_notify_addition'
+            'knot_acl_allow_notify_addition'
           )
         end
         it { is_expected.to contain_knot__remote('send_notify_addition') }
@@ -126,7 +143,7 @@ describe 'knot' do
         end
         it do
           is_expected.to contain_concat__fragment(
-            'knot_groups_send_notify_addition'
+            'knot_acl_send_notify_addition'
           )
         end
         it do
@@ -135,96 +152,178 @@ describe 'knot' do
             require: "Package[#{package_name}]"
           )
         end
-        it do
-          is_expected.to contain_concat__fragment('knot_server').with(
-            order: '10',
-            target: conf_file
-          ).with_content(
-            %r{identity foo.example.com;}
-          ).with_content(
-            %r{version on;}
-          ).with_content(
-            %r{nsid foo.example.com;}
-          ).with_content(
-            %r{rundir "#{run_dir}"}
-          ).with_content(
-            %r{pidfile "#{pidfile}"}
-          ).with_content(
-            %r{workers #{facts[:processors]['count']};}
-          ).with_content(
-            %r{max-tcp-clients 250;}
-          ).with_content(
-            %r{max-udp-payload 4096;}
-          ).with_content(
-            %r{user knot;}
-          ).with_content(
-            %r{rate-limit 200;}
-          ).with_content(
-            %r{rate-limit-size 1000000;}
-          ).with_content(
-            %r{rate-limit-slip 2;}
-          ).with_content(
-            %r{interfaces\s+\{\s+interface-\d+\s+\{\s+address\s+\d+\.\d+\.\d+\.\d+;\s+port\s+53;}
-          ).with_content(
-            %r{control\s+\{\s+listen-on\s+\{\s+address\s+127.0.0.1@5533;\s+\}\s+allow\s+localhost;}
-          ).with_content(
-            %r{remotes\s+\{\s+localhost\s+\{\s+address\s+127.0.0.1;}
-          ).with_content(
-            %r{log\s+\{\s+syslog\s+\{\s+any\s+error;\s+zone\s+notice;\s+server\s+info;}
-          )
+        if facts[:operatingsystem] == 'Ubuntu' &&
+           facts[:lsbdistcodename] == 'trusty'
+          it do
+            is_expected.to contain_concat__fragment('knot_server').with(
+              order: '10',
+              target: conf_file
+            ).with_content(
+              %r{identity foo.example.com;}
+            ).with_content(
+              %r{version on;}
+            ).with_content(
+              %r{nsid foo.example.com;}
+            ).with_content(
+              %r{rundir "#{run_dir}"}
+            ).with_content(
+              %r{pidfile "#{pidfile}"}
+            ).with_content(
+              %r{workers #{facts[:processors]['count']};}
+            ).with_content(
+              %r{max-tcp-clients 250;}
+            ).with_content(
+              %r{max-udp-payload 4096;}
+            ).with_content(
+              %r{user knot;}
+            ).with_content(
+              %r{rate-limit 200;}
+            ).with_content(
+              %r{rate-limit-size 1000000;}
+            ).with_content(
+              %r{rate-limit-slip 2;}
+            ).with_content(
+              %r{
+              interfaces
+              \s+\{
+              \s+interface-\d+\s+\{
+              \s+address\s+\d+\.\d+\.\d+\.\d+;
+              \s+port\s+53;
+              }x
+            ).with_content(
+              %r{
+              control\s+\{
+              \s+listen-on
+              \s+\{
+              \s+address\s+127.0.0.1@5533;
+              \s+\}
+              \s+allow\s+localhost_remote;
+              }x
+            ).with_content(
+              %r{
+              remotes\s+\{
+              \s+localhost_remote\s+\{
+              \s+address\s+127.0.0.1;
+              }x
+            ).with_content(
+              %r{
+              log\s+\{
+              \s+syslog\s+\{
+              \s+any\s+error;
+              \s+zone\s+notice;
+              \s+server\s+info;
+              }x
+            )
+          end
+        else
+          it do
+            is_expected.to contain_concat__fragment('knot_server').with(
+              order: '10',
+              target: conf_file
+            ).with_content(
+              %r{identity: foo.example.com}
+            ).without_content(
+              %r{version:}
+            ).with_content(
+              %r{nsid: foo.example.com}
+            ).with_content(
+              %r{rundir: #{run_dir}}
+            ).with_content(
+              %r{pidfile: #{pidfile}}
+            ).with_content(
+              %r{background-workers: 1}
+            ).with_content(
+              %r{tcp-workers: 1}
+            ).with_content(
+              %r{udp-workers: 1}
+            ).with_content(
+              %r{max-tcp-clients: 250}
+            ).with_content(
+              %r{max-udp-payload: 4096}
+            ).with_content(
+              %r{user: knot}
+            ).with_content(
+              %r{rate-limit: 200}
+            ).with_content(
+              %r{rate-limit-table-size: 1000000}
+            ).with_content(
+              %r{rate-limit-slip: 2}
+            ).with_content(
+              %r{listen: \[\d+\.\d+\.\d+\.\d+\]}
+            ).with_content(
+              %r{control:\n\s+listen: #{run_dir}/knot.sock}
+            ).with_content(
+              %r{
+              log:\n
+              \s+-\starget:\ssyslog\n
+              \s+any:\serror\n
+              \s+zone:\snotice\n
+              \s+server:\sinfo
+              }x
+            )
+          end
         end
         it do
           is_expected.to contain_concat__fragment('key_head').with(
-            content: %r{keys \{},
+            content: "key#{concat_head}",
             order: '01',
             target: conf_file
           )
         end
         it do
           is_expected.to contain_concat__fragment('key_foot').with(
-            content: %r{\}},
+            content: concat_foot,
             order: '03',
             target: conf_file
           )
         end
         it do
           is_expected.to contain_concat__fragment('remote_head').with(
-            content: %r{remotes \{},
+            content: "remote#{concat_head}",
             order: '11',
             target: conf_file
           )
         end
         it do
           is_expected.to contain_concat__fragment('remote_foot').with(
-            content: %r{\}},
+            content: concat_foot,
             order: '13',
             target: conf_file
           )
         end
         it do
-          is_expected.to contain_concat__fragment('groups_head').with(
-            content: %r{groups \{},
+          is_expected.to contain_concat__fragment('acl_head').with(
+            content: acl_head,
             order: '14',
             target: conf_file
           )
         end
         it do
-          is_expected.to contain_concat__fragment('groups_foot').with(
-            content: "  slave_servers {}\n  slave_servers_notify {}\n}\n",
-            order: '16',
-            target: conf_file
-          )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            is_expected.to contain_concat__fragment('acl_foot').with(
+              content: %r{slave_servers \{\}\s+slave_servers_notify \{\}},
+              order: '16',
+              target: conf_file
+            )
+          else
+            is_expected.to contain_concat__fragment('acl_foot').with(
+              content: concat_foot,
+              order: '16',
+              target: conf_file
+            )
+          end
         end
         it do
           is_expected.to contain_concat__fragment('zones_head').with(
-            content: %r{zones \{},
+            content: "zone#{concat_head}",
             order: '21',
             target: conf_file
           )
         end
         it do
           is_expected.to contain_concat__fragment('zones_foot').with(
-            content: %r{\}},
+            content: concat_foot,
             order: '23',
             target: conf_file
           )
@@ -310,10 +409,23 @@ describe 'knot' do
         context 'ip_addresses' do
           before { params.merge!(ip_addresses: ['192.0.2.2']) }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{interfaces\s+\{\s+interface-192022\s+\{\s+address\s+192.0.2.2;\s+port\s+53;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{
+                interfaces\s+\{
+                \s+interface-192022\s+\{
+                \s+address\s+192.0.2.2;\s+port\s+53;
+                }x
+              )
+            end
+          else
+            id do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{listen: \[192\.0\.2\.2\]}
+              )
+            end
           end
         end
         context 'identity' do
@@ -321,7 +433,7 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{identity bar.example.com}
+              %r{identity:? bar.example.com}
             )
           end
         end
@@ -330,53 +442,146 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{nsid bar.example.com}
+              %r{nsid:? bar.example.com}
             )
           end
         end
         context 'log_target' do
           before { params.merge!(log_target: 'stdout') }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{log\s+\{\s+stdout\s+\{\s+any\s+error;\s+zone\s+notice;\s+server\s+info;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{log\s+\{
+                \s+stdout\s+\{
+                \s+any\s+error;
+                \s+zone\s+notice;
+                \s+server\s+info;
+                }x
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{
+                log:\n
+                \s+-\starget:\sstdout\n
+                \s+any:\serror\n
+                \s+zone:\snotice\n
+                \s+server:\sinfo
+                }x
+              )
+            end
           end
         end
         context 'log_zone_level' do
           before { params.merge!(log_zone_level: 'debug') }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{log\s+\{\s+syslog\s+\{\s+any\s+error;\s+zone\s+debug;\s+server\s+info;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{log\s+\{
+                \s+syslog\s+\{
+                \s+any\s+error;
+                \s+zone\s+debug;
+                \s+server\s+info;
+                }x
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{
+                log:\n
+                \s+-\starget:\ssyslog\n
+                \s+any:\serror\n
+                \s+zone:\sdebug\n
+                \s+server:\sinfo
+                }x
+              )
+            end
           end
         end
         context 'log_server_level' do
           before { params.merge!(log_server_level: 'debug') }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{log\s+\{\s+syslog\s+\{\s+any\s+error;\s+zone\s+notice;\s+server\s+debug;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{log\s+\{
+                \s+syslog\s+\{
+                \s+any\s+error;
+                \s+zone\s+notice;
+                \s+server\s+debug;
+                }x
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{
+                log:\n
+                \s+-\starget:\ssyslog\n
+                \s+any:\serror\n
+                \s+zone:\snotice\n
+                \s+server:\sdebug
+                }x
+              )
+            end
           end
         end
         context 'log_any_level' do
           before { params.merge!(log_any_level: 'debug') }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{log\s+\{\s+syslog\s+\{\s+any\s+debug;\s+zone\s+notice;\s+server\s+info;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{log\s+\{
+                \s+syslog\s+\{
+                \s+any\s+debug;
+                \s+zone\s+notice;
+                \s+server\s+info;
+                }x
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{
+                log:\n
+                \s+-\starget:\ssyslog\n
+                \s+any:\sdebug\n
+                \s+zone:\snotice\n
+                \s+server:\sinfo
+                }x
+              )
+            end
           end
         end
         context 'server_count' do
           before { params.merge!(server_count: 42) }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{workers 42;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{workers 42;}
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{background-workers: 1}
+              ).with_content(
+                %r{tcp-workers: 8}
+              ).with_content(
+                %r{udp-workers: 33}
+              )
+            end
           end
         end
         context 'max_tcp_clients' do
@@ -384,7 +589,7 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{max-tcp-clients 42;}
+              %r{max-tcp-clients:? 42;?}
             )
           end
         end
@@ -393,7 +598,7 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{max-udp-payload 513}
+              %r{max-udp-payload:? 513}
             )
           end
         end
@@ -402,7 +607,7 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{pidfile "/knot.pid"}
+              %r{pidfile:? "?/knot.pid"?}
             )
           end
         end
@@ -414,10 +619,22 @@ describe 'knot' do
             )
           end
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{interfaces\s+\{\s+interface-192022\s+\{\s+address\s+192.0.2.2;\s+port\s+5353;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{interfaces\s+\{
+                \s+interface-192022\s+\{
+                \s+address\s+192.0.2.2;\s+port\s+5353;
+                }x
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{listen: \[192\.0\.2\.2\@5353\]}
+              )
+            end
           end
         end
         context 'username' do
@@ -425,7 +642,7 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{user foobar;}
+              %r{user:? foobar;?}
             )
           end
         end
@@ -445,19 +662,37 @@ describe 'knot' do
         context 'hide_version' do
           before { params.merge!(hide_version: true) }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{version off;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{version off;}
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{version: hidden}
+              )
+            end
           end
         end
         context 'rrl_size' do
           before { params.merge!(rrl_size: 42) }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{rate-limit-size 42;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{rate-limit-size 42}
+              )
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{rate-limit-table-size: 42}
+              )
+            end
           end
         end
         context 'rrl_limit' do
@@ -465,7 +700,7 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{rate-limit 42;}
+              %r{rate-limit:? 42;?}
             )
           end
         end
@@ -474,47 +709,81 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{rate-limit-slip 42;}
+              %r{rate-limit-slip:? 42;?}
             )
           end
         end
         context 'control_enable' do
           before { params.merge!(control_enable: false) }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').without_content(
-              %r{control\{.+\}}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_server'
+              ).without_content(%r{control\{.+\}})
+            end
+          else
+            it do
+              is_expected.to contain_concat__fragment(
+                'knot_server'
+              ).without_content(%r{control:\n\s+listen:})
+            end
           end
         end
         context 'control_interface' do
           before { params.merge!(control_interface: '192.0.2.2') }
           it { is_expected.to compile }
-          # Add Check to validate change was successful
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{control\s+\{\s+listen-on\s+\{\s+address\s+192.0.2.2@5533;\s+\}\s+allow\s+localhost;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{
+                control\s+\{
+                \s+listen-on\s+\{
+                \s+address\s+192.0.2.2@5533;
+                \s+\}
+                \s+allow\s+localhost_remote;
+                }x
+              )
+            end
           end
         end
         context 'control_port' do
           before { params.merge!(control_port: 42) }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{control\s+\{\s+listen-on\s+\{\s+address\s+127.0.0.1@42;\s+\}\s+allow\s+localhost;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{
+                control\s+\{
+                \s+listen-on\s+\{
+                \s+address\s+127.0.0.1@42;
+                \s+\}
+                \s+allow\s+localhost_remote;
+                }x
+              )
+            end
           end
         end
         context 'control_allow' do
           before { params.merge!(control_allow: { 'bob' => '192.0.2.2' }) }
           it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{remotes\s+\{\s+bob\s+\{\s+address\s+192.0.2.2;}
-            ).with_content(
-              %r{control\s+\{\s+listen-on\s+\{\s+address\s+127.0.0.1@5533;\s+\}\s+allow\s+bob;}
-            )
+          if facts[:operatingsystem] == 'Ubuntu' &&
+             facts[:lsbdistcodename] == 'trusty'
+            it do
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{remotes\s+\{\s+bob\s+\{\s+address\s+192.0.2.2;}
+              ).with_content(
+                %r{control\s+\{
+                \s+listen-on\s+\{
+                \s+address\s+127.0.0.1@5533;
+                \s+\}
+                \s+allow\s+bob;
+                }x
+              )
+            end
           end
         end
         context 'package_name' do

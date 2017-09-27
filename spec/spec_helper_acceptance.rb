@@ -11,6 +11,18 @@ modules = [
   'icann-tea'
 ]
 git_repos = []
+# git_repos = [
+#  {
+#    mod: 'nsd',
+#    branch: 'refactor_zone',
+#    repo: 'https://github.com/icann-dns/puppet-nsd'
+#  },
+#  {
+#    mod: 'knot',
+#    branch: 'knot_2.0',
+#    repo: 'https://github.com/icann-dns/puppet-knot'
+#  }
+# ]
 def install_modules(host, modules, git_repos)
   module_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
   install_dev_puppet_module_on(host, source: module_root)
