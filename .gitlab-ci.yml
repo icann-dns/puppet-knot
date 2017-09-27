@@ -1,27 +1,31 @@
 stages:
-  - rspec
+  - lint
   - rubocop
+  - rspec
   - beaker_apply
   - beaker_agent
 
 before_script:
-  - rvm -v
   - ruby -v
   - bundle --version
   - gem --version
-  - rvm use 2.3
   - rm Gemfile.lock || true
-  - bundle install
+  - bundle install --path=${BUNDLE_PATH:-vendor/bundle}
 
-rspec:
+lint:
   stage: rspec
   script:
-    - bundle exec rake test
+    - bundle exec rake validate lint
 
 rubocop:
   stage: rubocop
   script:
     - bundle exec rake rubocop
+
+rspec:
+  stage: rspec
+  script:
+    - bundle exec rake spec
 
 beaker_trusty_apply:
   stage: beaker_apply
@@ -52,6 +56,5 @@ beaker_xenial_agent:
   variables:
     BEAKER_set: docker/ubuntu-master-16.04
     BEAKER_TESTMODE: agent
-    BEAKER_debug: 'on'
   script:
     -  bundle exec rake beaker

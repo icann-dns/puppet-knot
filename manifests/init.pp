@@ -44,7 +44,6 @@ class knot (
   Tea::Port                    $puppetdb_port        = 8080,
   Array[String]                $exports              = [],
   Array[String]                $imports              = [],
-  String                       $puppetdb_search      = 'dns__export_',
 ) inherits knot::params  {
 
   $server_template   = $::knot::params::server_template
