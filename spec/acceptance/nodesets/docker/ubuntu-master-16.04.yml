@@ -3,7 +3,7 @@
 # https://github.com/voxpupuli/modulesync
 # https://github.com/voxpupuli/modulesync_config
 HOSTS:
-  ubuntu-1604-x64-puppet-master:
+  knot-1604-x64-puppet-master:
     roles: 
     - master
     - dashboard
@@ -17,7 +17,7 @@ HOSTS:
     docker_image_commands:
       - 'apt-get install -y net-tools wget locales cron'
       - 'locale-gen en_US.UTF-8'
-  ubuntu-1604-x64-dns-master:
+  knot-1604-x64-dns-master:
     roles: 
     - agent
     - default
@@ -31,7 +31,7 @@ HOSTS:
     docker_image_commands:
       - 'apt-get install -y net-tools wget locales cron'
       - 'locale-gen en_US.UTF-8'
-  ubuntu-1604-x64-dnsslave:
+  knot-1604-x64-dnsslave:
     roles: 
     - agent
     - dnsslave
