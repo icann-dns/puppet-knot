@@ -16,7 +16,7 @@ group :test do
   gem 'semantic_puppet',                                            :require => false
   gem 'rspec-puppet-facts',                                         :require => false
   gem 'rspec-puppet-utils',                                         :require => false
-  gem 'puppet-lint', '<= 2.3.0',                                    :require => false
+  gem 'puppet-lint',                                                :require => false
   gem 'puppet-lint-absolute_classname-check',                       :require => false
   gem 'puppet-lint-leading_zero-check',                             :require => false
   gem 'puppet-lint-trailing_comma-check',                           :require => false
