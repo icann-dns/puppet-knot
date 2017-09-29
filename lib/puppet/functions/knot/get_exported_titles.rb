@@ -27,7 +27,7 @@ Puppet::Functions.create_function('knot::get_exported_titles') do
         )
         return []
       end
-      return JSON.parse(response.body).map { |res| res['title'] }
+      return JSON.parse(response.body).map { |res| res['title'] }.sort
     rescue => e
       Puppet.warning("Exception, exported resources wont work: #{e}")
     end
