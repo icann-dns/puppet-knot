@@ -1,4 +1,4 @@
-### 2017-09-26 0.3.3
+### 2017-09-26 0.3.4
 * update `get_exported_titles` so it returns a sorted array
 
 ### 2017-09-26 0.3.3
