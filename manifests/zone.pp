@@ -13,7 +13,6 @@ define knot::zone (
   $default_provide_xfrs = $::knot::default_provide_xfrs
   $exported_remotes     = $::knot::exported_remotes
   if $zone_dir {
-    validate_absolute_path($zone_dir)
     $zone_subdir = $zone_dir
   } else {
     $zone_subdir = $::knot::zone_subdir
