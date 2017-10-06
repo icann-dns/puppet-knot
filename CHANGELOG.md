@@ -1,3 +1,6 @@
+### 2017-09-26 0.3.5
+* fix dependencies
+
 ### 2017-09-26 0.3.4
 * update `get_exported_titles` so it returns a sorted array
 
