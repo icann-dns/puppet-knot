@@ -34,10 +34,10 @@ server:
   rate-limit-slip: <%= @rrl_slip %>
 <%- else -%>
 mod-rrl:
-  id: default
-  rate-limit: <%= @rrl_limit %>
-  table-size: <%= @rrl_size %>
-  slip: <%= @rrl_slip %>
+  - id: default
+    rate-limit: <%= @rrl_limit %>
+    table-size: <%= @rrl_size %>
+    slip: <%= @rrl_slip %>
 template:
   - id: default
     global-module: mod-rrl/default 
