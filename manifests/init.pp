@@ -39,7 +39,7 @@ class knot (
   Tea::Absolutepath            $zone_subdir          = $::knot::params::zone_subdir,
   Tea::Absolutepath            $conf_file            = $::knot::params::conf_file,
   Tea::Absolutepath            $run_dir              = $::knot::params::run_dir,
-  Tea::Absolutepath            $validate_cmd         = $::knot::params::validate_cmd,
+  String                       $validate_cmd         = $::knot::params::validate_cmd,
   Optional[Tea::Absolutepath]  $network_status       = undef,
   Tea::Ip_address              $puppetdb_server      = '127.0.0.1',
   Tea::Port                    $puppetdb_port        = 8080,
