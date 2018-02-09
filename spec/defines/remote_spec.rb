@@ -3,24 +3,7 @@
 require 'spec_helper'
 
 describe 'knot::remote' do
-  # by default the hiera integration uses hiera data from the shared_contexts.rb file
-  # but basically to mock hiera you first need to add a key/value pair
-  # to the specific context in the spec/shared_contexts.rb file
-  # Note: you can only use a single hiera context per describe/context block
-  # rspec-puppet does not allow you to swap out hiera data on a per test block
-
   let(:title) { 'xfr.example.com' }
-
-  # below is the facts hash that gives you the ability to mock
-  # facts on a per describe/context block.  If you use a fact in your
-  # manifest you should mock the facts below.
-  let(:facts) do
-    {}
-  end
-
-  # below is a list of the resource parameters that you can override.
-  # By default all non-required parameters are commented out,
-  # while all required parameters will require you to add a value
   let(:params) do
     {
       address4: '192.0.2.1',
@@ -30,20 +13,19 @@ describe 'knot::remote' do
 
     }
   end
-  # add these two lines in a single test block to enable puppet &&hiera debug mode
-  # Puppet::Util::Log.level = :debug
-  # Puppet::Util::Log.newdestination(:console)
   let(:pre_condition) do
     'class {\'::knot\':
       tsigs => { \'example_tsig\' => { \'data\' => \'AAAA\' } }
     }'
   end
 
+  # add these two lines in a single test block to enable puppet &&hiera debug mode
+  # Puppet::Util::Log.level = :debug
+  # Puppet::Util::Log.newdestination(:console)
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) do
-        facts
-      end
+      let(:facts) { facts }
+
       case facts[:operatingsystem]
       when 'Ubuntu'
         let(:conf_dir) { '/etc/knot' }

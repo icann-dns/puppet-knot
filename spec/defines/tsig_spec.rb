@@ -28,9 +28,7 @@ describe 'knot::tsig' do
   # manifest you should mock the facts below.
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) do
-        facts.merge(knot_version: '1.6.0')
-      end
+      let(:facts) { facts }
 
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }

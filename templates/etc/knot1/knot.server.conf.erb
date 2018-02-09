@@ -24,7 +24,7 @@ system {
 <%- if @server_count -%>
     workers <%= @server_count %>;
 <%- end -%>
-  <%- if @max_tcp_clients and scope.function_versioncmp([@_knot_version, '1.6']) >= 0 -%>
+<%- if @max_tcp_clients and scope.function_versioncmp([@_knot_version, '1.6']) >= 0 -%>
     max-tcp-clients <%= @max_tcp_clients %>;
 <%- end -%>
 <%- if @max_udp_payload -%>

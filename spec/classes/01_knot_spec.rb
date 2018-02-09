@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'puppet/util/package'
 
 describe 'knot' do
   # by default the hiera integration uses hiera data from the shared_contexts.rb file
@@ -70,9 +71,6 @@ describe 'knot' do
   # it { pp catalogue.resources }
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) do
-        facts.merge(knot_version: '1.6.0')
-      end
       case facts[:operatingsystem]
       when 'FreeBSD'
         let(:package_name) { 'knot2' }
@@ -81,6 +79,7 @@ describe 'knot' do
         let(:concat_head)  { ":\n" }
         let(:concat_foot)  { "\n" }
         let(:acl_head)     { "acl:\n" }
+        let(:knot_version) { '2.6.1' }
       else
         let(:package_name) { 'knot' }
         let(:conf_dir)     { '/etc/knot' }
@@ -88,19 +87,22 @@ describe 'knot' do
 
         case facts[:lsbdistcodename]
         when 'trusty'
-          let(:concat_head) { "s {\n" }
-          let(:concat_foot) { "}\n" }
-          let(:acl_head)    { "groups {\n" }
+          let(:concat_head)  { "s {\n" }
+          let(:concat_foot)  { "}\n" }
+          let(:acl_head)     { "groups {\n" }
+          let(:knot_version) { '1.4.2' }
         else
-          let(:concat_head) { ":\n" }
-          let(:concat_foot) { "\n" }
-          let(:acl_head)    { "acl:\n" }
+          let(:concat_head)  { ":\n" }
+          let(:concat_foot)  { "\n" }
+          let(:acl_head)     { "acl:\n" }
+          let(:knot_version) { '2.2.1' }
         end
       end
       let(:conf_file)   { "#{conf_dir}/knot.conf" }
       let(:zonesdir)    { "#{conf_dir}/zone" }
       let(:zone_subdir) { "#{zonesdir}/zone" }
       let(:pidfile)     { "#{run_dir}/knot.pid" }
+      let(:facts)       { facts.merge(knot_version: knot_version) }
 
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
@@ -171,8 +173,6 @@ describe 'knot' do
             ).with_content(
               %r{workers #{facts[:processors]['count']};}
             ).with_content(
-              %r{max-tcp-clients 250;}
-            ).with_content(
               %r{max-udp-payload 4096;}
             ).with_content(
               %r{user knot;}
@@ -237,17 +237,9 @@ describe 'knot' do
             ).with_content(
               %r{udp-workers: 1}
             ).with_content(
-              %r{max-tcp-clients: 250}
-            ).with_content(
               %r{max-udp-payload: 4096}
             ).with_content(
               %r{user: knot}
-            ).with_content(
-              %r{rate-limit: 200}
-            ).with_content(
-              %r{rate-limit-table-size: 1000000}
-            ).with_content(
-              %r{rate-limit-slip: 2}
             ).with_content(
               %r{listen: \[\d+\.\d+\.\d+\.\d+\]}
             ).with_content(
@@ -261,6 +253,33 @@ describe 'knot' do
               \s+server:\sinfo
               }x
             )
+          end
+          it do
+            if Puppet::Util::Package.versioncmp(knot_version, '2.4') < 0
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{rate-limit: 200}
+              ).with_content(
+                %r{rate-limit-table-size: 1000000}
+              ).with_content(
+                %r{rate-limit-slip: 2}
+              )
+            else
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{
+                mod-rrl:
+                \s+id:\sdefault
+                \s+rate-limit:\s200
+                \s+table-size:\s1000000
+                \s+slip:\s2
+                }x
+              ).with_content(
+                %r{
+                template:
+                \s+-\sid:\sdefault
+                \s+global-module:\smod-rrl/default
+                }x
+              )
+            end
           end
         end
         it do
@@ -588,9 +607,17 @@ describe 'knot' do
           before { params.merge!(max_tcp_clients: 42) }
           it { is_expected.to compile }
           it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{max-tcp-clients:? 42;?}
-            )
+            if Puppet::Util::Package.versioncmp(knot_version, '1.6') < 0
+              is_expected.to contain_concat__fragment(
+                'knot_server'
+              ).without_content(
+                %r{max-tcp-clients:? 42;?}
+              )
+            else
+              is_expected.to contain_concat__fragment('knot_server').with_content(
+                %r{max-tcp-clients:? 42;?}
+              )
+            end
           end
         end
         context 'max_udp_payload' do
@@ -689,9 +716,25 @@ describe 'knot' do
             end
           else
             it do
-              is_expected.to contain_concat__fragment('knot_server').with_content(
-                %r{rate-limit-table-size: 42}
-              )
+              if Puppet::Util::Package.versioncmp(knot_version, '2.4') < 0
+                is_expected.to contain_concat__fragment(
+                  'knot_server'
+                ).with_content(
+                  %r{rate-limit-table-size: 42}
+                )
+              else
+                is_expected.to contain_concat__fragment(
+                  'knot_server'
+                ).with_content(
+                  %r{
+                  mod-rrl:
+                  \s+id:\sdefault
+                  \s+rate-limit:\s200
+                  \s+table-size:\s42
+                  \s+slip:\s2
+                  }x
+                )
+              end
             end
           end
         end
@@ -699,18 +742,50 @@ describe 'knot' do
           before { params.merge!(rrl_limit: 42) }
           it { is_expected.to compile }
           it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{rate-limit:? 42;?}
-            )
+            if Puppet::Util::Package.versioncmp(knot_version, '2.4') < 0
+              is_expected.to contain_concat__fragment(
+                'knot_server'
+              ).with_content(
+                %r{rate-limit:? 42;?}
+              )
+            else
+              is_expected.to contain_concat__fragment(
+                'knot_server'
+              ).with_content(
+                %r{
+                mod-rrl:
+                \s+id:\sdefault
+                \s+rate-limit:\s42
+                \s+table-size:\s1000000
+                \s+slip:\s2
+                }x
+              )
+            end
           end
         end
         context 'rrl_slip' do
           before { params.merge!(rrl_slip: 42) }
           it { is_expected.to compile }
           it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{rate-limit-slip:? 42;?}
-            )
+            if Puppet::Util::Package.versioncmp(knot_version, '2.4') < 0
+              is_expected.to contain_concat__fragment(
+                'knot_server'
+              ).with_content(
+                %r{rate-limit-slip:? 42;?}
+              )
+            else
+              is_expected.to contain_concat__fragment(
+                'knot_server'
+              ).with_content(
+                %r{
+                mod-rrl:
+                \s+id:\sdefault
+                \s+rate-limit:\s200
+                \s+table-size:\s1000000
+                \s+slip:\s42
+                }x
+              )
+            end
           end
         end
         context 'control_enable' do

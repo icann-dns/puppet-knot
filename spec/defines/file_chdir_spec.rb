@@ -32,9 +32,8 @@ describe 'knot::file' do
   # manifest you should mock the facts below.
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) do
-        facts.merge(knot_version: '1.6.0')
-      end
+      let(:facts) { facts }
+
       case facts[:operatingsystem]
       when 'Ubuntu'
         let(:package_name) { 'knot' }

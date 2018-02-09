@@ -39,6 +39,7 @@ class knot (
   Tea::Absolutepath            $zone_subdir          = $::knot::params::zone_subdir,
   Tea::Absolutepath            $conf_file            = $::knot::params::conf_file,
   Tea::Absolutepath            $run_dir              = $::knot::params::run_dir,
+  Tea::Absolutepath            $validate_cmd         = $::knot::params::validate_cmd,
   Optional[Tea::Absolutepath]  $network_status       = undef,
   Tea::Ip_address              $puppetdb_server      = '127.0.0.1',
   Tea::Port                    $puppetdb_port        = 8080,
@@ -56,6 +57,11 @@ class knot (
   $concat_head       = $::knot::params::concat_head
   $concat_foot       = $::knot::params::concat_foot
   $force_knot1       = $::knot::params::force_knot1
+  if defined('$knot_version') and versioncmp('$knot_version', '2.4') < 0 {
+    $use_mod_rrl = false
+  } else {
+    $use_mod_rrl = true
+  }
 
   if $force_knot1 and $::kernel == 'Linux' {
     apt::pin{'00knot1':
@@ -72,8 +78,9 @@ class knot (
   ensure_packages($package_name)
 
   concat{$conf_file:
-    require => Package[$package_name],
-    notify  => Service[$service_name];
+    require      => Package[$package_name],
+    notify       => Service[$service_name],
+    validate_cmd => $validate_cmd,
   }
 
   concat::fragment{'key_head':
