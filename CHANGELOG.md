@@ -1,3 +1,6 @@
+### 2018-02-09 0.3.6
+* Feature: Support mod-rrl when knot is 2.4 or greater
+
 ### 2017-09-26 0.3.5
 * fix dependencies
 
