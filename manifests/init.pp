@@ -24,6 +24,7 @@ class knot (
   Tea::Port                    $port                 = 53,
   String                       $username             = 'knot',
   Tea::Absolutepath            $zonesdir             = $::knot::params::zonesdir,
+  Tea::Absolutepath            $kzonecheck_bin       = $::knot::params::kzonecheck_bin,
   Boolean                      $hide_version         = false,
   Integer                      $rrl_size             = 1000000,
   Integer                      $rrl_limit            = 200,

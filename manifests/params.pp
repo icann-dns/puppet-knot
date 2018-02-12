@@ -12,12 +12,14 @@ class knot::params (
         $conf_dir       = '/usr/local/etc/knot'
         $run_dir        = '/var/run/knot'
         $knotc_bin      = '/usr/local/sbin/knotc'
+        $kzonecheck_bin = '/usr/local/bin/kzonecheck'
       }
       default: {
         $package_name   = 'knot'
         $conf_dir       = '/etc/knot'
         $run_dir        = '/run/knot'
         $knotc_bin      = '/usr/sbin/knotc'
+        $kzonecheck_bin = '/usr/bin/kzonecheck'
       }
     }
     $knotc_arg        = 'checkconf'
@@ -47,12 +49,14 @@ class knot::params (
         $acl_template     = 'knot/etc/knot2/knot.acl.conf.erb'
         $knotc_arg        = 'conf-check'
         $knotc_bin        = '/usr/local/sbin/knotc'
+        $kzonecheck_bin = '/usr/local/bin/kzonecheck'
       }
       default: {
         $package_name = 'knot'
         $conf_dir     = '/etc/knot'
         $run_dir      = '/run/knot'
         $knotc_bin    = '/usr/sbin/knotc'
+        $kzonecheck_bin = '/usr/bin/kzonecheck'
         case $::lsbdistcodename {
           'trusty': {
             $concat_head      = "s {\n"
@@ -91,5 +95,5 @@ class knot::params (
   $identity     = $::fqdn
   $server_count = $facts['processors']['count']
   $restart_cmd  = "${knotc_bin} reload || ${knotc_bin} ${knotc_arg} && service knot restart"
-  $validate_cmd = "${knotc_bin} ${knotc_arg}"
+  $validate_cmd = "${knotc_bin} -c % ${knotc_arg}"
 }
