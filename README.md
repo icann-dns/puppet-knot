@@ -235,6 +235,7 @@ Manage files used by knot
 * `owner` (String: Default root): the owner of the file
 * `group` (String: Default knot): the group of the file
 * `mode` (String /^\d+$/: Default '0640'): the mode of the file
+* `origin` (String: Default undef): the zones origin used to check zonecontent
 * `source` (File Path: Default undef): the source location of the file
 * `content` (string: Default undef): the content to liad to the file
 * `content_template` (File Path: Default undef): the template location 

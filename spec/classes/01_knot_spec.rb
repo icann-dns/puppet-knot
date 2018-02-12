@@ -267,7 +267,7 @@ describe 'knot' do
               is_expected.to contain_concat__fragment('knot_server').with_content(
                 %r{
                 mod-rrl:
-                \s+id:\sdefault
+                \s+-\sid:\sdefault
                 \s+rate-limit:\s200
                 \s+table-size:\s1000000
                 \s+slip:\s2
@@ -728,7 +728,7 @@ describe 'knot' do
                 ).with_content(
                   %r{
                   mod-rrl:
-                  \s+id:\sdefault
+                  \s+-\sid:\sdefault
                   \s+rate-limit:\s200
                   \s+table-size:\s42
                   \s+slip:\s2
@@ -754,7 +754,7 @@ describe 'knot' do
               ).with_content(
                 %r{
                 mod-rrl:
-                \s+id:\sdefault
+                \s+-\sid:\sdefault
                 \s+rate-limit:\s42
                 \s+table-size:\s1000000
                 \s+slip:\s2
@@ -779,7 +779,7 @@ describe 'knot' do
               ).with_content(
                 %r{
                 mod-rrl:
-                \s+id:\sdefault
+                \s+-\sid:\sdefault
                 \s+rate-limit:\s200
                 \s+table-size:\s1000000
                 \s+slip:\s42
