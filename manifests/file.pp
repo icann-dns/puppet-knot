@@ -20,12 +20,14 @@ define knot::file (
   } else {
     $_content = undef
   }
-  if versioncmp($::knot_version, '2.3.0') < 0 {
-    $validate_cmd = undef
-  } elsif $origin {
-    $validate_cmd = "${::knot::kzonecheck_bin} -o ${origin} %"
+  if defined('$::knot_version') and versioncmp($::knot_version, '2.3.0') >= 0 {
+    if $origin {
+      $validate_cmd = "${::knot::kzonecheck_bin} -o ${origin} %"
+    } else {
+      $validate_cmd = "${::knot::kzonecheck_bin} %"
+    }
   } else {
-    $validate_cmd = "${::knot::kzonecheck_bin} %"
+    $validate_cmd = undef
   }
   file { "${::knot::zone_subdir}/${title}":
     ensure       => $ensure,
