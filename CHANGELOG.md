@@ -1,3 +1,6 @@
+### 2018-02-12 0.3.7
+* add additional syntax checking
+
 ### 2018-02-09 0.3.6
 * Feature: Support mod-rrl when knot is 2.4 or greater
 
