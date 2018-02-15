@@ -1,3 +1,6 @@
+### 2018-02-15 0.3.7
+* update to include home.arpa on as112 servers
+
 ### 2018-02-09 0.3.6
 * Feature: Support mod-rrl when knot is 2.4 or greater
 
