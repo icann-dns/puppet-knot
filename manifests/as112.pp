@@ -51,6 +51,8 @@ class knot::as112 {
       zonefile => 'db.dd-empty';
     '254.169.in-addr.arpa':
       zonefile => 'db.dd-empty';
+    'home.arpa':
+      zonefile => 'db.dd-empty';
     'empty.as112.arpa':
       zonefile => 'db.dr-empty';
     'hostname.as112.net':
