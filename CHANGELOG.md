@@ -1,3 +1,6 @@
+### 2018-02-15 0.3.8
+* update to include home.arpa on as112 servers
+
 ### 2018-02-12 0.3.7
 * add additional syntax checking
 
