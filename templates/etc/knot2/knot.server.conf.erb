@@ -9,7 +9,7 @@
 if @knot_version then
   @_knot_version = @knot_version
 else
-  @_knot_version = '0'
+  @_knot_version = '2.4'
 end
 -%>
 server:
@@ -28,11 +28,11 @@ server:
   user: <%= @username %>
 <%- if @port == 53 then port_str = '' else port_str = "@#{@port}" end -%>
   listen: [<%= @ip_addresses.join("#{port_str}, ") %><%= port_str %>]
-<%- if scope.function_versioncmp([@_knot_version, '2.4']) < 0 -%>
+<%- if scope.function_versioncmp([@_knot_version, '2.4']) < 0 and @rrl_enable-%>
   rate-limit: <%= @rrl_limit %>
   rate-limit-table-size: <%= @rrl_size %>
   rate-limit-slip: <%= @rrl_slip %>
-<%- else -%>
+<%- elsif @rrl_enable -%>
 mod-rrl:
   - id: default
     rate-limit: <%= @rrl_limit %>
