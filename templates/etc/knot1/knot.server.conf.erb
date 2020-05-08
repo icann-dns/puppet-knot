@@ -33,14 +33,16 @@ system {
 <%- if @username -%>
     user <%= @username %>;
 <%- end -%>
-<%- if @rrl_limit -%>
+<%- if @rrl_enable -%>
+    <%- if @rrl_limit -%>
     rate-limit <%= @rrl_limit %>;
-<%- end -%>
-<%- if @rrl_size -%>
+    <%- end -%>
+    <%- if @rrl_size -%>
     rate-limit-size <%= @rrl_size %>;
-<%- end -%>
-<%- if @rrl_slip -%>
+    <%- end -%>
+    <%- if @rrl_slip -%>
     rate-limit-slip <%= @rrl_slip %>;
+    <%- end -%>
 <%- end -%>
 }
 interfaces {

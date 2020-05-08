@@ -7,7 +7,7 @@ define knot::remote (
   Optional[String]                             $tsig_name = undef,
   Tea::Port                                    $port      = 53,
 ) {
-  include ::knot
+  include knot
   if ! $address4 and ! $address6 {
     fail("${name} must specify eiather address4 or address6")
   }

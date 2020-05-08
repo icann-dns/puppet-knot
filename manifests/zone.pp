@@ -8,7 +8,7 @@ define knot::zone (
   Optional[String]              $zonefile               = undef,
   Optional[Tea::Absolutepath]   $zone_dir               = undef,
 ) {
-  include ::knot
+  include knot
   $default_masters      = $::knot::default_masters
   $default_provide_xfrs = $::knot::default_provide_xfrs
   $exported_remotes     = $::knot::exported_remotes

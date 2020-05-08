@@ -26,6 +26,7 @@ class knot (
   Tea::Absolutepath            $zonesdir             = $::knot::params::zonesdir,
   Tea::Absolutepath            $kzonecheck_bin       = $::knot::params::kzonecheck_bin,
   Boolean                      $hide_version         = false,
+  Boolean                      $rrl_enable           = true,
   Integer                      $rrl_size             = 1000000,
   Integer                      $rrl_limit            = 200,
   Integer                      $rrl_slip             = 2,

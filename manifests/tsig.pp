@@ -5,7 +5,7 @@ define knot::tsig (
   Tea::Base64      $data     = undef,
   Optional[String] $key_name = undef,
 ) {
-  include ::knot
+  include knot
 
   $key_template = $::knot::key_template
 
