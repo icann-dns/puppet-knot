@@ -16,6 +16,8 @@ server:
   identity: <%= @identity %>
 <%- if @hide_version -%>
   version: hidden
+<%- elsif @version -%>
+  version: <%= @version %>
 <%- end -%>
   nsid: <%= @nsid %>
   rundir: <%= @run_dir %>

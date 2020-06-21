@@ -198,6 +198,8 @@ create and as112, please look at the as112 class to see how this works under the
 * `username` (String, Default: knot): After binding the socket, drop user privileges and assume the username.
 * `zonesdir` (Tea::Absolutepath, Default: OS Specific): The data directory
 * `hide_version`: (Boolean, Default: false): Prevent KNOT from replying with the version string on CHAOS class queries.
+* `version`: (String): The version of the server software returned in the response to the query for TXT record version.server. or version.bind. in the CHAOS class.
+* `rrl_enable` (Bool, Default: true): Enable RRL configuration.
 * `rrl_size`: (Integet, Default: 1000000): This option gives the size of the  hashtable.
 * `rrl_limit` (Integer, Default: 200):  The max qps allowed.
 * `rrl_slip` (Integer, Default: 2): This option controls the number of packets discarded before we send back a SLIP response
