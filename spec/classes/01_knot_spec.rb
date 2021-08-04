@@ -166,7 +166,7 @@ describe 'knot' do
           ).with_content(
             %r{udp-workers: 1}
           ).with_content(
-            %r{max-udp-payload: 4096}
+            %r{server.udp-max-payload: 4096}
           ).with_content(
             %r{user: knot}
           ).with_content(
@@ -452,11 +452,11 @@ describe 'knot' do
               is_expected.to contain_concat__fragment(
                 'knot_server'
               ).without_content(
-                %r{max-tcp-clients:? 42;?}
+                %r{server.tcp-max-clients:? 42;?}
               )
             else
               is_expected.to contain_concat__fragment('knot_server').with_content(
-                %r{max-tcp-clients:? 42;?}
+                %r{server.tcp-max-clients:? 42;?}
               )
             end
           end
@@ -466,7 +466,7 @@ describe 'knot' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{max-udp-payload:? 513}
+              %r{server.udp-max-payload:? 513}
             )
           end
         end
