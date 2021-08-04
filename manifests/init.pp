@@ -59,19 +59,11 @@ class knot (
   $acl_foot          = $::knot::params::acl_foot
   $concat_head       = $::knot::params::concat_head
   $concat_foot       = $::knot::params::concat_foot
-  $force_knot1       = $::knot::params::force_knot1
+
   if defined('$knot_version') and versioncmp('$knot_version', '2.4') < 0 {
     $use_mod_rrl = false
   } else {
     $use_mod_rrl = true
-  }
-
-  if $force_knot1 and $::kernel == 'Linux' {
-    apt::pin{'00knot1':
-      packages => 'knot',
-      version  => '1.*',
-      priority => 1001,
-    }
   }
 
   $exported_remotes = empty($imports) ? {
