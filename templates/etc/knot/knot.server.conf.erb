@@ -22,19 +22,19 @@ server:
   udp-workers: <%= @udp_workers %>
   tcp-workers: <%= @tcp_workers %>
   background-workers: <%= @background_workers %>
-  async-start: <%= $async_start %>
-  tcp-idle-timeout: <%= $tcp_idle_timeout %>
-  tcp-io-timeout: <%= $tcp_io_timeout %>
-  tcp-remote-io-timeout: <%= $tcp_remote_io_timeout %>
-  tcp-reuseport: <%= $tcp_reuseport %>
-  tcp-fastopen: <%= $tcp_fastopen %>
+  async-start: <%= @async_start %>
+  tcp-idle-timeout: <%= @tcp_idle_timeout %>
+  tcp-io-timeout: <%= @tcp_io_timeout %>
+  tcp-remote-io-timeout: <%= @tcp_remote_io_timeout %>
+  tcp-reuseport: <%= @tcp_reuseport %>
+  tcp-fastopen: <%= @tcp_fastopen %>
   tcp-max-clients: <%= @tcp_max_clients %>
   udp-max-payload: <%= @udp_max_payload %>
   udp-max-payload-ipv4: <%= @udp_max_payload_ipv4 %>
   udp-max-payload-ipv6: <%= @udp_max_payload_ipv6 %>
-  socket-affinity: <%= $socket_affinity %>
-  edns-client-subnet: <%= $edns_client_subnet %>
-  answer-rotation: <%= $answer_rotation %>
+  socket-affinity: <%= @socket_affinity %>
+  edns-client-subnet: <%= @edns_client_subnet %>
+  answer-rotation: <%= @answer_rotation %>
 <%- if @port == 53 then port_str = '' else port_str = "@#{@port}" end -%>
   listen: [<%= @ip_addresses.join("#{port_str}, ") %><%= port_str %>]
 <%- if @rrl_enable -%>
