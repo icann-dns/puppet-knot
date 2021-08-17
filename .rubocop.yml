@@ -1,6 +1,7 @@
+---
 require: rubocop-rspec
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: '2.6.6'
   Include:
     - ./**/*.rb
   Exclude:
@@ -13,7 +14,7 @@ AllCops:
     - Rakefile
     - Guardfile
     - Vagrantfile
-Lint/ConditionPosition:
+Layout/ConditionPosition:
   Enabled: True
 
 Lint/ElseLayout:
@@ -22,16 +23,16 @@ Lint/ElseLayout:
 Lint/UnreachableCode:
   Enabled: True
 
-Lint/UselessComparison:
+Lint/BinaryOperatorWithIdenticalOperands:
   Enabled: True
 
 Lint/EnsureReturn:
   Enabled: True
 
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Enabled: True
 
-Lint/LiteralInCondition:
+Lint/LiteralAsCondition:
   Enabled: True
 
 Lint/ShadowingOuterLocalVariable:
@@ -81,13 +82,13 @@ Lint/AmbiguousRegexpLiteral:
 Security/Eval:
   Enabled: True
 
-Lint/BlockAlignment:
+Layout/BlockAlignment:
   Enabled: True
 
-Lint/DefEndAlignment:
+Layout/DefEndAlignment:
   Enabled: True
 
-Lint/EndAlignment:
+Layout/EndAlignment:
   Enabled: True
 
 Lint/DeprecatedClassMethods:
@@ -102,7 +103,7 @@ Lint/ParenthesesAsGroupedExpression:
 Lint/RescueException:
   Enabled: True
 
-Lint/StringConversionInInterpolation:
+Lint/RedundantStringCoercion:
   Enabled: True
 
 Lint/UnusedBlockArgument:
@@ -123,20 +124,19 @@ Lint/Void:
 Layout/AccessModifierIndentation:
   Enabled: True
 
-#Naming/AccessorMethodName:
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: True
 
 Style/Alias:
   Enabled: True
 
-Layout/AlignArray:
+Layout/ArrayAlignment:
   Enabled: True
 
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: True
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   Enabled: True
 
 Metrics/BlockNesting:
@@ -148,9 +148,6 @@ Style/AsciiComments:
 Style/Attr:
   Enabled: True
 
-Style/BracesAroundHashParameters:
-  Enabled: True
-
 Style/CaseEquality:
   Enabled: True
 
@@ -160,8 +157,7 @@ Layout/CaseIndentation:
 Style/CharacterLiteral:
   Enabled: True
 
-#Naming/ClassAndModuleCamelCase:
-Style/ClassAndModuleCamelCase:
+Naming/ClassAndModuleCamelCase:
   Enabled: True
 
 Style/ClassAndModuleChildren:
@@ -186,22 +182,19 @@ Style/WhenThen:
 Style/WordArray:
   Enabled: True
 
-Style/UnneededPercentQ:
+Style/RedundantPercentQ:
   Enabled: True
 
-Layout/Tab:
+Layout/IndentationStyle:
   Enabled: True
 
 Layout/SpaceBeforeSemicolon:
   Enabled: True
 
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Enabled: True
 
 Layout/SpaceInsideBlockBraces:
-  Enabled: True
-
-Layout/SpaceInsideBrackets:
   Enabled: True
 
 Layout/SpaceInsideHashLiteralBraces:
@@ -259,8 +252,7 @@ Style/CommentAnnotation:
 Metrics/CyclomaticComplexity:
   Enabled: False
 
-#Naming/ConstantName:
-Style/ConstantName:
+Naming/ConstantName:
   Enabled: True
 
 Style/Documentation:
@@ -284,10 +276,10 @@ Style/EachWithObject:
 Layout/EmptyLineBetweenDefs:
   Enabled: True
 
-Layout/IndentArray:
+Layout/FirstArrayElementIndentation:
   Enabled: True
 
-Layout/IndentHash:
+Layout/FirstHashElementIndentation:
   Enabled: True
 
 Layout/IndentationConsistency:
@@ -305,8 +297,7 @@ Layout/EmptyLinesAroundAccessModifier:
 Style/EmptyLiteral:
   Enabled: True
 
-# Configuration parameters: AllowURI, URISchemes.
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: False
 
 Style/MethodCallWithoutArgsParentheses:
@@ -327,7 +318,7 @@ Style/StringLiterals:
 Style/TrailingCommaInArguments:
   Enabled: True
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInHashLiteral:
   Enabled: True
 
 Style/GlobalVars:
@@ -369,8 +360,7 @@ Style/UnlessElse:
 Style/VariableInterpolation:
   Enabled: True
 
-#Naming/VariableName:
-Style/VariableName:
+Naming/VariableName:
   Enabled: True
 
 Style/WhileUntilDo:
@@ -379,8 +369,7 @@ Style/WhileUntilDo:
 Style/EvenOdd:
   Enabled: True
 
-#Naming/FileName:
-Style/FileName:
+Naming/FileName:
   Enabled: True
 
 Style/For:
@@ -389,8 +378,7 @@ Style/For:
 Style/Lambda:
   Enabled: True
 
-#Naming/MethodName:
-Style/MethodName:
+Naming/MethodName:
   Enabled: True
 
 Style/MultilineTernaryOperator:
@@ -426,7 +414,7 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: True
 
-Style/OpMethod:
+Naming/BinaryOperatorParameterName:
   Enabled: True
 #Style/BinaryOperatorParameterName:
 #  Enabled: True
@@ -440,8 +428,7 @@ Style/PercentLiteralDelimiters:
 Style/PerlBackrefs:
   Enabled: True
 
-#Naming/PredicateName:
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: True
 
 Style/RedundantException:
@@ -502,9 +489,6 @@ Metrics/AbcSize:
 Metrics/PerceivedComplexity:
   Enabled: False
 
-Lint/UselessAssignment:
-  Enabled: True
-
 Layout/ClosingParenthesisIndentation:
   Enabled: True
 
@@ -538,9 +522,90 @@ RSpec/NestedGroups:
   Enabled: False
 
 # this is broken on ruby1.9
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: False
 
 # disable Yaml safe_load. This is needed to support ruby2.0.0 development envs
 Security/YAMLLoad:
   Enabled: false
+
+Lint/DuplicateBranch: # (new in 1.3)
+  Enabled: true
+Lint/DuplicateRegexpCharacterClassElement: # (new in 1.1)
+  Enabled: true
+Lint/EmptyBlock: # (new in 1.1)
+  Enabled: true
+Lint/EmptyClass: # (new in 1.3)
+  Enabled: true
+Lint/NoReturnInBeginEndBlocks: # (new in 1.2)
+  Enabled: true
+Lint/ToEnumArguments: # (new in 1.1)
+  Enabled: true
+Lint/UnexpectedBlockArity: # (new in 1.5)
+  Enabled: true
+Lint/UnmodifiedReduceAccumulator: # (new in 1.1)
+  Enabled: true
+Style/ArgumentsForwarding: # (new in 1.1)
+  Enabled: true
+Style/CollectionCompact: # (new in 1.2)
+  Enabled: true
+Style/DocumentDynamicEvalDefinition: # (new in 1.1)
+  Enabled: true
+Style/NegatedIfElseCondition: # (new in 1.2)
+  Enabled: true
+Style/NilLambda: # (new in 1.3)
+  Enabled: true
+Style/RedundantArgument: # (new in 1.4)
+  Enabled: true
+Style/SwapValues: # (new in 1.1)
+  Enabled: true
+Gemspec/DateAssignment: # (new in 1.10)
+  Enabled: true
+Layout/LineEndStringConcatenationIndentation: # (new in 1.18)
+  Enabled: true
+Layout/SpaceBeforeBrackets: # (new in 1.7)
+  Enabled: true
+Lint/AmbiguousAssignment: # (new in 1.7)
+  Enabled: true
+Lint/AmbiguousRange: # (new in 1.19)
+  Enabled: true
+Lint/DeprecatedConstants: # (new in 1.8)
+  Enabled: true
+Lint/EmptyInPattern: # (new in 1.16)
+  Enabled: true
+Lint/LambdaWithoutLiteralBlock: # (new in 1.8)
+  Enabled: true
+Lint/NumberedParameterAssignment: # (new in 1.9)
+  Enabled: true
+Lint/OrAssignmentToConstant: # (new in 1.9)
+  Enabled: true
+Lint/RedundantDirGlobSort: # (new in 1.8)
+  Enabled: true
+Lint/SymbolConversion: # (new in 1.9)
+  Enabled: true
+Lint/TripleQuotes: # (new in 1.9)
+  Enabled: true
+Naming/InclusiveLanguage: # (new in 1.18)
+  Enabled: true
+Style/EndlessMethod: # (new in 1.8)
+  Enabled: true
+Style/HashConversion: # (new in 1.10)
+  Enabled: true
+Style/HashExcept: # (new in 1.7)
+  Enabled: true
+Style/IfWithBooleanLiteralBranches: # (new in 1.9)
+  Enabled: true
+Style/InPatternThen: # (new in 1.16)
+  Enabled: true
+Style/MultilineInPatternThen: # (new in 1.16)
+  Enabled: true
+Style/QuotedSymbols: # (new in 1.16)
+  Enabled: true
+Style/RedundantSelfAssignmentBranch: # (new in 1.19)
+  Enabled: true
+Style/StringChars: # (new in 1.12)
+  Enabled: true
+RSpec/IdenticalEqualityAssertion: # (new in 2.4)
+  Enabled: true
+RSpec/Rails/AvoidSetupHook: # (new in 2.4)
+  Enabled: true
