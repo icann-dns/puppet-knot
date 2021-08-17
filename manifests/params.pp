@@ -17,6 +17,12 @@ class knot::params {
       $kzonecheck_bin   = '/usr/bin/kzonecheck'
     }
   }
+  $server_template  = 'knot/etc/knot/knot.server.conf.erb'
+  $key_template     = 'knot/etc/knot/knot.key.conf.erb'
+  $zones_template   = 'knot/etc/knot/knot.zones.conf.erb'
+  $remotes_template = 'knot/etc/knot/knot.remotes.conf.erb'
+  $acl_template     = 'knot/etc/knot/knot.acl.conf.erb'
+  $knotc_arg        = 'conf-check'
   $ip_addresses     = [$::ipaddress]
   $conf_file        = "${conf_dir}/knot.conf"
   $zonesdir         = "${conf_dir}/zone"
@@ -31,10 +37,4 @@ class knot::params {
   $acl_head         = "acl:\n"
   $concat_foot      = "\n"
   $acl_foot         = $concat_foot
-  $server_template  = 'knot/etc/knot/knot.server.conf.erb'
-  $key_template     = 'knot/etc/knot/knot.key.conf.erb'
-  $zones_template   = 'knot/etc/knot/knot.zones.conf.erb'
-  $remotes_template = 'knot/etc/knot/knot.remotes.conf.erb'
-  $acl_template     = 'knot/etc/knot/knot.acl.conf.erb'
-  $knotc_arg        = 'conf-check'
 }
