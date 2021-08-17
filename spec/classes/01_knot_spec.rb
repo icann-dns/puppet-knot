@@ -35,8 +35,8 @@ describe 'knot' do
       # identity: $fqdn,
       # nsid: $fqdn,
       # log_target: "syslog",
-      # log_zone_level: "error",
-      # log_server_level: "error",
+      # log_zone_level: "notice",
+      # log_server_level: "info",
       # log_any_level: "error",
       # server_count: $processorcount,
       # tcp_max_clients: 250,
@@ -366,17 +366,16 @@ describe 'knot' do
         context 'log_target' do
           before { params.merge!(log_target: 'stdout') }
         it { is_expected.to compile }
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{
-              log:\n
-              \s+-\starget:\sstdout\n
-              \s+any:\serror\n
-              \s+zone:\snotice\n
-              \s+server:\sinfo
-              }x
-            )
-          end
+        it do
+          is_expected.to contain_concat__fragment('knot_server').with_content(
+            %r{
+            log:\n
+            \s+-\starget:\sstdout\n
+            \s+any:\serror\n
+            \s+zone:\snotice\n
+            \s+server:\sinfo
+            }x
+          )
         end
         context 'log_zone_level' do
           before { params.merge!(log_zone_level: 'debug') }
