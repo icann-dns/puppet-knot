@@ -32,7 +32,8 @@ group :test do
   gem 'redcarpet',                                                  :require => false
   gem 'gettext-setup',                                              :require => false
   gem 'xmlrpc',                                                     :require => false if RUBY_VERSION >= '2.4.0'
-  gem 'rubocop-rspec', '~> 2.4.0',                                  :require => true if RUBY_VERSION >= '2.6.0'
+  gem 'rubocop-rspec', '~> 2.2.0',                                  :require => true if RUBY_VERSION >= '2.4.0'
+  gem 'rubocop', '~> 1.12.1',                                       :require => true if RUBY_VERSION >= '2.4.0'  
   gem 'mocha', '>= 1.2.1',                                          :require => false
   gem 'coveralls',                                                  :require => false
   gem 'simplecov-console',                                          :require => false
