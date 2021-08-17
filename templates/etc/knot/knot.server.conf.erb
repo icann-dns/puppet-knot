@@ -34,7 +34,7 @@ server:
   udp-max-payload-ipv6: <%= @udp_max_payload_ipv6 %>
   socket-affinity: <%= $socket_affinity %>
   edns-client-subnet: <%= $edns_client_subnet %>
-  answer-rotation: <%= answer_rotation %>
+  answer-rotation: <%= $answer_rotation %>
 <%- if @port == 53 then port_str = '' else port_str = "@#{@port}" end -%>
   listen: [<%= @ip_addresses.join("#{port_str}, ") %><%= port_str %>]
 <%- if @rrl_enable -%>
