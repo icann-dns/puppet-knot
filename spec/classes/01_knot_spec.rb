@@ -73,13 +73,13 @@ describe 'knot' do
     context "on #{os}" do
       case facts[:operatingsystem]
       when 'FreeBSD'
-        let(:package_name) { 'knot2' }
+        let(:package_name) { 'knot3' }
         let(:conf_dir)     { '/usr/local/etc/knot' }
         let(:run_dir)      { '/var/run/knot' }
         let(:concat_head)  { ":\n" }
         let(:concat_foot)  { "\n" }
         let(:acl_head)     { "acl:\n" }
-        let(:knot_version) { '2.6.1' }
+        let(:knot_version) { '3.0.0' }
       else
         let(:package_name) { 'knot' }
         let(:conf_dir)     { '/etc/knot' }
@@ -87,7 +87,7 @@ describe 'knot' do
         let(:concat_head)  { ":\n" }
         let(:concat_foot)  { "\n" }
         let(:acl_head)     { "acl:\n" }
-        let(:knot_version) { '2.2.1' }
+        let(:knot_version) { '3.0.0' }
       end
       let(:conf_file)   { "#{conf_dir}/knot.conf" }
       let(:zonesdir)    { "#{conf_dir}/zone" }
@@ -185,31 +185,21 @@ describe 'knot' do
             }x
           )
           it do
-            if Puppet::Util::Package.versioncmp(knot_version, '2.4') < 0
-              is_expected.to contain_concat__fragment('knot_server').with_content(
-                %r{rate-limit: 200}
-              ).with_content(
-                %r{rate-limit-table-size: 1000000}
-              ).with_content(
-                %r{rate-limit-slip: 2}
-              )
-            else
-              is_expected.to contain_concat__fragment('knot_server').with_content(
-                %r{
-                mod-rrl:
-                \s+-\sid:\sdefault
-                \s+rate-limit:\s200
-                \s+table-size:\s1000000
-                \s+slip:\s2
-                }x
-              ).with_content(
-                %r{
-                template:
-                \s+-\sid:\sdefault
-                \s+global-module:\smod-rrl/default
-                }x
-              )
-            end
+            is_expected.to contain_concat__fragment('knot_server').with_content(
+              %r{
+              mod-rrl:
+              \s+-\sid:\sdefault
+              \s+rate-limit:\s200
+              \s+table-size:\s1000000
+              \s+slip:\s2
+              }x
+            ).with_content(
+              %r{
+              template:
+              \s+-\sid:\sdefault
+              \s+global-module:\smod-rrl/default
+              }x
+            )
           end
         end
         it do
@@ -450,17 +440,9 @@ describe 'knot' do
           before { params.merge!(tcp_max_clients: 42) }
           it { is_expected.to compile }
           it do
-            if Puppet::Util::Package.versioncmp(knot_version, '1.6') < 0
-              is_expected.to contain_concat__fragment(
-                'knot_server'
-              ).without_content(
-                %r{tcp-max-clients:? 42;?}
-              )
-            else
-              is_expected.to contain_concat__fragment('knot_server').with_content(
-                %r{tcp-max-clients:? 42;?}
-              )
-            end
+            is_expected.to contain_concat__fragment('knot_server').with_content(
+              %r{tcp-max-clients:? 42;?}
+            )
           end
         end
         context 'udp_max_payload' do
@@ -529,76 +511,52 @@ describe 'knot' do
         context 'rrl_size' do
           before { params.merge!(rrl_size: 42) }
           it { is_expected.to compile }
-            it do
-            if Puppet::Util::Package.versioncmp(knot_version, '2.4') < 0
-              is_expected.to contain_concat__fragment(
-                'knot_server'
-              ).with_content(
-                %r{rate-limit-table-size: 42}
-              )
-            else
-              is_expected.to contain_concat__fragment(
-                'knot_server'
-              ).with_content(
-                %r{
-                mod-rrl:
-                \s+-\sid:\sdefault
-                \s+rate-limit:\s200
-                \s+table-size:\s42
-                \s+slip:\s2
-                }x
-              )
-            end
+          it do
+            is_expected.to contain_concat__fragment(
+              'knot_server'
+            ).with_content(
+              %r{
+              mod-rrl:
+              \s+-\sid:\sdefault
+              \s+rate-limit:\s200
+              \s+table-size:\s42
+              \s+slip:\s2
+              }x
+            )
           end
         end
         context 'rrl_limit' do
           before { params.merge!(rrl_limit: 42) }
           it { is_expected.to compile }
           it do
-            if Puppet::Util::Package.versioncmp(knot_version, '2.4') < 0
-              is_expected.to contain_concat__fragment(
-                'knot_server'
-              ).with_content(
-                %r{rate-limit:? 42;?}
-              )
-            else
-              is_expected.to contain_concat__fragment(
-                'knot_server'
-              ).with_content(
-                %r{
-                mod-rrl:
-                \s+-\sid:\sdefault
-                \s+rate-limit:\s42
-                \s+table-size:\s1000000
-                \s+slip:\s2
-                }x
-              )
-            end
+            is_expected.to contain_concat__fragment(
+              'knot_server'
+            ).with_content(
+              %r{
+              mod-rrl:
+              \s+-\sid:\sdefault
+              \s+rate-limit:\s42
+              \s+table-size:\s1000000
+              \s+slip:\s2
+              }x
+            )
           end
         end
         context 'rrl_slip' do
           before { params.merge!(rrl_slip: 42) }
           it { is_expected.to compile }
           it do
-            if Puppet::Util::Package.versioncmp(knot_version, '2.4') < 0
-              is_expected.to contain_concat__fragment(
-                'knot_server'
-              ).with_content(
-                %r{rate-limit-slip:? 42;?}
-              )
-            else
-              is_expected.to contain_concat__fragment(
-                'knot_server'
-              ).with_content(
-                %r{
-                mod-rrl:
-                \s+-\sid:\sdefault
-                \s+rate-limit:\s200
-                \s+table-size:\s1000000
-                \s+slip:\s42
-                }x
-              )
-            end
+            is_expected.to contain_concat__fragment(
+              'knot_server'
+            ).with_content(
+              %r{
+              mod-rrl:
+              \s+-\sid:\sdefault
+              \s+rate-limit:\s200
+              \s+table-size:\s1000000
+              \s+slip:\s42
+              }x
+            )
           end
         end
         context 'control_enable' do
