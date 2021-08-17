@@ -365,17 +365,18 @@ describe 'knot' do
         end
         context 'log_target' do
           before { params.merge!(log_target: 'stdout') }
-        it { is_expected.to compile }
-        it do
-          is_expected.to contain_concat__fragment('knot_server').with_content(
-            %r{
-            log:\n
-            \s+-\starget:\sstdout\n
-            \s+any:\serror\n
-            \s+zone:\snotice\n
-            \s+server:\sinfo
-            }x
-          )
+          it { is_expected.to compile }
+          it do
+            is_expected.to contain_concat__fragment('knot_server').with_content(
+              %r{
+              log:\n
+              \s+-\starget:\sstdout\n
+              \s+any:\serror\n
+              \s+zone:\snotice\n
+              \s+server:\sinfo
+              }x
+            )
+          end
         end
         context 'log_zone_level' do
           before { params.merge!(log_zone_level: 'debug') }
