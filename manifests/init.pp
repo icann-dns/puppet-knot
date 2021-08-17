@@ -21,10 +21,8 @@ class knot (
   Optional[Integer[1,255]]     $tcp_workers          = undef,
   Optional[Integer[1,255]]     $udp_workers          = undef,
   Integer[1,255]               $background_workers   = 1,
-  Integer                      $tcp_max_clients      = $::max_tcp_clients, # added for legacy compatibility
-  Integer                      $max_tcp_clients      = 250, # added for legacy compatibility
-  Integer[512,4096]            $udp_max_payload      = $::max_udp_payload, # added for legacy compatibility
-  Integer[512,4096]            $max_udp_payload      = 4096, # added for legacy compatibility
+  Integer                      $tcp_max_clients      = 250
+  Integer[512,4096]            $udp_max_payload      = 4096
   Tea::Absolutepath            $pidfile              = $::knot::params::pidfile,
   Tea::Port                    $port                 = 53,
   String                       $username             = 'knot',
