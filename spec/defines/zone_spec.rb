@@ -54,7 +54,7 @@ describe 'knot::zone' do
         let(:conf_dir)     { '/etc/knot' }
         let(:run_dir)      { '/run/knot' }
       else
-        let(:package_name) { 'knot2' }
+        let(:package_name) { 'knot3' }
         let(:conf_dir)     { '/usr/local/etc/knot' }
         let(:run_dir)      { '/var/run/knot' }
       end
