@@ -3,7 +3,7 @@
 class knot::params {
   case $::kernel {
     'FreeBSD': {
-      $package_name     = 'knot2'
+      $package_name     = 'knot3'
       $conf_dir         = '/usr/local/etc/knot'
       $run_dir          = '/var/run/knot'
       $knotc_bin        = '/usr/local/sbin/knotc'

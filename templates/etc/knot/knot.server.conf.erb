@@ -23,6 +23,8 @@ server:
   background-workers: <%= @background_workers %>
   tcp-max-clients: <%= @tcp_max_clients %>
   udp-max-payload: <%= @udp_max_payload %>
+  udp-max-payload-ipv4: <%= @udp_max_payload %>
+  udp-max-payload-ipv6: <%= @udp_max_payload %>
   user: <%= @username %>
 <%- if @port == 53 then port_str = '' else port_str = "@#{@port}" end -%>
   listen: [<%= @ip_addresses.join("#{port_str}, ") %><%= port_str %>]
