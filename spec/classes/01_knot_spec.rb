@@ -432,7 +432,7 @@ describe 'knot' do
             ).with_content(
               %r{tcp-workers: 8}
             ).with_content(
-              %r{udp-workers: 33}
+              %r{udp-workers: 34}
             )
           end
         end

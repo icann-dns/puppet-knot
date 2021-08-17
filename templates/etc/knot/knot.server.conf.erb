@@ -1,10 +1,10 @@
 <%-
 if @tcp_workers.nil?
-  @tcp_workers = (@server_count * 0.2).floor
+  @tcp_workers = (@server_count * 0.25).floor
   @tcp_workers = @tcp_workers > 0 ? @tcp_workers : 1
 end
 if @udp_workers.nil?
-  @udp_workers = @server_count - @tcp_workers - @background_workers
+  @udp_workers = (@server_count * 0.75).floor
   @udp_workers = @udp_workers > 0 ? @udp_workers : 1
 end
 -%>
