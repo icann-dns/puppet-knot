@@ -184,23 +184,23 @@ describe 'knot' do
             \s+server:\sinfo
             }x
           )
-          it do
-            is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{
-              mod-rrl:
-              \s+-\sid:\sdefault
-              \s+rate-limit:\s200
-              \s+table-size:\s1000000
-              \s+slip:\s2
-              }x
-            ).with_content(
-              %r{
-              template:
-              \s+-\sid:\sdefault
-              \s+global-module:\smod-rrl/default
-              }x
-            )
-          end
+        end
+        it do
+          is_expected.to contain_concat__fragment('knot_server').with_content(
+            %r{
+            mod-rrl:
+            \s+-\sid:\sdefault
+            \s+rate-limit:\s200
+            \s+table-size:\s1000000
+            \s+slip:\s2
+            }x
+          ).with_content(
+            %r{
+            template:
+            \s+-\sid:\sdefault
+            \s+global-module:\smod-rrl/default
+            }x
+          )
         end
         it do
           is_expected.to contain_concat__fragment('key_head').with(
