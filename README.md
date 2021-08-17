@@ -4,8 +4,6 @@
 
 # knot
 
-# WARNING version 0.2.x is *NOT* backwards compatible with 0.1.x
-
 #### Table of Contents
 
 1. [Overview](#overview)
@@ -21,7 +19,7 @@
 
 ## Overview
 
-Manage the installation and configuration of KNOT 1.* and zone files.
+Manage the installation and configuration of KNOT 3.* and zone files.
 
 ## Module Description
 
@@ -191,8 +189,8 @@ create and as112, please look at the as112 class to see how this works under the
 * `log_server_level` (Knot::Log_level, Default: info): Log level for server messages
 * `log_any_level` (Knot::Log_level, Default: error): Log level for any messages
 * `server_count (Integer. Default: $::processorcount)`:  Start this many KNOT workers.
-* `max_tcp_clients` (Integer, Default: 250):  The maximum number of concurrent, active TCP connections by each server. valid options: Integer.
-* `max_udp_payload` (Integer < 4097, Default: 4096): Preferred EDNS buffer size.
+* `tcp_max_clients` (Integer, Default: 250):  The maximum number of concurrent, active TCP connections by each server. valid options: Integer.
+* `udp_max_payload` (Integer < 4097, Default: 4096): Preferred EDNS buffer size.
 * `pidfile` (Tea::Absolutepath, Default: OS Specific): Use the pid file.
 * `port` (Tea::Port, Default: 53): Port to listen on.
 * `username` (String, Default: knot): After binding the socket, drop user privileges and assume the username.
@@ -287,7 +285,7 @@ Determins the version of knot by parsing the output of `knot -v`
 
 This module has been tested on:
 
-* Ubuntu 14.04
+* Ubuntu 16.04,18.04
 * FreeBSD 10
 
 ## Development

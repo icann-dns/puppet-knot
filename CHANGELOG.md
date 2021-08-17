@@ -1,3 +1,8 @@
+### 2021-08-01 0.5.0
+* drop support for knot1 and knot2 versions
+* update values max-tcp-clients -> tcp-max-clients
+* update values max-udp-payload -> udp-max-payload
+
 ### 2018-02-15 0.3.8
 * update to include home.arpa on as112 servers
 

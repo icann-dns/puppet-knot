@@ -39,8 +39,8 @@ describe 'knot' do
       # log_server_level: "error",
       # log_any_level: "error",
       # server_count: $processorcount,
-      # max_tcp_clients: 250,
-      # max_udp_payload: 4096,
+      # tcp_max_clients: 250,
+      # udp_max_payload: 4096,
       # pidfile: $run_dir/knot.pid,
       # port: 53,
       # username: "knot",
@@ -166,7 +166,9 @@ describe 'knot' do
           ).with_content(
             %r{udp-workers: 1}
           ).with_content(
-            %r{server.udp-max-payload: 4096}
+            %r{tcp-max-clients: 250}
+          ).with_content(
+            %r{udp-max-payload: 4096}
           ).with_content(
             %r{user: knot}
           ).with_content(
@@ -444,29 +446,29 @@ describe 'knot' do
             )
           end
         end
-        context 'max_tcp_clients' do
-          before { params.merge!(max_tcp_clients: 42) }
+        context 'tcp_max_clients' do
+          before { params.merge!(tcp_max_clients: 42) }
           it { is_expected.to compile }
           it do
             if Puppet::Util::Package.versioncmp(knot_version, '1.6') < 0
               is_expected.to contain_concat__fragment(
                 'knot_server'
               ).without_content(
-                %r{server.tcp-max-clients:? 42;?}
+                %r{tcp-max-clients:? 42;?}
               )
             else
               is_expected.to contain_concat__fragment('knot_server').with_content(
-                %r{server.tcp-max-clients:? 42;?}
+                %r{tcp-max-clients:? 42;?}
               )
             end
           end
         end
-        context 'max_udp_payload' do
-          before { params.merge!(max_udp_payload: 513) }
+        context 'udp_max_payload' do
+          before { params.merge!(udp_max_payload: 513) }
           it { is_expected.to compile }
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{server.udp-max-payload:? 513}
+              %r{udp-max-payload:? 513}
             )
           end
         end
@@ -731,12 +733,12 @@ describe 'knot' do
           before { params.merge!(server_count: true) }
           it { expect { subject.call }.to raise_error(Puppet::Error) }
         end
-        context 'max_tcp_clients' do
-          before { params.merge!(max_tcp_clients: true) }
+        context 'tcp_max_clients' do
+          before { params.merge!(tcp_max_clients: true) }
           it { expect { subject.call }.to raise_error(Puppet::Error) }
         end
-        context 'max_udp_payload' do
-          before { params.merge!(max_udp_payload: true) }
+        context 'udp_max_payload' do
+          before { params.merge!(udp_max_payload: true) }
           it { expect { subject.call }.to raise_error(Puppet::Error) }
         end
         context 'pidfile' do
