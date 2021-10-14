@@ -1,41 +1,64 @@
 ---
-sudo: false
-dist: trusty
+os: linux
+dist: xenial
 language: ruby
 cache: bundler
-bundler_args: --without development
 before_install:
   - bundle -v
-  - rm Gemfile.lock || true
-  - gem update --system
-  - gem update bundler
+  - rm -f Gemfile.lock
+  - "# Update system gems if requested. This is useful to temporarily workaround troubles in the test runner"
+  - "# See https://github.com/puppetlabs/pdk-templates/commit/705154d5c437796b821691b707156e1b056d244f for an example of how this was used"
+  - "# Ignore exit code of SIGPIPE'd yes to not fail with shell's pipefail set"
+  - '[ -z "$RUBYGEMS_VERSION" ] || (yes || true) | gem update --system $RUBYGEMS_VERSION'
   - gem --version
   - bundle -v
 script:
   - 'bundle exec rake $CHECK'
-env: ["CHECK=rubocop", "PUPPET_VERSION=\"~> 4.6.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 4.7.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 4.8.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 4.9.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 4.10.0\" STRICT_VARIABLES=yes CHECK=test", "PUPPET_VERSION=\"~> 5.0.0\" STRICT_VARIABLES=yes CHECK=test"]
-rvm: [2.2, 2.3, 2.4]
-matrix:
+bundler_args: --without system_tests
+rvm:
+  - 2.5.7
+stages:
+  - static
+  - spec
+  - acceptance
+  -
+    if: tag =~ ^v\d
+    name: deploy
+jobs:
   fast_finish: true
- 
-  exclude:
-  - rvm: 2.2
-    env: CHECK=rubocop
   include:
-  - rvm: 2.3
-    bundler_args: --without development
-    dist: trusty
-    env: BEAKER_TESTMODE=apply BEAKER_set=docker/ubuntu-master-14.04 CHECK=beaker
-    services: docker
-    sudo: required
-  - rvm: 2.3
-    bundler_args: --without development
-    dist: trusty
-    env: BEAKER_TESTMODE=agent BEAKER_set=docker/ubuntu-master-14.04 CHECK=beaker
-    services: docker
-    sudo: required
-  - rvm: 2.4.0
-    env: PUPPET_VERSION="~> 4.0" CHECK=build DEPLOY_TO_FORGE=yes
+    -
+      bundler_args: --with system_tests
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_PUPPET_COLLECTION=puppet6 BEAKER_set=docker/ubuntu-master-14.04 BEAKER_TESTMODE=apply
+      rvm: 2.5.7
+      script: bundle exec rake beaker
+      services: docker
+      stage: acceptance
+      sudo: required
+    -
+      bundler_args: --with system_tests
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_PUPPET_COLLECTION=puppet6 BEAKER_set=docker/ubuntu-master-14.04 BEAKER_TESTMODE=agent
+      rvm: 2.5.7
+      script: bundle exec rake beaker
+      services: docker
+      stage: acceptance
+      sudo: required
+    -
+      env: CHECK="validate lint check rubocop"
+      stage: static
+    -
+      env: PUPPET_GEM_VERSION="~> 6.0" CHECK=parallel_spec
+      rvm: 2.5.7
+      stage: spec
+    -
+      env: DEPLOY_TO_FORGE=yes
+      stage: deploy
+branches:
+  only:
+    - main
+    - /^v\d/
 notifications:
   email: false
 deploy:

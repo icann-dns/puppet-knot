@@ -430,9 +430,9 @@ describe 'knot' do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{background-workers: 1}
             ).with_content(
-              %r{tcp-workers: 8}
+              %r{tcp-workers: 10}
             ).with_content(
-              %r{udp-workers: 34}
+              %r{udp-workers: 31}
             )
           end
         end

@@ -1,27 +1,27 @@
 {
-  "name": "icann-knot",
-  "version": "0.3.7",
-  "author": "john.bond@icann.org",
+  "name": "puppet-knot",
+  "version": "0.4.0",
+  "author": "noc@dns.icann.org",
   "summary": "Installs and configuers knot from nic.cz",
   "license": "Apache-2.0",
-  "source": "https://github.com/icann-dns/puppet-knot",
-  "project_page": "https://github.com/icann-dns/puppet-knot",
-  "issues_url": "https://github.com/icann-dns/puppet-knot/issues",
+  "source": "https://git.dns.icann.org/root/puppet-knot",
+  "project_page": "https://git.dns.icann.org/root/puppet-knot/",
+  "issues_url": "https://git.dns.icann.org/root/puppet-knot/-/issues",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 4.11.0 <5.0.0"},
-    {"name":"puppetlabs-concat","version_requirement":">= 4.0.0 <5.0.0"},
-    {"name":"puppetlabs-apt","version_requirement":">= 2.2.2 <5.0.0"},
-    {"name":"icann-tea","version_requirement":">= 0.2.13 <1.0.0"}
+    { "name": "puppetlabs-stdlib",       "version_requirement": ">= 4.25.1 <7.0.1" },
+    { "name": "puppetlabs-vcsrepo",      "version_requirement": ">= 2.0.0 <3.2.0"  },
+    { "name": "voxpupuli-python",        "version_requirement": ">= 1.18.2 <2.0.0" },
+    { "name": "puppetlabs/sshkeys_core", "version_requirement": ">= 2.0.0 <2.3.0"  },
+    { "name": "puppetlabs-concat",       "version_requirement": ">= 5.0.0 <7.1.1"  },
+    { "name": "puppetlabs-apt",          "version_requirement": ">= 5.0.0 <8.3.0"  }
   ],
   "operatingsystem_support": [
-    {
-      "operatingsystem" : "Ubuntu",
-      "operatingsystemrelease" : [ "14.04", "16.04" ]
-    },
-    {
-      "operatingsystem" : "FreeBSD",
-      "operatingsystemrelease" : [ "10" ]
-    }
-  ]
+    { "operatingsystem": "Ubuntu",       "operatingsystemrelease": [ "18.04" ] }
+  ],
+  "requirements": [
+    { "name": "puppet",                  "version_requirement": ">= 6.21.0 < 8.0.0" }
+  ],
+  "pdk-version": "2.2.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates",
+  "template-ref": "heads/main-0-g8aaceff"
 }
-
