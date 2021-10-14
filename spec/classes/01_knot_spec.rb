@@ -76,19 +76,15 @@ describe 'knot' do
         let(:package_name) { 'knot3' }
         let(:conf_dir)     { '/usr/local/etc/knot' }
         let(:run_dir)      { '/var/run/knot' }
-        let(:concat_head)  { ":\n" }
-        let(:concat_foot)  { "\n" }
-        let(:acl_head)     { "acl:\n" }
-        let(:knot_version) { '3.0.0' }
       else
         let(:package_name) { 'knot' }
         let(:conf_dir)     { '/etc/knot' }
         let(:run_dir)      { '/run/knot' }
-        let(:concat_head)  { ":\n" }
-        let(:concat_foot)  { "\n" }
-        let(:acl_head)     { "acl:\n" }
-        let(:knot_version) { '3.0.0' }
       end
+      let(:concat_head)  { ":\n" }
+      let(:concat_foot)  { "\n" }
+      let(:acl_head)     { "acl:\n" }
+      let(:knot_version) { '3.0.0' }
       let(:conf_file)   { "#{conf_dir}/knot.conf" }
       let(:zonesdir)    { "#{conf_dir}/zone" }
       let(:zone_subdir) { "#{zonesdir}/zone" }
@@ -565,7 +561,7 @@ describe 'knot' do
           it do
             is_expected.to contain_concat__fragment(
               'knot_server'
-             ).without_content(%r{control:\n\s+listen:})
+            ).without_content(%r{control:\n\s+listen:})
           end
         end
         context 'package_name' do

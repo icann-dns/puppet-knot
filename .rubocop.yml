@@ -1,10 +1,11 @@
+# -*- ruby_mode -*-
 ---
 require:
 - rubocop-performance
 - rubocop-rspec
 AllCops:
   DisplayCopNames: true
-  TargetRubyVersion: '2.4'
+  TargetRubyVersion: '2.5.9'
   Include:
   - "**/*.rb"
   Exclude:
@@ -18,6 +19,7 @@ AllCops:
   - "**/Puppetfile"
   - "**/Vagrantfile"
   - "**/Guardfile"
+  - spec/defines/**
 Layout/LineLength:
   Description: People have wide screens, use them.
   Max: 200
@@ -26,9 +28,6 @@ RSpec/BeforeAfterAll:
     A necessary evil in acceptance testing.
   Exclude:
   - spec/acceptance/**/*.rb
-RSpec/HookArgument:
-  Description: Prefer explicit :each argument, matching existing module's style
-  EnforcedStyle: each
 RSpec/DescribeSymbol:
   Exclude:
   - spec/unit/facter/**/*.rb
@@ -60,14 +59,6 @@ Style/TernaryParentheses:
     on complex expressions for better readability, but seriously consider breaking
     it up.
   EnforcedStyle: require_parentheses_when_complex
-Style/TrailingCommaInArguments:
-  Description: Prefer always trailing comma on multiline argument lists. This makes
-    diffs, and re-ordering nicer.
-  EnforcedStyleForMultiline: comma
-Style/TrailingCommaInArrayLiteral:
-  Description: Prefer always trailing comma on multiline literals. This makes diffs,
-    and re-ordering nicer.
-  EnforcedStyleForMultiline: comma
 Style/SymbolArray:
   Description: Using percent style obscures symbolic intent of array's contents.
   EnforcedStyle: brackets
@@ -356,7 +347,7 @@ RSpec/RepeatedIncludeExample:
 RSpec/ReturnFromStub:
   Enabled: false
 RSpec/SharedExamples:
-  Enabled: false
+  Enabled: true
 RSpec/StubbedMock:
   Enabled: false
 RSpec/UnspecifiedException:
@@ -366,6 +357,8 @@ RSpec/VariableDefinition:
 RSpec/VoidExpect:
   Enabled: false
 RSpec/Yield:
+  Enabled: false
+RSpec/NamedSubject:
   Enabled: false
 Security/Open:
   Enabled: false
