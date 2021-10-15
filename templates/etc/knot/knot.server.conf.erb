@@ -1,15 +1,11 @@
 <%-
-@background_workers = 1
-@tcp_workers        = (@server_count * 0.2).floor
-@tcp_workers        = @tcp_workers > 0 ? @tcp_workers : 1 
-
-@udp_workers        = @server_count - @tcp_workers - @background_workers
-@udp_workers        = @udp_workers > 0 ? @udp_workers : 1 
-
-if @knot_version then
-  @_knot_version = @knot_version
-else
-  @_knot_version = '2.4'
+if @tcp_workers.nil?
+  @tcp_workers = (@server_count * 0.25).floor
+  @tcp_workers = @tcp_workers > 0 ? @tcp_workers : 1
+end
+if @udp_workers.nil?
+  @udp_workers = (@server_count * 0.75).floor
+  @udp_workers = @udp_workers > 0 ? @udp_workers : 1
 end
 -%>
 server:
@@ -21,20 +17,27 @@ server:
 <%- end -%>
   nsid: <%= @nsid %>
   rundir: <%= @run_dir %>
+  user: <%= @username %>
   pidfile: <%= @pidfile %>
   udp-workers: <%= @udp_workers %>
   tcp-workers: <%= @tcp_workers %>
   background-workers: <%= @background_workers %>
-  max-tcp-clients: <%= @max_tcp_clients %>
-  max-udp-payload: <%= @max_udp_payload %>
-  user: <%= @username %>
+  async-start: <%= @async_start %>
+  tcp-idle-timeout: <%= @tcp_idle_timeout %>
+  tcp-io-timeout: <%= @tcp_io_timeout %>
+  tcp-remote-io-timeout: <%= @tcp_remote_io_timeout %>
+  tcp-reuseport: <%= @tcp_reuseport %>
+  tcp-fastopen: <%= @tcp_fastopen %>
+  tcp-max-clients: <%= @tcp_max_clients %>
+  udp-max-payload: <%= @udp_max_payload %>
+  udp-max-payload-ipv4: <%= @udp_max_payload_ipv4 %>
+  udp-max-payload-ipv6: <%= @udp_max_payload_ipv6 %>
+  socket-affinity: <%= @socket_affinity %>
+  edns-client-subnet: <%= @edns_client_subnet %>
+  answer-rotation: <%= @answer_rotation %>
 <%- if @port == 53 then port_str = '' else port_str = "@#{@port}" end -%>
   listen: [<%= @ip_addresses.join("#{port_str}, ") %><%= port_str %>]
-<%- if scope.function_versioncmp([@_knot_version, '2.4']) < 0 and @rrl_enable-%>
-  rate-limit: <%= @rrl_limit %>
-  rate-limit-table-size: <%= @rrl_size %>
-  rate-limit-slip: <%= @rrl_slip %>
-<%- elsif @rrl_enable -%>
+<%- if @rrl_enable -%>
 mod-rrl:
   - id: default
     rate-limit: <%= @rrl_limit %>
