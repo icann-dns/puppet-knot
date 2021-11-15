@@ -26,6 +26,7 @@ class knot (
   Integer                      $tcp_io_timeout        = 500,
   Integer                      $tcp_remote_io_timeout = 5000,
   Enum['on','off']             $tcp_reuseport         = 'off',
+  Enum['on','off']             $tcp_fastopen          = 'off',
   Integer                      $tcp_max_clients       = 250,
   Integer[512,4096]            $udp_max_payload       = 4096,
   Integer[512,4096]            $udp_max_payload_ipv4  = 4096,
