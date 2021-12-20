@@ -13,10 +13,10 @@ class knot (
   Array[Tea::Ip_address]       $ip_addresses          = $::knot::params::ip_addresses,
   String                       $identity              = $::knot::params::identity,
   String                       $nsid                  = $::knot::params::nsid,
-  Knot::Log_target             $log_target            = 'syslog',
+  Knot::Log_target             $log_target            = '/var/log/knot/knot.log',
   Knot::Log_level              $log_zone_level        = 'notice',
   Knot::Log_level              $log_server_level      = 'info',
-  Knot::Log_level              $log_any_level         = 'error',
+  Knot::Log_level              $log_any_level         = 'info',
   Integer[1,255]               $server_count          = $::knot::params::server_count,
   Optional[Integer[1,255]]     $tcp_workers           = undef,
   Optional[Integer[1,255]]     $udp_workers           = undef,
@@ -149,6 +149,13 @@ class knot (
     require => Package[$package_name],
   }
   file { [$run_dir]:
+    ensure  => directory,
+    mode    => '0775',
+    owner   => $username,
+    group   => $username,
+    require => Package[$package_name],
+  }
+  file { '/var/log/knot':
     ensure  => directory,
     mode    => '0775',
     owner   => $username,
