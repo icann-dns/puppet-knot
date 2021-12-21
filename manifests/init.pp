@@ -16,7 +16,7 @@ class knot (
   Knot::Log_target             $log_target            = '/var/log/knot/knot.log',
   Knot::Log_level              $log_zone_level        = 'notice',
   Knot::Log_level              $log_server_level      = 'info',
-  Knot::Log_level              $log_any_level         = 'info',
+  Knot::Log_level              $log_any_level         = 'error',
   Integer[1,255]               $server_count          = $::knot::params::server_count,
   Optional[Integer[1,255]]     $tcp_workers           = undef,
   Optional[Integer[1,255]]     $udp_workers           = undef,
