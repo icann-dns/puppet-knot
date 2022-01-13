@@ -52,7 +52,11 @@ control:
   listen: <%= @run_dir %>/knot.sock
 <%- end -%>
 log:
+<%- if @log_target_path.nil? -%>
   - target: <%= @log_target %>
+<%- else -%>
+  - target: <%= @log_target_path %>/<%= @log_target_file %>
+<%- end -%>
     any: <%= @log_any_level %>
     zone: <%= @log_zone_level %>
     server: <%= @log_server_level %>

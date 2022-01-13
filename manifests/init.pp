@@ -13,7 +13,9 @@ class knot (
   Array[Tea::Ip_address]       $ip_addresses          = $::knot::params::ip_addresses,
   String                       $identity              = $::knot::params::identity,
   String                       $nsid                  = $::knot::params::nsid,
-  Knot::Log_target             $log_target            = '/var/log/knot/knot.log',
+  Knot::Log_target             $log_target            = 'syslog',
+  Optional[Tea::Absolutepath]  $log_target_path       = undef,
+  String                       $log_target_file       = 'knot.log',
   Knot::Log_level              $log_zone_level        = 'notice',
   Knot::Log_level              $log_server_level      = 'info',
   Knot::Log_level              $log_any_level         = 'error',
@@ -62,6 +64,9 @@ class knot (
   Tea::Port                    $puppetdb_port         = 8080,
   Array[String]                $exports               = [],
   Array[String]                $imports               = [],
+  Boolean                      $logrotate_enable      = true,
+  Integer                      $logrotate_rotate      = 5,
+  String                       $logrotate_size        = '100M',
 ) inherits knot::params  {
 
   $server_template   = $::knot::params::server_template
@@ -155,12 +160,22 @@ class knot (
     group   => $username,
     require => Package[$package_name],
   }
-  file { '/var/log/knot':
-    ensure  => directory,
-    mode    => '0775',
-    owner   => $username,
-    group   => $username,
-    require => Package[$package_name],
+  if $log_target_path {
+    file { $log_target_path:
+      ensure  => directory,
+      mode    => '0775',
+      owner   => $username,
+      group   => $username,
+    }
+    if $logrotate_enable and $::kernel != 'FreeBSD' {
+      logrotate::rule {'knot':
+        path       => "${log_target_path}/${log_target_file}",
+        rotate     => $logrotate_rotate,
+        size       => $logrotate_size,
+        compress   => true,
+        postrotate => "/usr/sbin/service ${service_name} restart",
+      }
+    }
   }
   if $::kernel == 'Linux' {
     file{'/etc/init/knot.conf':
