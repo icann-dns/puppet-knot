@@ -1,3 +1,6 @@
+### 2021-11-15 0.4.5
+* allow knot to mamage its own log file with logrotate
+
 ### 2021-11-15 0.4.3
 * as of this release, we support 3.1+
 * add additional configuration for knot 3.1
