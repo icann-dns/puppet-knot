@@ -43,3 +43,9 @@
 <%- elsif @default_masters.any? -%>
     master: [<%= @default_masters.join(', ') %>]
 <%- end -%>
+<%- if @zonemd_verify -%>
+    zonemd-verify: <%= @zonemd_verify %>
+<%- end -%>
+<%- if @zonemd_generate -%>
+    zonemd-generate: <%= @zonemd_generate %>
+<%- end -%>
