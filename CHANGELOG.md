@@ -1,3 +1,7 @@
+### 2022-03-24 0.4.6
+* Add zonemd-verify
+* Add zonemd-generate
+
 ### 2021-11-15 0.4.5
 * allow knot to mamage its own log file with logrotate
 
