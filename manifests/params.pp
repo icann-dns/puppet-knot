@@ -37,4 +37,5 @@ class knot::params {
   $acl_head         = "acl:\n"
   $concat_foot      = "\n"
   $acl_foot         = $concat_foot
+  $database_dir     = '/var/lib/knot'
 }

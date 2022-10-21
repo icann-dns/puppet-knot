@@ -67,6 +67,7 @@ class knot (
   Boolean                      $logrotate_enable      = true,
   Integer                      $logrotate_rotate      = 5,
   String                       $logrotate_size        = '100M',
+  Tea::Absolutepath            $database_path         = $::knot::params::database_dir,
 ) inherits knot::params  {
 
   $server_template   = $::knot::params::server_template
@@ -156,6 +157,12 @@ class knot (
   file { [$run_dir]:
     ensure  => directory,
     mode    => '0775',
+    owner   => $username,
+    group   => $username,
+    require => Package[$package_name],
+  }
+  file { [$database_dir, "${database_dir}/timers"]:
+    ensure  => directory,
     owner   => $username,
     group   => $username,
     require => Package[$package_name],
