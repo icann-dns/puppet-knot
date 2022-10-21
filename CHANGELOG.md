@@ -1,6 +1,10 @@
+### 2022-10-21 0.4.7
+* add databse storage parameters
+* manage `/var/lib/knot`and `/var/lib/knot/timers` directories
+
 ### 2022-03-24 0.4.6
-* Add zonemd-verify
-* Add zonemd-generate
+* add zonemd-verify
+* add zonemd-generate
 
 ### 2021-11-15 0.4.5
 * allow knot to mamage its own log file with logrotate
