@@ -297,7 +297,7 @@ describe 'knot' do
             require: "Package[#{package_name}]"
           )
         end
-        if facts[:operatingsystem] == 'Ubuntu'
+        if facts[:os]['distro']['release'] == 'bionic'
           it do
             is_expected.to contain_file('/etc/init/knot.conf').with(
               ensure: 'present',

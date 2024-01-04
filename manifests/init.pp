@@ -184,7 +184,8 @@ class knot (
       }
     }
   }
-  if $::kernel == 'Linux' {
+  # We use systemd on focal and later
+  if $::kernel == 'Linux' and $facts['os']['distro']['release'] == 'bionic' {
     file{'/etc/init/knot.conf':
       ensure  => present,
       content => template('knot/etc/init/knot.conf.erb'),
