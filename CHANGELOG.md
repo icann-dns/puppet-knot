@@ -1,3 +1,6 @@
+### 2023-01-04 0.4.8
+* Only install upstart files on Bionic
+
 ### 2022-10-21 0.4.7
 * add databse storage parameters
 * manage `/var/lib/knot`and `/var/lib/knot/timers` directories
