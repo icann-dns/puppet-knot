@@ -1,3 +1,6 @@
+### 2023-01-04 0.4.9
+* Add ixfr support (only here as compatible param with nsd)
+
 ### 2023-01-04 0.4.8
 * Only install upstart files on Bionic
 
