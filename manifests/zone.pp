@@ -9,6 +9,9 @@ define knot::zone (
   Optional[Tea::Absolutepath]                                     $zone_dir               = undef,
   Optional[Enum['on','off']]                                      $zonemd_verify          = undef,
   Optional[Knot::Zonemd_generate]                                 $zonemd_generate        = undef,
+  Optional[Enum['yes','no']]                                      $allow_axfr_fallback    = undef,
+  Optional[Enum['yes','no']]                                      $create_ixfr            = undef,
+  Optional[Integer]                                               $ixfr_size              = undef,
 ) {
   include knot
   $default_masters      = $::knot::default_masters
