@@ -1,3 +1,6 @@
+### 2024-08-26 0-5-0
+* Add service.arpa
+
 ### 2023-01-04 0.4.9
 * Add ixfr support (only here as compatible param with nsd)
 
