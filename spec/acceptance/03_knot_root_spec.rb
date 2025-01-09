@@ -32,31 +32,26 @@ if ENV['BEAKER_TESTMODE'] == 'apply'
         execute_manifest(pp, catch_failures: true)
         expect(execute_manifest(pp, catch_failures: true).exit_code).to eq 0
       end
+
       describe service('knot') do
         it { is_expected.to be_running }
       end
+
       describe port(53) do
         it { is_expected.to be_listening }
       end
+
       describe command('knotc -c /etc/knot/knot.conf checkconf || cat /etc/knot/knot.conf'), if: os[:family] == 'ubuntu' do
-        its(:stdout) { is_expected.to match %r{} }
-      end
-      describe command('knotc -c /usr/local/etc/knot/knot.conf checkconf || cat /usr/local/etc/knot/knot.conf'), if: os[:family] == 'freebsd' do
-        its(:stdout) { is_expected.to match %r{} }
-      end
-      describe command("dig +short soa . @#{ipaddress}") do
         let(:pre_command) { 'sleep 10' }
 
-        its(:exit_status) { is_expected.to eq 0 }
-        its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
+        its(:stdout) { is_expected.to match %r{} }
       end
-      describe command("dig +short soa arpa. @#{ipaddress}") do
-        its(:exit_status) { is_expected.to eq 0 }
-        its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
-      end
-      describe command("dig +short soa root-servers.net. @#{ipaddress}") do
-        its(:exit_status) { is_expected.to eq 0 }
-        its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
+
+      %w[. arpa. root-servers.net.].each do |zone|
+        describe command("dig +short soa #{zone} @#{ipaddress}") do
+          its(:exit_status) { is_expected.to eq 0 }
+          its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
+        end
       end
     end
   end

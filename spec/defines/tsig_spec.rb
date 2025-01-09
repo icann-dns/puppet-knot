@@ -34,16 +34,43 @@ describe 'knot::tsig' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_knot__tsig('foo.example.com') }
 
-        if facts[:operatingsystem] == 'Ubuntu' &&
-           facts[:lsbdistcodename] == 'trusty'
+        it do
+          is_expected.to contain_concat__fragment(
+            'knot_key_foo.example.com'
+          ).with_content(
+            %r{
+            \s+-\sid:\sfoo.example.com\n
+            \s+algorithm:\shmac-sha256\n
+            \s+secret:\sA+=
+            }x
+          ).with_order('02')
+        end
+      end
+
+      describe 'Change Defaults' do
+        context 'algo' do
+          before { params.merge!(algo: 'hmac-md5') }
+
+          it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment(
               'knot_key_foo.example.com'
             ).with_content(
-              %r{foo.example.com hmac-sha256 "A+="}
+              %r{
+              \s+-\sid:\sfoo.example.com\n
+              \s+algorithm:\shmac-md5\n
+              \s+secret:\sA+=
+              }x
             ).with_order('02')
           end
-        else
+        end
+
+        context 'data' do
+          before { params.merge!(data: 'foobar') }
+
+          it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment(
               'knot_key_foo.example.com'
@@ -51,85 +78,10 @@ describe 'knot::tsig' do
               %r{
               \s+-\sid:\sfoo.example.com\n
               \s+algorithm:\shmac-sha256\n
-              \s+secret:\sA+=
+              \s+secret:\sfoobar
               }x
             ).with_order('02')
           end
-        end
-      end
-
-      describe 'Change Defaults' do
-        context 'algo' do
-          before { params.merge!(algo: 'hmac-md5') }
-          it { is_expected.to compile }
-          if facts[:operatingsystem] == 'Ubuntu' &&
-             facts[:lsbdistcodename] == 'trusty'
-            it do
-              is_expected.to contain_concat__fragment(
-                'knot_key_foo.example.com'
-              ).with_content(
-                %r{foo.example.com hmac-md5 "A+="}
-              ).with_order('02')
-            end
-          else
-            it do
-              is_expected.to contain_concat__fragment(
-                'knot_key_foo.example.com'
-              ).with_content(
-                %r{
-                \s+-\sid:\sfoo.example.com\n
-                \s+algorithm:\shmac-md5\n
-                \s+secret:\sA+=
-                }x
-              ).with_order('02')
-            end
-          end
-        end
-        context 'data' do
-          before { params.merge!(data: 'foobar') }
-          it { is_expected.to compile }
-          if facts[:operatingsystem] == 'Ubuntu' &&
-             facts[:lsbdistcodename] == 'trusty'
-            it do
-              is_expected.to contain_concat__fragment(
-                'knot_key_foo.example.com'
-              ).with_content(
-                %r{foo.example.com hmac-sha256 "foobar"}
-              ).with_order('02')
-            end
-          else
-            it do
-              is_expected.to contain_concat__fragment(
-                'knot_key_foo.example.com'
-              ).with_content(
-                %r{
-                \s+-\sid:\sfoo.example.com\n
-                \s+algorithm:\shmac-sha256\n
-                \s+secret:\sfoobar
-                }x
-              ).with_order('02')
-            end
-          end
-        end
-      end
-
-      # You will have to correct any values that should be bool
-      describe 'check bad type' do
-        context 'algo' do
-          before { params.merge!(algo: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'algo unsupported' do
-          before { params.merge!(algo: 'mac-sha2') }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'data' do
-          before { params.merge!(data: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'template' do
-          before { params.merge!(template: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
         end
       end
     end

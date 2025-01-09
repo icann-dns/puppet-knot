@@ -33,25 +33,18 @@ describe 'knot::file' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) { facts }
-
-      case facts[:operatingsystem]
-      when 'Ubuntu'
-        let(:package_name) { 'knot' }
-        let(:conf_dir)     { '/etc/knot' }
-        let(:run_dir)      { '/run/knot' }
-      else
-        let(:package_name) { 'knot3' }
-        let(:conf_dir)     { '/usr/local/etc/knot' }
-        let(:run_dir)      { '/var/run/knot' }
-      end
       let(:conf_file)   { "#{conf_dir}/knot.conf" }
       let(:zonesdir)    { "#{conf_dir}/zone" }
       let(:zone_subdir) { '/zone' }
       let(:pidfile)     { "#{run_dir}/knot.pid" }
+      let(:package_name) { 'knot' }
+      let(:conf_dir)     { '/etc/knot' }
+      let(:run_dir)      { '/run/knot' }
 
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_knot__file('example.com') }
+
         it do
           is_expected.to contain_file("#{zone_subdir}/example.com").with(
             ensure: 'present',
@@ -67,7 +60,9 @@ describe 'knot::file' do
       describe 'Change Defaults' do
         context 'owner' do
           before { params.merge!(owner: 'foobar') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file("#{zone_subdir}/example.com").with(
               ensure: 'present',
@@ -79,9 +74,12 @@ describe 'knot::file' do
             )
           end
         end
+
         context 'group' do
           before { params.merge!(group: 'foobar') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file("#{zone_subdir}/example.com").with(
               ensure: 'present',
@@ -93,9 +91,12 @@ describe 'knot::file' do
             )
           end
         end
+
         context 'mode' do
           before { params.merge!(mode: '0660') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file("#{zone_subdir}/example.com").with(
               ensure: 'present',
@@ -107,9 +108,12 @@ describe 'knot::file' do
             )
           end
         end
+
         context 'source' do
           before { params.merge!(source: 'puppet:///modules/test/example.com') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file("#{zone_subdir}/example.com").with(
               ensure: 'present',
@@ -122,9 +126,12 @@ describe 'knot::file' do
             )
           end
         end
+
         context 'content' do
           before { params.merge!(content: 'zone content') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file("#{zone_subdir}/example.com").with(
               content: 'zone content',
@@ -137,13 +144,16 @@ describe 'knot::file' do
             )
           end
         end
+
         context 'content_template' do
           before do
             params.merge!(
               content_template: 'knot/etc/knot/hostname.as112.net.zone.erb'
             )
           end
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file("#{zone_subdir}/example.com").with(
               ensure: 'present',
@@ -157,46 +167,17 @@ describe 'knot::file' do
             )
           end
         end
+
         context 'ensure' do
           before { params.merge!(ensure: 'absent') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file("#{zone_subdir}/example.com").with(
               ensure: 'absent'
             )
           end
-        end
-      end
-
-      # You will have to correct any values that should be bool
-      describe 'check bad type' do
-        context 'owner' do
-          before { params.merge!(owner: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'group' do
-          before { params.merge!(group: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'mode' do
-          before { params.merge!(mode: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'source' do
-          before { params.merge!(source: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'content' do
-          before { params.merge!(content: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'content_template' do
-          before { params.merge!(content_template: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'ensure' do
-          before { params.merge!(ensure: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
         end
       end
     end

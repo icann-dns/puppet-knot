@@ -1,11 +1,16 @@
-#== Define: knot::remote
+# @summary Define a remote server for knot
+# @param address4 The IPv4 address of the remote server
+# @param address6 The IPv6 address of the remote server
+# @param tsig The name of the TSIG key to use
+# @param tsig_name The name of the TSIG key to use
+# @param port The port to use for the remote server
 #
 define knot::remote (
-  Optional[Variant[Tea::Ipv4, Tea::Ipv4_cidr]] $address4  = undef,
-  Optional[Variant[Tea::Ipv6, Tea::Ipv6_cidr]] $address6  = undef,
-  Optional[String]                             $tsig      = undef,
-  Optional[String]                             $tsig_name = undef,
-  Tea::Port                                    $port      = 53,
+  Optional[Stdlib::IP::Address::V4] $address4  = undef,
+  Optional[Stdlib::IP::Address::V6] $address6  = undef,
+  Optional[String]                  $tsig      = undef,
+  Optional[String]                  $tsig_name = undef,
+  Stdlib::Port                      $port      = 53,
 ) {
   include knot
   if ! $address4 and ! $address6 {
@@ -27,16 +32,16 @@ define knot::remote (
       fail("Knot::Tsig['${tsig_name}'] does not exist")
     }
   } else {
-    $_tsig_name = $::knot::default_tsig_name
+    $_tsig_name = $knot::default_tsig_name
   }
-  concat::fragment{ "knot_remotes_${name}":
-    target  => $::knot::conf_file,
-    content => template($::knot::remotes_template),
+  concat::fragment { "knot_remotes_${name}":
+    target  => $knot::conf_file,
+    content => template($knot::remotes_template),
     order   => '12';
   }
-  concat::fragment{ "knot_acl_${name}":
-    target  => $::knot::conf_file,
-    content => template($::knot::acl_template),
+  concat::fragment { "knot_acl_${name}":
+    target  => $knot::conf_file,
+    content => template($knot::acl_template),
     order   => '15';
   }
 }

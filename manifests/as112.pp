@@ -1,4 +1,4 @@
-# Class knot::as112
+# @summary class to configure AS112 service
 #
 class knot::as112 {
   include knot
