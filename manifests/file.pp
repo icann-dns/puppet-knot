@@ -1,14 +1,22 @@
-# Define: knot::file
+# @summary Define a file resource for a Knot zone file
+# @param ensure Whether the file should be present or absent
+# @param owner The owner of the file
+# @param group The group of the file
+# @param mode The mode of the file
+# @param origin The origin of the zone file
+# @param source The source of the file
+# @param content The content of the file
+# @param content_template The template to use for the content of the file
 #
 define knot::file (
-    String                       $ensure           = 'present',
-    String                       $owner            = 'knot',
-    String                       $group            = 'knot',
-    Pattern[/^\d+$/]             $mode             = '0640',
-    Optional[String]             $origin           = undef,
-    Optional[Tea::Puppetsource]  $source           = undef,
-    Optional[String]             $content          = undef,
-    Optional[Tea::Puppetcontent] $content_template = undef,
+  String                       $ensure           = 'present',
+  String                       $owner            = 'knot',
+  String                       $group            = 'knot',
+  Pattern[/^\d+$/]             $mode             = '0640',
+  Optional[String]             $origin           = undef,
+  Optional[Stdlib::Filesource] $source           = undef,
+  Optional[String[1]]          $content          = undef,
+  Optional[String[1]]          $content_template = undef,
 ) {
   include knot
   if $content and $content_template {
@@ -20,16 +28,15 @@ define knot::file (
   } else {
     $_content = undef
   }
-  if defined('$::knot_version') and versioncmp($::knot_version, '2.3.0') >= 0 {
-    if $origin {
-      $validate_cmd = "${::knot::kzonecheck_bin} -o ${origin} %"
-    } else {
-      $validate_cmd = "${::knot::kzonecheck_bin} %"
+  if 'knot_version' in $facts and versioncmp($facts['knot_version'], '2.3.0') >= 0 {
+    $validate_cmd = $origin ? {
+      undef   => "${knot::kzonecheck_bin} %",
+      default => "${knot::kzonecheck_bin} -o ${origin} %",
     }
   } else {
     $validate_cmd = undef
   }
-  file { "${::knot::zone_subdir}/${title}":
+  file { "${knot::zone_subdir}/${title}":
     ensure       => $ensure,
     owner        => $owner,
     group        => $group,
@@ -37,8 +44,7 @@ define knot::file (
     source       => $source,
     content      => $_content,
     validate_cmd => $validate_cmd,
-    require      => Package[$::knot::package_name],
-    notify       => Service[$::knot::service_name];
+    require      => Package[$knot::package_name],
+    notify       => Service[$knot::service_name];
   }
 }
-

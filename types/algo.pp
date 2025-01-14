@@ -1,3 +1,4 @@
+# @summary Define a zone in Knot DNS
 type Knot::Algo = Enum[
   hmac-sha1,
   hmac-sha224,
@@ -6,4 +7,3 @@ type Knot::Algo = Enum[
   hmac-sha512,
   hmac-md5,
 ]
-

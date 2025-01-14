@@ -6,6 +6,8 @@ require 'puppet/network/http_pool'
 # credit to dalen
 # https://github.com/dalen/puppet-puppetdbquery/blob/master/lib/puppetdb/connection.rb
 Puppet::Functions.create_function('knot::get_exported_titles') do
+  # @param imports Array of import tags
+  # @return [Array] Array of exported titles
   dispatch :get_exported_titles do
     param 'Array', :imports
   end
@@ -17,8 +19,8 @@ Puppet::Functions.create_function('knot::get_exported_titles') do
     )
     headers = { 'Accept' => 'application/json' }
     query = ['and', ['=', 'exported', true], ['~', 'tag', "(#{imports.join('|')})"]]
-    uri = '/pdb/query/v4/resources/Knot::Remote'
-    uri += URI.escape("?query=#{query.to_json}")
+    uri = '/pdb/query/v4/resources/Knot::Remote?'
+    uri += URI.encode_www_form(query: query.to_json)
     begin
       response = http.get(uri, headers)
       unless response.is_a?(Net::HTTPSuccess)
@@ -28,7 +30,7 @@ Puppet::Functions.create_function('knot::get_exported_titles') do
         return []
       end
       return JSON.parse(response.body).map { |res| res['title'] }.sort
-    rescue => e
+    rescue StandardError => e
       Puppet.warning("Exception, exported resources wont work: #{e}")
     end
     []

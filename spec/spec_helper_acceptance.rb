@@ -5,10 +5,10 @@ require 'beaker/testmode_switcher/dsl'
 require 'beaker-pe'
 require 'progressbar'
 
-modules = [
-  'puppetlabs-stdlib',
-  'puppetlabs-concat',
-  'icann-tea'
+modules = %w[
+  puppetlabs-stdlib
+  puppetlabs-concat
+  icann-tea
 ]
 git_repos = []
 # git_repos = [
@@ -30,7 +30,7 @@ def install_modules(host, modules, git_repos)
     on(host, puppet('module', 'install', m))
   end
   git_repos.each do |g|
-    step "Installing puppet module \'#{g[:repo]}\' from git on #{host} to #{default['distmoduledir']}"
+    step "Installing puppet module '#{g[:repo]}' from git on #{host} to #{default['distmoduledir']}"
     on(host, "git clone -b #{g[:branch]} --single-branch #{g[:repo]} #{default['distmoduledir']}/#{g[:mod]}")
   end
 end

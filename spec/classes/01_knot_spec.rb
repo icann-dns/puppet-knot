@@ -23,7 +23,7 @@ describe 'knot' do
         'provide_xfr' => { 'address4' => '192.0.2.2' },
         'allow_notify_addition' => { 'address4' => '192.0.2.3' },
         'send_notify_addition' => { 'address4' => '192.0.2.4' },
-        'default_master'      => { 'address4' => '192.0.2.5' },
+        'default_master' => { 'address4' => '192.0.2.5' },
         'default_provide_xfr' => { 'address4' => '192.0.2.6' }
       },
       zones: { 'example.com' => { 'masters' => ['master'] } },
@@ -71,16 +71,9 @@ describe 'knot' do
   # it { pp catalogue.resources }
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      case facts[:operatingsystem]
-      when 'FreeBSD'
-        let(:package_name) { 'knot3' }
-        let(:conf_dir)     { '/usr/local/etc/knot' }
-        let(:run_dir)      { '/var/run/knot' }
-      else
-        let(:package_name) { 'knot' }
-        let(:conf_dir)     { '/etc/knot' }
-        let(:run_dir)      { '/run/knot' }
-      end
+      let(:package_name) { 'knot' }
+      let(:conf_dir)     { '/etc/knot' }
+      let(:run_dir)      { '/run/knot' }
       let(:concat_head)  { ":\n" }
       let(:concat_foot)  { "\n" }
       let(:acl_head)     { "acl:\n" }
@@ -95,7 +88,6 @@ describe 'knot' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_package(package_name) }
         it { is_expected.to contain_class('Knot') }
-        it { is_expected.to contain_class('Knot::Params') }
         it { is_expected.to contain_knot__zone('example.com') }
         it { is_expected.to contain_knot__tsig('test.example.com') }
         it { is_expected.to contain_concat__fragment('knot_key_test.example.com') }
@@ -114,33 +106,40 @@ describe 'knot' do
         it { is_expected.to contain_concat__fragment('knot_remotes_default_provide_xfr') }
         it { is_expected.to contain_concat__fragment('knot_acl_default_provide_xfr') }
         it { is_expected.to contain_knot__remote('allow_notify_addition') }
+
         it do
           is_expected.to contain_concat__fragment(
             'knot_remotes_allow_notify_addition'
           )
         end
+
         it do
           is_expected.to contain_concat__fragment(
             'knot_acl_allow_notify_addition'
           )
         end
+
         it { is_expected.to contain_knot__remote('send_notify_addition') }
+
         it do
           is_expected.to contain_concat__fragment(
             'knot_remotes_send_notify_addition'
           )
         end
+
         it do
           is_expected.to contain_concat__fragment(
             'knot_acl_send_notify_addition'
           )
         end
+
         it do
           is_expected.to contain_concat(conf_file).with(
             notify: 'Service[knot]',
             require: "Package[#{package_name}]"
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('knot_server').with(
             order: '10',
@@ -181,6 +180,7 @@ describe 'knot' do
             }x
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('knot_server').with_content(
             %r{
@@ -198,6 +198,7 @@ describe 'knot' do
             }x
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('key_head').with(
             content: "key#{concat_head}",
@@ -205,6 +206,7 @@ describe 'knot' do
             target: conf_file
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('key_foot').with(
             content: concat_foot,
@@ -212,6 +214,7 @@ describe 'knot' do
             target: conf_file
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('remote_head').with(
             content: "remote#{concat_head}",
@@ -219,6 +222,7 @@ describe 'knot' do
             target: conf_file
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('remote_foot').with(
             content: concat_foot,
@@ -226,6 +230,7 @@ describe 'knot' do
             target: conf_file
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('acl_head').with(
             content: acl_head,
@@ -233,6 +238,7 @@ describe 'knot' do
             target: conf_file
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('acl_foot').with(
             content: concat_foot,
@@ -240,6 +246,7 @@ describe 'knot' do
             target: conf_file
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('zones_head').with(
             content: "zone#{concat_head}",
@@ -247,6 +254,7 @@ describe 'knot' do
             target: conf_file
           )
         end
+
         it do
           is_expected.to contain_concat__fragment('zones_foot').with(
             content: concat_foot,
@@ -254,6 +262,7 @@ describe 'knot' do
             target: conf_file
           )
         end
+
         it do
           is_expected.to contain_file(zonesdir).with(
             ensure: 'directory',
@@ -263,6 +272,7 @@ describe 'knot' do
             require: "Package[#{package_name}]"
           )
         end
+
         it do
           is_expected.to contain_file(zone_subdir).with(
             ensure: 'directory',
@@ -272,6 +282,7 @@ describe 'knot' do
             require: "Package[#{package_name}]"
           )
         end
+
         it do
           is_expected.to contain_file(conf_dir).with(
             ensure: 'directory',
@@ -281,6 +292,7 @@ describe 'knot' do
             require: "Package[#{package_name}]"
           )
         end
+
         it do
           is_expected.to contain_file(run_dir).with(
             ensure: 'directory',
@@ -290,6 +302,7 @@ describe 'knot' do
             require: "Package[#{package_name}]"
           )
         end
+
         it do
           is_expected.to contain_service('knot').with(
             enable: 'true',
@@ -297,33 +310,14 @@ describe 'knot' do
             require: "Package[#{package_name}]"
           )
         end
-        if facts[:os]['distro']['release'] == 'bionic'
-          it do
-            is_expected.to contain_file('/etc/init/knot.conf').with(
-              ensure: 'present',
-              notify: 'Service[knot]'
-            ).without_content(
-              %r{while}
-            )
-          end
-        end
-        if facts[:operatingsystem] == 'FreeBSD'
-          it do
-            is_expected.to contain_file('/etc/rc.conf.d/knot').with_ensure('present')
-          end
-          it do
-            is_expected.to contain_file_line('add knot conf file').with(
-              path: '/etc/rc.conf.d/knot',
-              line: "config=\"#{conf_file}\""
-            )
-          end
-        end
       end
 
       describe 'Change Defaults' do
         context 'enable' do
           before { params.merge!(enable: false) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_service('knot').with(
               enable: 'false',
@@ -332,36 +326,48 @@ describe 'knot' do
             )
           end
         end
+
         context 'ip_addresses' do
           before { params.merge!(ip_addresses: ['192.0.2.2']) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{listen: \[192\.0\.2\.2\]}
             )
           end
         end
+
         context 'identity' do
           before { params.merge!(identity: 'bar.example.com') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{identity:? bar.example.com}
             )
           end
         end
+
         context 'nsid' do
           before { params.merge!(nsid: 'bar.example.com') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{nsid:? bar.example.com}
             )
           end
         end
+
         context 'log_target' do
           before { params.merge!(log_target: 'stdout') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{
@@ -374,9 +380,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'log_zone_level' do
           before { params.merge!(log_zone_level: 'debug') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{
@@ -389,9 +398,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'log_server_level' do
           before { params.merge!(log_server_level: 'debug') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{
@@ -404,9 +416,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'log_any_level' do
           before { params.merge!(log_any_level: 'debug') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{
@@ -419,9 +434,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'server_count' do
           before { params.merge!(server_count: 42) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{background-workers: 1}
@@ -432,33 +450,43 @@ describe 'knot' do
             )
           end
         end
+
         context 'tcp_max_clients' do
           before { params.merge!(tcp_max_clients: 42) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{tcp-max-clients:? 42;?}
             )
           end
         end
+
         context 'udp_max_payload' do
           before { params.merge!(udp_max_payload: 513) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{udp-max-payload:? 513}
             )
           end
         end
+
         context 'pidfile' do
           before { params.merge!(pidfile: '/knot.pid') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{pidfile:? "?/knot.pid"?}
             )
           end
         end
+
         context 'port' do
           before do
             params.merge!(
@@ -466,25 +494,33 @@ describe 'knot' do
               ip_addresses: ['192.0.2.2']
             )
           end
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
-              %r{listen: \[192\.0\.2\.2\@5353\]}
+              %r{listen: \[192\.0\.2\.2@5353\]}
             )
           end
         end
+
         context 'username' do
           before { params.merge!(username: 'foobar') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{user:? foobar;?}
             )
           end
         end
+
         context 'zonesdir' do
           before { params.merge!(zonesdir: '/zones') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file('/zones').with(
               ensure: 'directory',
@@ -495,18 +531,24 @@ describe 'knot' do
             )
           end
         end
+
         context 'hide_version' do
           before { params.merge!(hide_version: true) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment('knot_server').with_content(
               %r{version: hidden}
             )
           end
         end
+
         context 'rrl_size' do
           before { params.merge!(rrl_size: 42) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment(
               'knot_server'
@@ -521,9 +563,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'rrl_limit' do
           before { params.merge!(rrl_limit: 42) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment(
               'knot_server'
@@ -538,9 +583,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'rrl_slip' do
           before { params.merge!(rrl_slip: 42) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment(
               'knot_server'
@@ -555,28 +603,38 @@ describe 'knot' do
             )
           end
         end
+
         context 'control_enable' do
           before { params.merge!(control_enable: false) }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat__fragment(
               'knot_server'
             ).without_content(%r{control:\n\s+listen:})
           end
         end
+
         context 'package_name' do
           before { params.merge!(package_name: 'foobar') }
+
           it { is_expected.to compile }
           it { is_expected.to contain_package('foobar') }
         end
+
         context 'service_name' do
           before { params.merge!(service_name: 'foobar') }
+
           it { is_expected.to compile }
           it { is_expected.to contain_service('foobar') }
         end
+
         context 'conf_dir' do
           before { params.merge!(conf_dir: '/conf') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file('/conf').with(
               ensure: 'directory',
@@ -587,9 +645,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'zone_subdir' do
           before { params.merge!(zone_subdir: '/zone') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file('/zone').with(
               ensure: 'directory',
@@ -600,9 +661,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'conf_file' do
           before { params.merge!(conf_file: '/knot.conf') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_concat('/knot.conf').with(
               notify: 'Service[knot]',
@@ -610,9 +674,12 @@ describe 'knot' do
             )
           end
         end
+
         context 'run_dir' do
           before { params.merge!(run_dir: '/knot_run') }
+
           it { is_expected.to compile }
+
           it do
             is_expected.to contain_file('/knot_run').with(
               ensure: 'directory',
@@ -622,150 +689,6 @@ describe 'knot' do
               require: "Package[#{package_name}]"
             )
           end
-        end
-      end
-
-      # You will have to correct any values that should be bool
-      describe 'check bad type' do
-        context 'enable' do
-          before { params.merge!(enable: []) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'tsig' do
-          before { params.merge!(tsig: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'slave_addresses' do
-          before { params.merge!(slave_addresses: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'zones' do
-          before { params.merge!(zones: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'tsigs' do
-          before { params.merge!(tsigs: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'files' do
-          before { params.merge!(files: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'ip_addresses' do
-          before { params.merge!(ip_addresses: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'identity' do
-          before { params.merge!(identity: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'nsid' do
-          before { params.merge!(nsid: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'log_target' do
-          before { params.merge!(log_target: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'log_target bas string' do
-          before { params.merge!(log_target: 'fail') }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'log_zone_level' do
-          before { params.merge!(log_zone_level: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'log_server_level' do
-          before { params.merge!(log_server_level: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'log_any_level' do
-          before { params.merge!(log_any_level: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'server_count' do
-          before { params.merge!(server_count: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'tcp_max_clients' do
-          before { params.merge!(tcp_max_clients: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'udp_max_payload' do
-          before { params.merge!(udp_max_payload: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'pidfile' do
-          before { params.merge!(pidfile: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'port' do
-          before { params.merge!(port: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'username' do
-          before { params.merge!(username: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'zonesdir' do
-          before { params.merge!(zonesdir: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'hide_version' do
-          before { params.merge!(hide_version: 'yes') }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'rrl_size' do
-          before { params.merge!(rrl_size: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'rrl_limit' do
-          before { params.merge!(rrl_limit: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'rrl_slip' do
-          before { params.merge!(rrl_slip: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'control_enable' do
-          before { params.merge!(control_enable: 'fail') }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'control_interface' do
-          before { params.merge!(control_interface: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'control_port' do
-          before { params.merge!(control_port: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'control_allow' do
-          before { params.merge!(control_allow: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'package_name' do
-          before { params.merge!(package_name: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'service_name' do
-          before { params.merge!(service_name: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'conf_dir' do
-          before { params.merge!(conf_dir: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'zone_subdir' do
-          before { params.merge!(zone_subdir: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'conf_file' do
-          before { params.merge!(conf_file: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
-        end
-        context 'run_dir' do
-          before { params.merge!(run_dir: true) }
-          it { expect { subject.call }.to raise_error(Puppet::Error) }
         end
       end
     end

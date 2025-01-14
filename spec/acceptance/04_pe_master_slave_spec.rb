@@ -87,49 +87,46 @@ EOS
         execute_manifest_on(dnsmaster, master_pp, catch_failures: true)
         execute_manifest_on(dnsmaster, master_pp, catch_failures: true)
       end
+
       it 'clean puppet run on dns master' do
         expect(execute_manifest_on(dnsmaster, master_pp, catch_failures: true).exit_code).to eq 0
       end
+
       it 'clean puppet run on dns dnsslave' do
         expect(execute_manifest_on(dnsslave, dnsslave_pp, catch_failures: true).exit_code).to eq 0
       end
+
       describe service('knot'), node: dnsmaster do
         it { is_expected.to be_running }
       end
+
       describe port(53), node: dnsmaster do
         it { is_expected.to be_listening }
       end
+
       describe service('knot'), node: dnsslave do
         it { is_expected.to be_running }
       end
+
       describe port(53), node: dnsslave do
         it { is_expected.to be_listening }
       end
-      describe command('knotc -c /etc/knot/knot.conf checkconf || cat /etc/knot/knot.conf'), if: os[:family] == 'ubuntu', node: dnsmaster do
+
+      describe command('knotc -c /etc/knot/knot.conf checkconf || cat /etc/knot/knot.conf'), node: dnsmaster do
         its(:stdout) { is_expected.to match %r{} }
       end
-      describe command('knotc -c /usr/local/etc/knot/knot.conf checkconf || cat /usr/local/etc/knot/knot.conf'), if: os[:family] == 'freebsd', node: dnsmaster do
-        its(:stdout) { is_expected.to match %r{} }
-      end
-      describe command('knotc -c /etc/knot/knot.conf checkconf || cat /etc/knot/knot.conf'), if: os[:family] == 'ubuntu', node: dnsslave do
-        its(:stdout) { is_expected.to match %r{} }
-      end
-      describe command('knotc -c /usr/local/etc/knot/knot.conf checkconf || cat /usr/local/etc/knot/knot.conf'), if: os[:family] == 'freebsd', node: dnsslave do
-        its(:stdout) { is_expected.to match %r{} }
-      end
-      describe command("dig +short soa . @#{dnsslave_ip}"), node: dnsslave do
+
+      describe command('knotc -c /etc/knot/knot.conf checkconf || cat /etc/knot/knot.conf'), node: dnsslave do
         let(:pre_command) { 'sleep 10' }
 
-        its(:exit_status) { is_expected.to eq 0 }
-        its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
+        its(:stdout) { is_expected.to match %r{} }
       end
-      describe command("dig +short soa root-servers.net. @#{dnsslave_ip}"), node: dnsslave do
-        its(:exit_status) { is_expected.to eq 0 }
-        its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
-      end
-      describe command("dig +short soa arpa. @#{dnsslave_ip}"), node: dnsslave do
-        its(:exit_status) { is_expected.to eq 0 }
-        its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
+
+      %( . arpa. root-servers.net. ).each do |zone|
+        describe command("dig +short soa #{zone} @#{dnsslave_ip}"), node: dnsslave do
+          its(:exit_status) { is_expected.to eq 0 }
+          its(:stdout) { is_expected.to match %r{a.root-servers.net. nstld.verisign-grs.com.} }
+        end
       end
     end
   end
