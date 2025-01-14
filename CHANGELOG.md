@@ -1,4 +1,12 @@
-### 2024-08-26 0-5-0
+### 2025-01-14 0.6.0
+* use stdlib
+* add docs
+* fix linting issues
+* add reference
+* fix rubocop issues
+* fix rspec
+
+### 2024-08-26 0.5.0
 * Add service.arpa
 
 ### 2023-01-04 0.4.9
