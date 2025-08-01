@@ -4,13 +4,13 @@ class knot::as112 {
   include knot
   knot::file {
     'db.dd-empty':
-      source  => 'puppet:///modules/knot/etc/knot/db.dd-empty';
+      source => 'puppet:///modules/knot/etc/knot/db.dd-empty';
     'db.dr-empty':
-      source  => 'puppet:///modules/knot/etc/knot/db.dr-empty';
+      source => 'puppet:///modules/knot/etc/knot/db.dr-empty';
     'hostname.as112.net.zone':
       content_template => 'knot/etc/knot/hostname.as112.net.zone.erb';
     'hostname.as112.arpa.zone':
-      content_template=> 'knot/etc/knot/hostname.as112.arpa.zone.erb';
+      content_template => 'knot/etc/knot/hostname.as112.arpa.zone.erb';
   }
   knot::zone {
     '10.in-addr.arpa':
