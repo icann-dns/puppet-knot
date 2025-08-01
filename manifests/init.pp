@@ -227,9 +227,9 @@ class knot (
     [$database_path, "${database_path}/timers"]:
       ;
     [$zonesdir, $zone_subdir, $conf_dir].unique():
-      mode    => '0750';
+      mode => '0750';
     $run_dir:
-      mode    => '0775';
+      mode => '0775';
   }
   if $log_target_path {
     file { $log_target_path:
