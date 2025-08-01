@@ -1,3 +1,6 @@
+### 2025-08-01 0.7.0
+* add parameters to override soa timers
+
 ### 2025-01-14 0.6.0
 * use stdlib
 * add docs
