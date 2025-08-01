@@ -107,6 +107,12 @@ The following parameters are available in the `knot` class:
 * [`logrotate_rotate`](#-knot--logrotate_rotate)
 * [`logrotate_size`](#-knot--logrotate_size)
 * [`database_path`](#-knot--database_path)
+* [`default_refresh_min_interval`](#-knot--default_refresh_min_interval)
+* [`default_refresh_max_interval`](#-knot--default_refresh_max_interval)
+* [`default_retry_min_interval`](#-knot--default_retry_min_interval)
+* [`default_retry_max_interval`](#-knot--default_retry_max_interval)
+* [`default_expire_min_interval`](#-knot--default_expire_min_interval)
+* [`default_expire_max_interval`](#-knot--default_expire_max_interval)
 
 ##### <a name="-knot--knotc_bin"></a>`knotc_bin`
 
@@ -652,6 +658,54 @@ Database path
 
 Default value: `'/var/lib/knot'`
 
+##### <a name="-knot--default_refresh_min_interval"></a>`default_refresh_min_interval`
+
+Data type: `Optional[Integer[1]]`
+
+Minimum refresh interval
+
+Default value: `undef`
+
+##### <a name="-knot--default_refresh_max_interval"></a>`default_refresh_max_interval`
+
+Data type: `Optional[Integer[1]]`
+
+Maximum refresh interval
+
+Default value: `undef`
+
+##### <a name="-knot--default_retry_min_interval"></a>`default_retry_min_interval`
+
+Data type: `Optional[Integer[1]]`
+
+Minimum retry interval
+
+Default value: `undef`
+
+##### <a name="-knot--default_retry_max_interval"></a>`default_retry_max_interval`
+
+Data type: `Optional[Integer[1]]`
+
+Maximum retry interval
+
+Default value: `undef`
+
+##### <a name="-knot--default_expire_min_interval"></a>`default_expire_min_interval`
+
+Data type: `Optional[Integer[1]]`
+
+Minimum expire interval
+
+Default value: `undef`
+
+##### <a name="-knot--default_expire_max_interval"></a>`default_expire_max_interval`
+
+Data type: `Optional[Integer[1]]`
+
+Maximum expire interval
+
+Default value: `undef`
+
 ### <a name="knot--as112"></a>`knot::as112`
 
 class to configure AS112 service
@@ -846,6 +900,12 @@ The following parameters are available in the `knot::zone` defined type:
 * [`allow_axfr_fallback`](#-knot--zone--allow_axfr_fallback)
 * [`create_ixfr`](#-knot--zone--create_ixfr)
 * [`ixfr_size`](#-knot--zone--ixfr_size)
+* [`refresh_min_interval`](#-knot--zone--refresh_min_interval)
+* [`refresh_max_interval`](#-knot--zone--refresh_max_interval)
+* [`retry_min_interval`](#-knot--zone--retry_min_interval)
+* [`retry_max_interval`](#-knot--zone--retry_max_interval)
+* [`expire_min_interval`](#-knot--zone--expire_min_interval)
+* [`expire_max_interval`](#-knot--zone--expire_max_interval)
 
 ##### <a name="-knot--zone--masters"></a>`masters`
 
@@ -932,6 +992,54 @@ Default value: `undef`
 Data type: `Optional[Integer]`
 
 The size of IXFR files
+
+Default value: `undef`
+
+##### <a name="-knot--zone--refresh_min_interval"></a>`refresh_min_interval`
+
+Data type: `Optional[Integer]`
+
+Minimum refresh interval
+
+Default value: `undef`
+
+##### <a name="-knot--zone--refresh_max_interval"></a>`refresh_max_interval`
+
+Data type: `Optional[Integer]`
+
+Maximum refresh interval
+
+Default value: `undef`
+
+##### <a name="-knot--zone--retry_min_interval"></a>`retry_min_interval`
+
+Data type: `Optional[Integer]`
+
+Minimum retry interval
+
+Default value: `undef`
+
+##### <a name="-knot--zone--retry_max_interval"></a>`retry_max_interval`
+
+Data type: `Optional[Integer]`
+
+Maximum retry interval
+
+Default value: `undef`
+
+##### <a name="-knot--zone--expire_min_interval"></a>`expire_min_interval`
+
+Data type: `Optional[Integer]`
+
+Minimum expire interval
+
+Default value: `undef`
+
+##### <a name="-knot--zone--expire_max_interval"></a>`expire_max_interval`
+
+Data type: `Optional[Integer]`
+
+Maximum expire interval
 
 Default value: `undef`
 
