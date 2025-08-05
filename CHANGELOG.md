@@ -1,3 +1,6 @@
+### 2025-08-05 0.7.1
+* include global parameter for SOA overrides
+
 ### 2025-08-01 0.7.0
 * add parameters to override soa timers
 
