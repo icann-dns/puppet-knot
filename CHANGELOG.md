@@ -1,3 +1,6 @@
+### 2025-08-05 0.7.3
+* fix broken template
+
 ### 2025-08-05 0.7.2
 * BUG: template was using incorrect variable
 
