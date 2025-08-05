@@ -49,21 +49,21 @@
 <%- if @zonemd_generate -%>
     zonemd-generate: <%= @zonemd_generate %>
 <%- end -%>
-<%- if @refresh_min_interval.kind_of?(Integer) -%>
+<%- if @_refresh_min_interval.kind_of?(Integer) -%>
     refresh-min-interval: <%= @refresh_min_interval %>
 <%- end -%>
-<%- if @refresh_max_interval.kind_of?(Integer) -%>
+<%- if @_refresh_max_interval.kind_of?(Integer) -%>
     refresh-max-interval: <%= @refresh_max_interval %>
 <%- end -%>
-<%- if @retry_min_interval.kind_of?(Integer) -%>
+<%- if @_retry_min_interval.kind_of?(Integer) -%>
     retry-min-interval: <%= @retry_min_interval %>
 <%- end -%>
-<%- if @retry_max_interval.kind_of?(Integer) -%>
+<%- if @_retry_max_interval.kind_of?(Integer) -%>
     retry-max-interval: <%= @retry_max_interval %>
 <%- end -%>
-<%- if @expire_min_interval.kind_of?(Integer) -%>
+<%- if @_expire_min_interval.kind_of?(Integer) -%>
     expire-min-interval: <%= @expire_min_interval %>
 <%- end -%>
-<%- if @expire_max_interval.kind_of?(Integer) -%>
+<%- if @_expire_max_interval.kind_of?(Integer) -%>
     expire-max-interval: <%= @expire_max_interval %>
 <%- end -%>
