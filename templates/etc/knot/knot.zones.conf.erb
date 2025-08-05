@@ -50,20 +50,19 @@
     zonemd-generate: <%= @zonemd_generate %>
 <%- end -%>
 <%- if @_refresh_min_interval.kind_of?(Integer) -%>
-    refresh-min-interval: <%= @refresh_min_interval %>
+    refresh-min-interval: <%= @_refresh_min_interval %>
 <%- end -%>
 <%- if @_refresh_max_interval.kind_of?(Integer) -%>
-    refresh-max-interval: <%= @refresh_max_interval %>
+    refresh-max-interval: <%= @_refresh_max_interval %>
 <%- end -%>
 <%- if @_retry_min_interval.kind_of?(Integer) -%>
-    retry-min-interval: <%= @retry_min_interval %>
+    retry-min-interval: <%= @_retry_min_interval %>
 <%- end -%>
 <%- if @_retry_max_interval.kind_of?(Integer) -%>
-    retry-max-interval: <%= @retry_max_interval %>
+    retry-max-interval: <%= @_retry_max_interval %>
 <%- end -%>
 <%- if @_expire_min_interval.kind_of?(Integer) -%>
-    expire-min-interval: <%= @expire_min_interval %>
+    expire-min-interval: <%= @_expire_min_interval %>
 <%- end -%>
 <%- if @_expire_max_interval.kind_of?(Integer) -%>
-    expire-max-interval: <%= @expire_max_interval %>
-<%- end -%>
+    expire-max-interval: <%= @_expire_max_interval %>
