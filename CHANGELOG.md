@@ -1,5 +1,8 @@
+### 2025-08-05 0.7.2
+* BUG: template was using incorrect variable
+
 ### 2025-08-05 0.7.1
-* include global parameter for SOA overrides
+* BUG: template not considering global default
 
 ### 2025-08-01 0.7.0
 * add parameters to override soa timers

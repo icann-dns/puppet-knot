@@ -1,6 +1,6 @@
 {
   "name": "puppet-knot",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "author": "noc@dns.icann.org",
   "summary": "Installs and configuers knot from nic.cz",
   "license": "Apache-2.0",
