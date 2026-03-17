@@ -26,7 +26,7 @@ begin
 rescue LoadError
   # voxpupuli-release not present
 else
-  GCGConfig.user = 'dns-eng'
+  GCGConfig.user = 'icann-dns'
   GCGConfig.project = 'puppet-knot'
 end
 
